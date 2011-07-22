@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Installation hooks for the CAS Server module.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function cas_server_schema() {
+  $schema = array();
+
+  $schema['cas_server_tickets'] = array(
+    'description' => 'Stores CAS server tickets.',
+    'fields' => array(
+      'service' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'ticket' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('ticket'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function cas_server_install() {
+  drupal_install_schema('cas_server');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function cas_server_uninstall() {
+  drupal_uninstall_schema('cas_server');
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function cas_server_update_1() {
+  $schema = array();
+
+  $schema['cas_server_tickets'] = array(
+    'description' => 'Stores CAS server tickets.',
+    'fields' => array(
+      'service' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'ticket' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('ticket'),
+  );
+
+  $ret = array();
+  db_create_table($ret, 'cas_server_tickets', $schema['cas_server_tickets']);
+  return $ret;
+}

@@ -1,0 +1,127 @@
+<?php
+
+/**
+ * @file
+ * Tests for CAS Attributes.
+ */
+
+/**
+ * Helper class to automatically include the CAS Attributes module.
+ */
+class CasAttributesTestHelper extends CasTestHelper {
+  function setUp($modules = array()) {
+    $modules = array_merge(array('cas_attributes', 'token'), $modules);
+    parent::setUp($modules);
+  }
+}
+
+/**
+ * Test case for CAS attribute tokens.
+ */
+class CasAttributesTokenTestCase extends CasAttributesTestHelper {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'CAS Attributes: Tokens',
+      'description' => 'Test CAS Attribute attribute tokens.',
+      'group' => 'Central Authentication Service',
+    );
+  }
+
+  /**
+   * Test the CAS attribute tokens.
+   */
+  function testAttributeTokens() {
+    $account = $this->casCreateUser();
+    $attributes = array(
+      'surname' => 'Smith',
+      'givenName' => 'John',
+      'memberOf' => array(
+        'CN=Staff,OU=Groups,DC=example,DC=edu',
+        'CN=Spanish Department,OU=Departments,OU=Groups,DC=example,DC=edu',
+      ),
+    );
+    $this->casLogin($account, $attributes);
+
+    $this->assertToken('[cas-name]', $account->cas_name);
+    $this->assertToken('[cas-attribute-surname]', $attributes['surname']);
+    $this->assertToken('[cas-attribute-memberof]', $attributes['memberOf'][0]);
+
+    $keys = array_merge(array('attraStyle'), array_keys($attributes));
+    $keys = array_map('drupal_strtolower', $keys);
+    $this->assertToken('[cas-attribute-?]', t('Available attributes: %keys', array('%keys' => implode(', ', $keys))));
+  }
+}
+
+/**
+ * Test case for CAS attribute setting.
+ */
+class CasAttributesTestCase extends CasAttributesTestHelper {
+
+  function setUp() {
+    parent::setUp(array('profile'));
+
+    $this->drupalLogin($this->admin_user);
+    foreach (array('test_user_memberof', 'test_user_name') as $field_name) {
+      $edit = array(
+        'category' => 'Test',
+        'title' => t('Some user field called @field_name', array('@field_name' => $field_name)),
+        'name' => $field_name,
+      );
+      $this->drupalPost('admin/user/profile/add/textfield', $edit, t('Save field'));
+    }
+    $this->drupalLogout();
+  }
+
+  public static function getInfo() {
+    return array(
+      'name' => 'CAS Attributes: Login',
+      'description' => 'Test CAS Attributes are set on login.',
+      'group' => 'Central Authentication Service',
+    );
+  }
+
+  /**
+   * Test the CAS attribute tokens.
+   */
+  function testNewUserLogin() {
+    // Create a new CAS user.
+    $cas_name = $this->randomName();
+    $attributes = array(
+      'surname' => 'Smith',
+      'givenName' => 'John',
+      'memberOf' => array(
+        'CN=Staff,OU=Groups,DC=example,DC=edu',
+        'CN=Spanish Department,OU=Departments,OU=Groups,DC=example,DC=edu',
+      ),
+    );
+    $cas_user = array('name' => $cas_name, 'attributes' => $attributes);
+    variable_set('cas_test_cas_user', $cas_user);
+
+    // Set up the relationship mappings.
+    $this->drupalLogin($this->admin_user);
+    $edit = array(
+      'cas_attributes[sync_every_login]' => 0,
+      'cas_attributes[relations][name]' => '[cas-attribute-NAME]',
+      'cas_attributes[relations][mail]' => '[cas-name]@example.com',
+      'cas_attributes[relations][1]' => '[cas-attribute-memberof]',
+      'cas_attributes[relations][2]' => '[cas-attribute-givenname] [cas-attribute-surname]',
+    );
+    $this->drupalPost('admin/user/cas/attributes', $edit, t('Save configuration'));
+    $this->drupalGet('user/' . $this->admin_user->uid . '/edit');
+    $this->drupalGet('admin/user/cas/attributes/cas');
+    $this->drupalGet('user/' . $this->admin_user->uid . '/edit');
+    $this->drupalLogout();
+
+    // Log in as the new CAS user.
+    $this->casLogin($cas_name, $attributes);
+
+    // After login, the account is reloaded into $this->loggedInUser.
+    // The account name should not have been changed, since the token should
+    // evaluate to nothing.
+    $this->assertEqual($this->loggedInUser->name, $cas_name);
+    $this->assertEqual($this->loggedInUser->mail, "$cas_name@example.com");
+    $this->assertEqual($this->loggedInUser->test_user_memberof, 'CN=Staff,OU=Groups,DC=example,DC=edu');
+    $this->assertEqual($this->loggedInUser->test_user_name, 'John Smith');
+  }
+}

@@ -1,0 +1,11 @@
+name = TokenSTARTER
+description = Provides additional tokens and a base on which to build your own tokens.
+dependencies[] = token
+core = 6.x
+
+; Information added by drupal.org packaging script on 2011-05-18
+version = "6.x-1.16"
+core = "6.x"
+project = "token"
+datestamp = "1305745318"
+

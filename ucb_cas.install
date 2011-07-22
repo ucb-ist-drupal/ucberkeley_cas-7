@@ -1,0 +1,76 @@
+<?php 
+function ucb_cas_install() {
+
+  db_query("INSERT INTO `ldapauth` (`sid`, `name`, `status`, `server`, `port`, `tls`, `encrypted`, `basedn`
+  , `user_attr`, `mail_attr`, `binddn`, `bindpw`, `login_php`, `filter_php`, `weight`, `ldapdata_binddn`
+  , `ldapdata_bindpw`, `ldapdata_rwattrs`, `ldapdata_roattrs`, `ldapdata_mappings`, `ldapdata_attrs`
+  , `ldapdata_filter_php`, `ldapgroups_in_dn`, `ldapgroups_dn_attribute`, `ldapgroups_attr`, `ldapgroups_in_attr`
+  , `ldapgroups_as_entries`, `ldapgroups_entries`, `ldapgroups_entries_attribute`, `ldapgroups_mappings`
+  , `ldapgroups_mappings_filter`, `ldapgroups_filter_php`, `ldapgroups_groups`) 
+  VALUES
+  (1, 'Test Cal Directory', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail'
+  , '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL),
+  (2, 'Cal Directory', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL
+  , 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)
+  ");
+
+  variable_set("cas_access",  "0");
+  variable_set("cas_attributes",  array(
+    'sync_every_login' => 1,
+    'relations' => array(
+            'name' => '[cas-ldap-displayname]',
+            'mail' => '[cas-ldap-mail]',
+        ),
+    'ldap' => array(
+            'server' => 1,
+        ),
+  ));
+  variable_set("cas_auto_assigned_role",  array(null, null,1,0));
+  variable_set("cas_cert",  "");
+  variable_set("cas_changePasswordURL",  "https://net-auth.berkeley.edu/cgi-bin/krbcpw");
+  variable_set("cas_check_first",  0);
+  variable_set("cas_debugfile",  "");
+  variable_set("cas_domain",  "");
+  variable_set("cas_exclude",  "");
+  variable_set("cas_first_login_destination",  "");
+  variable_set("cas_hide_email",  0);
+  variable_set("cas_hide_password",  1);
+  variable_set("cas_library_dir",  "CAS");
+  variable_set("cas_login_drupal_invite",  "Cancel CAS login");
+  variable_set("cas_login_form",  "1");
+  variable_set("cas_login_invite",  "Log in using CAS");
+  variable_set("cas_login_message",  "Logged in via CAS as %cas_username.");
+  variable_set("cas_login_redir_message",  "You will be redirected to the secure CAS login page.");
+  variable_set("cas_logout_destination",  "");
+  variable_set("cas_pages",  "services/*
+node/add/*
+node/*/edit/*");
+  variable_set("cas_pgtformat",  "plain");
+  variable_set("cas_pgtpath",  "");
+  variable_set("cas_port",  "443");
+  variable_set("cas_proxy",  0);
+  variable_set("cas_registerURL",  "");
+  variable_set("cas_server",  "auth-test.berkeley.edu");
+  variable_set("cas_uri",  "/cas");
+  variable_set("cas_user_register",  1);
+  variable_set("cas_version",  "2.0");
+}
+
+function ucb_cas_uninstall() {
+  /*
+   * use hook (install) to get deps from info file
+   * loop deps including install files and invoking uninstall from each
+   */
+}
+
+function ucb_cas_update_6100() {
+/*
+  $ret = array();
+  // NOTE: update_sql() doesn't support %-substitution parameters
+  $ret[] = update_sql("INSERT INTO `ldapauth` (`sid`, `name`, `status`, `server`, `port`, `tls`, `encrypted`, `basedn`, `user_attr`, `mail_attr`, `binddn`, `bindpw`, `login_php`, `filter_php`, `weight`, `ldapdata_binddn`, `ldapdata_bindpw`, `ldapdata_rwattrs`, `ldapdata_roattrs`, `ldapdata_mappings`, `ldapdata_attrs`, `ldapdata_filter_php`, `ldapgroups_in_dn`, `ldapgroups_dn_attribute`, `ldapgroups_attr`, `ldapgroups_in_attr`, `ldapgroups_as_entries`, `ldapgroups_entries`, `ldapgroups_entries_attribute`, `ldapgroups_mappings`, `ldapgroups_mappings_filter`, `ldapgroups_filter_php`, `ldapgroups_groups`) VALUES
+  (1, 'Test Cal Directory', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL),
+  (2, 'Cal Directory', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)");
+  return $ret;
+  */
+  
+}

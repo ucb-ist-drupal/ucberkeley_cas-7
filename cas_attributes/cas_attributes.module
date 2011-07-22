@@ -1,0 +1,115 @@
+<?php
+
+/**
+ * @file
+ * Allows user account and profile attributes to be automatically populated
+ * using tokens. Provides basic tokens for attributes returned by the CAS
+ * server.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function cas_attributes_menu() {
+  $items = array();
+
+  $items['admin/user/cas/attributes'] = array(
+    'title' => 'Attributes',
+    'description' => 'Manage the relationships between CAS attributes and user fields.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cas_attributes_admin_settings'),
+    'access arguments' => array('administer cas'),
+    'file' => 'cas_attributes.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -8,
+  );
+  $items['admin/user/cas/attributes/cas'] = array(
+    'title' => 'CAS Attribute Tokens',
+    'description' => 'Get a list of all available CAS Attributes',
+    'page callback' => 'cas_attributes_list',
+    'access arguments' => array('administer cas'),
+    'file' => 'cas_attributes.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -8,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_token_list().
+ */
+function cas_attributes_token_list($type = 'all') {
+  module_load_include('tokens.inc', 'cas_attributes');
+  return _cas_attributes_token_list($type);
+}
+
+/**
+ * Implements hook_token_values().
+ */
+function cas_attributes_token_values($type, $object = NULL) {
+  module_load_include('tokens.inc', 'cas_attributes');
+  return _cas_attributes_token_values($type, $object);
+}
+
+/**
+ * Implements hook_cas_user_presave().
+ */
+function cas_attributes_cas_user_presave(&$edit, $account) {
+  $cas_attributes = variable_get('cas_attributes', array());
+  $cas_attributes += array('sync_every_login' => NULL, 'relations' => array('mail' => NULL, 'name' => NULL));
+
+  // We synchronize on the first login (always) and on future logins (if chosen).
+  if ($account->login && !$cas_attributes['sync_every_login']) {
+    // The user has logged in before and we are not set to always synchronize.
+    return;
+  }
+
+  $data = array('cas' => $edit['cas_user']['name']);
+
+  $profile_fields = _cas_attributes_get_profile_fields();
+
+  // Set each drupal field to its mapped attribute.
+  foreach ($cas_attributes['relations'] as $drupal_field => $text) {
+    $result = trim(token_replace_multiple($text, $data, TOKEN_PREFIX, TOKEN_SUFFIX, array('clear' => TRUE)));
+
+    // Only update the fields if there is data to set.
+    if (!empty($result)) {
+      // Is it a profile field? We unfortunately cannot just set this in edit, as
+      // profile is braindead.
+      if (is_numeric($drupal_field)) {
+        if (isset($profile_fields[$drupal_field]) && $instance = $profile_fields[$drupal_field]) {
+          $value = $result;
+          if (_profile_field_serialize($instance->type)) {
+            $value = serialize($value);
+          }
+          if ($row = db_fetch_array(db_query("SELECT value FROM {profile_values} WHERE fid = '%d' AND uid = '%d'", $drupal_field, $account->uid))) {
+            if ($row['value'] != $value)
+              db_query("UPDATE {profile_values} SET value = '%s' WHERE fid = '%d' AND uid = '%d'", $value, $drupal_field, $account->uid);
+          }
+          else {
+            db_query("INSERT INTO {profile_values} (value, fid, uid) VALUES ('%s', '%d', '%d')", $value, $drupal_field, $account->uid);
+          }
+        }
+      }
+      else {
+        // It is a Drupal field like 'mail' or 'name'.
+        $edit[$drupal_field] = $result;
+      }
+    }
+  }
+}
+
+/**
+ * Retrieve profile fields.
+ */
+function _cas_attributes_get_profile_fields() {
+  $fields = array();
+  if (module_exists('profile')) {
+    $result = db_query("SELECT fid, name, title, type FROM {profile_fields}");
+    while ($row = db_fetch_object($result)) {
+      $fields[$row->fid] = $row;
+    }
+  }
+  return $fields;
+}

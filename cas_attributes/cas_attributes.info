@@ -1,0 +1,14 @@
+name = CAS Attribute Tokens
+description = "Provides tokens for CAS attributes and an interface for token replacement in user account and profile fields."
+core = 6.x
+package = Central Authentication Service
+
+dependencies[] = cas
+dependencies[] = token
+
+; Information added by drupal.org packaging script on 2011-04-30
+version = "6.x-3.0-beta2"
+core = "6.x"
+project = "cas_attributes"
+datestamp = "1304124110"
+

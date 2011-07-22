@@ -1,0 +1,12 @@
+name = "CAS module tests"
+description = "Support module for CAS testing."
+package = Testing
+core = 6.x
+hidden = TRUE
+
+; Information added by drupal.org packaging script on 2011-04-28
+version = "6.x-3.x-dev"
+core = "6.x"
+project = "cas"
+datestamp = "1303949059"
+
