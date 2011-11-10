@@ -1,9 +1,7 @@
-<?php 
-function ucb_cas_install() {
-  /* Install modules */
-  // The order of this array is important for uninstall
-  // ldapgroups is optional, but needed with current db_query
-  // insert into ldapauth. useful for mapping ldapattributes to groups      
+<?php
+function ucb_cas_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
   $sub_modules = array("cas_ldap",
                        "cas_attributes",
                        "cas",
@@ -11,27 +9,41 @@ function ucb_cas_install() {
                        "ldapgroups",
                        "ldapauth",
                        "token",
-                      );
-  //Check if these modules are already installed
-  $paths = array();
-  foreach ($sub_modules as $sm) {
-    $path = drupal_get_path('module', $sm);
-    // If ucb_cas is in the path, it's ours
-    if (strpos($path, 'ucb_cas') === false) {
-      if (!in_array($path, $paths)) $paths[] = $path;
+  );
+  variable_set("ucb_cas_sub_modules", $sub_modules);
+  
+  if ($phase == 'install') {
+    $paths = array();
+    foreach ($sub_modules as $sm) {
+      $path = drupal_get_path('module', $sm);
+      // If ucb_cas is in the path, it's ours
+      if (strpos($path, 'ucb_cas') === false) {
+        if (!in_array($path, $paths)) $paths[] = $path;
+      }
+    }
+    if (count($paths) > 0 ) {
+      $msg = "The UCB CAS module is trying to install modules which already exist on your site.  <p>1. Please ensure these modules are disabled at admin/build/modules.<br/>2. Then remove these files: <br/><ul><li>" . implode('<li> ', $paths) . "</ul>";
+      if (!function_exists('cas_phpcas_attributes')) {
+        $requirements['cas_attributes'] = array(
+        'title' => $t('UCB CAS'),
+        'value' => $t('Conflict'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t($msg),
+        );
+      }
     }
   }
-  if (count($paths) > 0 ) {
-    $msg = "The UCB CAS module is trying to install the following modules which already exist on your site.  Please remove these files: <br/><ul>" . implode('<li> ', $paths) . "</ul>";
-    drupal_set_message($msg, 'warning');
-    //TODO abort?
-  }
-  variable_set("ucb_cas_sub_modules", $sub_modules);
+  return $requirements;
+}
+
+function ucb_cas_install() {
+  /* Install modules */
+  $sub_modules = variable_get("ucb_cas_sub_modules", array());
 
   //TODO: Check to see if they are installed first, if yes skip...?
   drupal_install_modules($sub_modules);
-  drupal_set_message("Installed ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');  
-  
+  drupal_set_message("Installed ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
+
   /* Settings */
   db_query("INSERT INTO `ldapauth` (`sid`, `name`, `status`, `server`, `port`, `tls`, `encrypted`, `basedn`
   , `user_attr`, `mail_attr`, `binddn`, `bindpw`, `login_php`, `filter_php`, `weight`, `ldapdata_binddn`
@@ -45,17 +57,17 @@ function ucb_cas_install() {
   (2, 'Cal Directory', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL
   , 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)
   ");
-  
+
   variable_set("cas_access",  "0");
   variable_set("cas_attributes",  array(
     'sync_every_login' => 1,
     'relations' => array(
             'name' => '[cas-ldap-displayname]',
             'mail' => '[cas-ldap-mail]',
-        ),
+  ),
     'ldap' => array(
             'server' => 1,
-        ),
+  ),
   ));
   variable_set("cas_auto_assigned_role",  array(null, null,1,0));
   variable_set("cas_cert",  "");
@@ -92,16 +104,16 @@ node/*/edit/*");
 
 function ucb_cas_uninstall() {
   /* Remove modules */
-  
+
   $sub_modules = variable_get("ucb_cas_sub_modules", array());
   //include_once('includes/install.inc');
   //module_rebuild_cache();
-  module_disable($sub_modules, TRUE);   
+  module_disable($sub_modules, TRUE);
   foreach ($sub_modules as $sm) {
-    drupal_uninstall_module($sm);   
+    drupal_uninstall_module($sm);
   }
-  drupal_set_message("Uninstalled ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');  
-  
+  drupal_set_message("Uninstalled ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
+
   /* Clear settings */
   // most settings are removed by uninstalling the sub modules.
   variable_del("ucb_cas_sub_modules");
@@ -109,13 +121,13 @@ function ucb_cas_uninstall() {
 
 //function ucb_cas_update_6105() {
 /*
-  $ret = array();
-  // NOTE: update_sql() doesn't support %-substitution parameters
-  $ret[] = update_sql("INSERT INTO `ldapauth` (`sid`, `name`, `status`, `server`, `port`, `tls`, `encrypted`, `basedn`, `user_attr`, `mail_attr`, `binddn`, `bindpw`, `login_php`, `filter_php`, `weight`, `ldapdata_binddn`, `ldapdata_bindpw`, `ldapdata_rwattrs`, `ldapdata_roattrs`, `ldapdata_mappings`, `ldapdata_attrs`, `ldapdata_filter_php`, `ldapgroups_in_dn`, `ldapgroups_dn_attribute`, `ldapgroups_attr`, `ldapgroups_in_attr`, `ldapgroups_as_entries`, `ldapgroups_entries`, `ldapgroups_entries_attribute`, `ldapgroups_mappings`, `ldapgroups_mappings_filter`, `ldapgroups_filter_php`, `ldapgroups_groups`) VALUES
-  (1, 'Test Cal Directory', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL),
-  (2, 'Cal Directory', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)");
-  return $ret;
-  */
+ $ret = array();
+ // NOTE: update_sql() doesn't support %-substitution parameters
+ $ret[] = update_sql("INSERT INTO `ldapauth` (`sid`, `name`, `status`, `server`, `port`, `tls`, `encrypted`, `basedn`, `user_attr`, `mail_attr`, `binddn`, `bindpw`, `login_php`, `filter_php`, `weight`, `ldapdata_binddn`, `ldapdata_bindpw`, `ldapdata_rwattrs`, `ldapdata_roattrs`, `ldapdata_mappings`, `ldapdata_attrs`, `ldapdata_filter_php`, `ldapgroups_in_dn`, `ldapgroups_dn_attribute`, `ldapgroups_attr`, `ldapgroups_in_attr`, `ldapgroups_as_entries`, `ldapgroups_entries`, `ldapgroups_entries_attribute`, `ldapgroups_mappings`, `ldapgroups_mappings_filter`, `ldapgroups_filter_php`, `ldapgroups_groups`) VALUES
+ (1, 'Test Cal Directory', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL),
+ (2, 'Cal Directory', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)");
+ return $ret;
+ */
 /*
-  */
+ */
 //}
