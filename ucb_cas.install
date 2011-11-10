@@ -52,9 +52,9 @@ function ucb_cas_install() {
   , `ldapgroups_as_entries`, `ldapgroups_entries`, `ldapgroups_entries_attribute`, `ldapgroups_mappings`
   , `ldapgroups_mappings_filter`, `ldapgroups_filter_php`, `ldapgroups_groups`) 
   VALUES
-  (1, 'Test Cal Directory', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail'
+  (1, 'ldap-test.berkeley.edu', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail'
   , '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL),
-  (2, 'Cal Directory', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL
+  (2, 'ldap.berkeley.edu', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL
   , 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)
   ");
 
@@ -119,15 +119,3 @@ function ucb_cas_uninstall() {
   variable_del("ucb_cas_sub_modules");
 }
 
-//function ucb_cas_update_6105() {
-/*
- $ret = array();
- // NOTE: update_sql() doesn't support %-substitution parameters
- $ret[] = update_sql("INSERT INTO `ldapauth` (`sid`, `name`, `status`, `server`, `port`, `tls`, `encrypted`, `basedn`, `user_attr`, `mail_attr`, `binddn`, `bindpw`, `login_php`, `filter_php`, `weight`, `ldapdata_binddn`, `ldapdata_bindpw`, `ldapdata_rwattrs`, `ldapdata_roattrs`, `ldapdata_mappings`, `ldapdata_attrs`, `ldapdata_filter_php`, `ldapgroups_in_dn`, `ldapgroups_dn_attribute`, `ldapgroups_attr`, `ldapgroups_in_attr`, `ldapgroups_as_entries`, `ldapgroups_entries`, `ldapgroups_entries_attribute`, `ldapgroups_mappings`, `ldapgroups_mappings_filter`, `ldapgroups_filter_php`, `ldapgroups_groups`) VALUES
- (1, 'Test Cal Directory', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL),
- (2, 'Cal Directory', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)");
- return $ret;
- */
-/*
- */
-//}
