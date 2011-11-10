@@ -4,7 +4,9 @@ TABLE OF CONTENTS
 2. Requirements
 3. Installing
 4. Uninstalling
-5. Authors
+5. Configuration Details
+6. Launching your site (Important)
+7. Authors
 
 PURPOSE
 -------
@@ -72,6 +74,72 @@ to disable each individual module that UCB CAS installed.)
 This step will disable and uninstall each module that UCB CAS
 installed.  It will also remove variables that UCB CAS added your
 site's variables table.
+
+CONFIGURATION DETAILS
+---------------------
+
+In order to make CAS and LDAP work out-of-the-box when you install UCB
+CAS, we've made some configuration decisions for you.  These decisions
+are aimed at defining "best practices" for using CAS and LDAP with
+your Drupal site.  That said, if you don't like our decisions, you can
+override them on the appropriate admin page on your site.
+
+CAS Configuration at admin/user/cas:
+
+  *Inital login destination* and *Logout destination*
+
+	You may want to customize these. Feel free...
+
+  *Users cannont change password*
+
+       Unchecking this is very likely to cause confusion.  Users
+       should change their passwords via CalNet. See *Change password
+       URL* further down.
+
+  *Drupal Login Invitation*
+
+	  This setting is blank because it can cause confusion.  It
+	  adds a link to your login block allowing users to login
+	  using Drupal's stadandard authentication instead of CalNet.
+	  It's best to require ALL of your users to login via CAS and
+	  not to give them the option of using Drupal's
+	  authentication.  If you need to allow people who don't have
+	  a CalNet ID to login to your site, you can add a value like
+	  "Non-UCB people login here" to this text box.
+
+	  IMPORTANT: If you allow standard Drupal authentication to
+	  your site you MUST run your site at an https URL.  Failure
+	  to do so is a significant security risk yielding multiple
+	  vulnerabilities. For example, anyone logging into your site
+	  from a public wireless network can easily have their
+	  password stolen.
+
+	  (There is a module in the works to facilitate using both CAS
+	  and standard Drupal authentication on a site. Email
+	  ist-drupal@lists.berkeley.edu for more information.)
+
+Cas Attributes configuration (admin/user/cas/attributes)
+
+  *Fetch CAS Attributes*
+
+       You can change this to "only when a CAS account is created
+       (i.e., the first login of a CAS user)."  That means your site
+       will not reflect changes made to LDAP after the user account
+       was created on your site.
+
+LAUNCHING YOUR SITE (IMPORTANT)
+-------------------------------
+
+	Your site is using the servers ldap-test.berkeley.edu and
+	auth-test.berkeley.edu.  These are the correct servers to use
+	for site development and testing.  When you make your site
+	live, you should change these servers to ldap.berkeley.edu and
+	auth.berkeley.edu. Make these changes at:
+
+        admin/user/cas
+        admin/user/cas/attributes
+
+        (A module to help automate this is in the works.)
 
 AUTHORS
 -------
