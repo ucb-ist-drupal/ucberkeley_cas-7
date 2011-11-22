@@ -13,8 +13,15 @@ class CasTestHelper extends DrupalWebTestCase {
    *
    * Creates an administrative user and downloads phpCAS.
    */
-  function setUp($modules = array()) {
-    $modules = array_merge(array('cas', 'cas_test'), $modules);
+  function setUp() {
+    // Since this is a base class for many test cases, support the same
+    // flexibility that DrupalWebTestCase::setUp() has for the modules to be
+    // passed in as either an array or a variable number of string arguments.
+    $modules = func_get_args();
+    if (isset($modules[0]) && is_array($modules[0])) {
+      $modules = $modules[0];
+    }
+    $modules = array_merge(array('cas', 'cas_test', 'cas_server'), $modules);
     parent::setUp($modules);
 
     // Tests will fail unless clean URLs are enabled, due to an incompatibility
@@ -25,7 +32,7 @@ class CasTestHelper extends DrupalWebTestCase {
     $this->admin_user = $this->drupalCreateUser(array('administer users', 'administer cas'));
 
     // Download and extract in PHPCAS.
-    $this->downloadExtractPhpCas('1.2.1');
+    $this->downloadExtractPhpCas('1.2.2');
   }
 
   /**
@@ -61,33 +68,23 @@ class CasTestHelper extends DrupalWebTestCase {
 
     // Download and extact the archive, but only in one thread.
     if (!file_exists($local_archive)) {
-      $result = drupal_http_request($url);
-      file_put_contents($local_archive, $result->data);
+      $local_archive = system_retrieve_file($url, $local_archive, FALSE, FILE_EXISTS_REPLACE);
     }
     if (!file_exists($cas_library_dir)) {
-      // Get Archive_Tar. @see http://drupal.org/node/1113618.
-      $archive_tar = $simpletest_cache . '/archive_tar.inc';
-      $result = drupal_http_request('http://drupal.org/files/issues/system.tar_.inc_.txt');
-      file_put_contents($archive_tar, $result->data);
-      include_once $archive_tar;
-
       // Extract the files.
-      $archiver = new Archive_Tar($local_archive);
+      $archiver = archiver_get_archiver($local_archive);
       $archiver->extract($simpletest_cache);
       // Work around issue https://issues.jasig.org/browse/PHPCAS-105.
       // @see http://drupal.org/node/1120034
       switch ($version) {
         case '1.1.3':
-          $result = drupal_http_request('http://drupal.org/files/issues/CAS-1.1.3-CAS-client.txt');
-          file_put_contents($cas_library_dir . '/CAS/client.php', $result->data);
+          system_retrieve_file('http://drupal.org/files/issues/CAS-1.1.3-CAS-client.txt', $cas_library_dir . '/CAS/client.php', FALSE, FILE_EXISTS_REPLACE);
           break;
         case '1.2.1':
-          $result = drupal_http_request('http://drupal.org/files/issues/CAS-1.2.1-CAS-client_0.txt');
-          file_put_contents($cas_library_dir . '/CAS/client.php', $result->data);
+          system_retrieve_file('http://drupal.org/files/issues/CAS-1.2.1-CAS-client_0.txt', $cas_library_dir . '/CAS/client.php', FALSE, FILE_EXISTS_REPLACE);
           break;
       }
     }
-
     if (function_exists('sem_get')) {
       sem_release($semaphore);
     }
@@ -113,7 +110,7 @@ class CasTestHelper extends DrupalWebTestCase {
    *   A user account object. The CAS username is present in the cas_name
    *   field.
    */
-  function casCreateUser($cas_name = NULL, $permissions = array('access comments', 'access content', 'post comments', 'post comments without approval')) {
+  function casCreateUser($cas_name = NULL, $permissions = array('access comments', 'access content', 'post comments', 'skip comment approval')) {
     // Create user.
     $account = $this->drupalCreateUser($permissions);
     $pass_raw = $account->pass_raw;
@@ -269,7 +266,11 @@ class CasUserAdminTestCase extends CasTestHelper {
     $this->assertFalse($account, t('Could not load account with non-existent CAS username.'));
 
     // Verify that all CAS usernames have been removed from {cas_user}.
-    $cas_uid_count = db_result(db_query("SELECT COUNT(*) FROM {cas_user} WHERE cas_name IN ('%s', '%s')", $cas_name, $cas_new_name));
+    $cas_uid_count = db_select('cas_user')
+      ->condition('cas_name', array($cas_name, $cas_new_name), 'IN')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
     $this->assertEqual($cas_uid_count, 0, t('CAS usernames successfully removed from {cas_user}.'));
   }
   /**
@@ -288,10 +289,10 @@ class CasUserAdminTestCase extends CasTestHelper {
       'pass[pass2]' => $pass,
       'notify' => FALSE,
     );
-    $this->drupalPost('admin/user/user/create', $edit, t('Create new account'));
+    $this->drupalPost('admin/people/create', $edit, t('Create new account'));
     $this->assertText(t('Created a new user account for @name. No e-mail has been sent.', array('@name' => $edit['name'])), 'User created');
 
-    $this->drupalGet('admin/user/user');
+    $this->drupalGet('admin/people');
     $this->assertText($edit['name'], 'User found in list of users');
     $this->assertText($edit['cas_name'], 'CAS username found in list of users');
 
@@ -304,7 +305,7 @@ class CasUserAdminTestCase extends CasTestHelper {
       'pass[pass2]' => $pass,
       'notify' => FALSE,
     );
-    $this->drupalPost('admin/user/user/create', $edit, t('Create new account'));
+    $this->drupalPost('admin/people/create', $edit, t('Create new account'));
     $this->assertText(t('The CAS username is already in use on this site.'), 'CAS username already in use.');
   }
 
@@ -318,15 +319,15 @@ class CasUserAdminTestCase extends CasTestHelper {
     $edit = array(
       'cas_name' => $this->randomName(),
     );
-    $this->drupalPost('admin/user/user/cas/create', $edit, t('Create new account'));
+    $this->drupalPost('admin/people/cas/create', $edit, t('Create new account'));
     $this->assertText(t('Created a new user account for @name. No e-mail has been sent.', array('@name' => $edit['cas_name'])), 'User created');
 
     // Verify the user shows up in the list of all users.
-    $this->drupalGet('admin/user/user');
+    $this->drupalGet('admin/people');
     $this->assertNoUniqueText($edit['cas_name'], 'User and CAS username found in list of users');
 
     // Attempt to add the user again and see that it fails.
-    $this->drupalPost('admin/user/user/cas/create', $edit, t('Create new account'));
+    $this->drupalPost('admin/people/cas/create', $edit, t('Create new account'));
     $this->assertText(t('The CAS username is already in use on this site.'), 'CAS username already in use.');
   }
 }
@@ -384,17 +385,21 @@ class CasUserTestCase extends CasTestHelper {
     variable_set('cas_hide_password', FALSE);
     $this->drupalGet("user/$account->uid/edit");
     $this->assertField('mail', 'E-mail field is present.');
+    $this->assertField('current_pass', 'Current password field is present.');
     $this->assertField('pass[pass1]', 'Existing password field 1 is present.');
     $this->assertField('pass[pass2]', 'Existing password field 2 is present.');
     $edit = array(
       'mail' => $mail = $this->randomName() . '@example.com',
+      'current_pass' => $account->pass_raw,
     );
     $this->drupalPost("user/$account->uid/edit", $edit, t('Save'));
     $this->assertFieldByName('mail', $mail);
 
-    // Hide the password, ensure edits can be made..
+    // Hide the password, ensure edits can be made without providing
+    // the current password.
     variable_set('cas_hide_password', TRUE);
     $this->drupalGet("user/$account->uid/edit");
+    $this->assertNoField('current_pass', 'Current password field is not present.');
     $this->assertNoField('pass[pass1]', 'Existing password field 1 is not present.');
     $this->assertNoField('pass[pass2]', 'Existing password field 2 is not present.');
     $edit = array(
@@ -406,45 +411,14 @@ class CasUserTestCase extends CasTestHelper {
     // Hide the e-mail field as well, ensure that it is not visible.
     variable_set('cas_hide_email', TRUE);
     $this->drupalGet("user/$account->uid/edit");
-    // @todo: Need to test that the mail is field is hidden.
-    // $this->assertNoField('mail', 'E-mail field is not present.');
+    $this->assertNoField('mail', 'E-mail field is not present.');
   }
-}
 
+  function testNameToken() {
+    $account = $this->casCreateUser();
+    $this->casLogin($account);
 
-// Detect if we're running on Drupal.org's automated testbot.
-if (!file_exists("../checkout")) {
-  // @todo:
-  // Re-enable these test cases when we have a way of telling qa.drupal.org
-  // about the (soft) dependency on the token module.
-
-  /**
-   * Tests integration with token.
-   */
-  class CasTokenTestCase extends CasTestHelper {
-
-    public static function getInfo() {
-      return array(
-        'name' => 'CAS Token',
-        'description' => 'Tests CAS token replacement.',
-        'group' => 'Central Authentication Service',
-      );
-    }
-
-    function setUp() {
-      parent::setUp(array('token'));
-    }
-
-    /**
-     * Tests that the CAS username is available by a token.
-     */
-    function testNameToken() {
-      $account = $this->casCreateUser();
-      $this->casLogin($account);
-
-      $this->assertToken('[cas-name]', $account->cas_name);
-      $this->assertToken('[cas-name-raw]', $account->cas_name);
-    }
+    $this->assertToken('[cas:name]', $account->cas_name);
   }
 }
 
@@ -777,10 +751,10 @@ class CasLoginBlockTestCase extends CasTestHelper {
     $admin_user = $this->drupalCreateUser(array('administer blocks'));
     $this->drupalLogin($admin_user);
     $edit = array(
-      'user_0[region]' => '-1',
-      'cas_0[region]' => 'left',
+      'blocks[user_login][region]' => '-1',
+      'blocks[cas_login][region]' => 'sidebar_first',
     );
-    $this->drupalPost('admin/build/block', $edit, t('Save blocks'));
+    $this->drupalPost('admin/structure/block', $edit, t('Save blocks'));
     $this->drupalLogout();
   }
 
@@ -795,7 +769,7 @@ class CasLoginBlockTestCase extends CasTestHelper {
    */
   function assertCasLoginBlock($visible) {
     $xpath = '//div[@id=block-cas-0]/*';
-    $xpath = $this->buildXPathQuery('//div[@id=:id]/*', array(':id' => 'block-cas-0'));
+    $xpath = $this->buildXPathQuery('//div[@id=:id]/*', array(':id' => 'block-cas-login'));
     if ($visible) {
       return $this->assertFieldByXPath($xpath, NULL, t('CAS login block found.'));
     }

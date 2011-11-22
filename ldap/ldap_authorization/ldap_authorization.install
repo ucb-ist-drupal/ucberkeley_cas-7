@@ -1,0 +1,130 @@
+<?php
+// $Id: ldap_authorization.install,v 1.1.4.2 2011/02/08 06:01:00 johnbarclay Exp $
+
+/**
+ * @file
+ * Install, update and uninstall functions for the LDAP authorization module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function ldap_authorization_requirements($phase) {
+  $requirements = array();
+
+if ($phase != "install" && db_field_exists('ldapauth', 'ldapgroups_in_dn' )) {
+    $requirements['ldap_authorization_ldap_integration']['title'] = t('LDAP Integration LDAP Groups Upgrade Concern');
+    $requirements['ldap_authorization_ldap_integration']['severity'] = REQUIREMENT_WARNING;
+    $requirements['ldap_authorization_ldap_integration']['value'] = NULL;
+    $requirements['ldap_authorization_ldap_integration']['description'] = t('Upgrade from Drupal 6 LDAP Groups to Drupal 7
+      LDAP Authorization is not automatic.  LDAP Authorization will need to be configured by hand.
+      The authorization options are different and automated updgrade is not possible.
+      See also. See http://drupal.org/node/1023016, http://drupal.org/node/1183192.
+      This message will go away when the ldapauth database table is removed.');
+  }
+  // check that ldapauth not installed.
+  return $requirements;
+}
+
+
+/**
+ * Implements hook_schema().
+ */
+function ldap_authorization_schema() {
+
+  $schema['ldap_authorization'] = array(
+    'export' => array(
+      'key' => 'consumer_type',
+      'key name' => 'Mapping ID',
+      'identifier' => 'consumer_type',
+      'primary key' => 'numeric_consumer_conf_id',
+      'api' => array(
+        'owner' => 'ldap_authorization',
+        'api' => 'ldap_authorization',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+    ),
+
+    'description' => "Data used to map users ldap entry to authorization rights.",
+    'primary key' => array('numeric_consumer_conf_id'),
+    'foreign keys' => array(
+      'sid' => array(
+        'table' => 'ldap_servers',
+        'columns' => array('sid' => 'sid'),
+      ),
+    ),
+  );
+
+  require_once('LdapAuthorizationConsumerConfAdmin.class.php');
+
+  $fields = LdapAuthorizationConsumerConfAdmin::fields();
+  foreach ($fields as $name => $props) {
+    if (isset($props['schema'])) {
+      $schema['ldap_authorization']['fields'][$name] = $props['schema'];
+    }
+  }
+
+  return $schema;
+}
+
+/**
+ * add 'create_consumers field to ldap_authorization table
+ */
+function ldap_authorization_update_7100() {
+
+  if (!db_field_exists('ldap_authorization', 'create_consumers')) {
+    db_add_field('ldap_authorization', 'create_consumers', array(
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+    ));
+    return t('"create_consumers" field added to ldap_authorization table');
+  }
+  else {
+    return t('No database changes made.');
+  }
+
+}
+
+/**
+ * add derive_from_attr_use_first_attr field to ldap_authorization table
+ */
+function ldap_authorization_update_7101() {
+
+  if (!db_field_exists('ldap_authorization', 'derive_from_attr_use_first_attr')) {
+    db_add_field('ldap_authorization', 'derive_from_attr_use_first_attr', array(
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+    ));
+    return t('"derive_from_attr_use_first_attr" field added to ldap_authorization table');
+  }
+  else {
+    return t('No database changes made.');
+  }
+
+}
+
+
+/**
+ * Add derive_from_entry_search_all column to ldap_authorization
+ */
+function ldap_authorization_update_7102() {
+
+  if (!db_field_exists('ldap_authorization', 'derive_from_entry_search_all')) {
+    db_add_field('ldap_authorization', 'derive_from_entry_search_all', array(
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+    ));
+    return t('"derive_from_entry_search_all" field added to ldap_authorization table');
+  }
+  else {
+    return t('No database changes made.');
+  }
+
+}

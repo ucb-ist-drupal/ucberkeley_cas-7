@@ -10,7 +10,7 @@
  */
 class CasAttributesTestHelper extends CasTestHelper {
   function setUp($modules = array()) {
-    $modules = array_merge(array('cas_attributes', 'token'), $modules);
+    $modules = array_merge(array('cas_attributes'), $modules);
     parent::setUp($modules);
   }
 }
@@ -43,13 +43,13 @@ class CasAttributesTokenTestCase extends CasAttributesTestHelper {
     );
     $this->casLogin($account, $attributes);
 
-    $this->assertToken('[cas-name]', $account->cas_name);
-    $this->assertToken('[cas-attribute-surname]', $attributes['surname']);
-    $this->assertToken('[cas-attribute-memberof]', $attributes['memberOf'][0]);
+    $this->assertToken('[cas:name]', $account->cas_name);
+    $this->assertToken('[cas:attribute:surname]', $attributes['surname']);
+    $this->assertToken('[cas:attribute:memberOf]', $attributes['memberOf'][0]);
 
     $keys = array_merge(array('attraStyle'), array_keys($attributes));
     $keys = array_map('drupal_strtolower', $keys);
-    $this->assertToken('[cas-attribute-?]', t('Available attributes: %keys', array('%keys' => implode(', ', $keys))));
+    $this->assertToken('[cas:attribute:?]', t('Available attributes: %keys', array('%keys' => implode(', ', $keys))));
   }
 }
 
@@ -59,18 +59,26 @@ class CasAttributesTokenTestCase extends CasAttributesTestHelper {
 class CasAttributesTestCase extends CasAttributesTestHelper {
 
   function setUp() {
-    parent::setUp(array('profile'));
+    parent::setUp();
 
-    $this->drupalLogin($this->admin_user);
     foreach (array('test_user_memberof', 'test_user_name') as $field_name) {
-      $edit = array(
-        'category' => 'Test',
-        'title' => t('Some user field called @field_name', array('@field_name' => $field_name)),
-        'name' => $field_name,
+      // Create a field, and an instance on 'user' entity type.
+      $field = array(
+        'field_name' => $field_name,
+        'type' => 'text',
+        'settings' => array(
+          'max_length' => 255,
+        ),
       );
-      $this->drupalPost('admin/user/profile/add/textfield', $edit, t('Save field'));
+      field_create_field($field);
+      $instance = array(
+        'field_name' => $field_name,
+        'label' => t('Some user field called @field_name', array('@field_name' => $field_name)),
+        'entity_type' => 'user',
+        'bundle' => 'user',
+      );
+      field_create_instance($instance);
     }
-    $this->drupalLogout();
   }
 
   public static function getInfo() {
@@ -102,14 +110,14 @@ class CasAttributesTestCase extends CasAttributesTestHelper {
     $this->drupalLogin($this->admin_user);
     $edit = array(
       'cas_attributes[sync_every_login]' => 0,
-      'cas_attributes[relations][name]' => '[cas-attribute-NAME]',
-      'cas_attributes[relations][mail]' => '[cas-name]@example.com',
-      'cas_attributes[relations][1]' => '[cas-attribute-memberof]',
-      'cas_attributes[relations][2]' => '[cas-attribute-givenname] [cas-attribute-surname]',
+      'cas_attributes[relations][name]' => '[cas:attribute:NAME]',
+      'cas_attributes[relations][mail]' => '[cas:name]@example.com',
+      'cas_attributes[relations][test_user_memberof]' => '[cas:attribute:memberOf]',
+      'cas_attributes[relations][test_user_name]' => '[cas:attribute:givenName] [cas:attribute:surname]',
     );
-    $this->drupalPost('admin/user/cas/attributes', $edit, t('Save configuration'));
+    $this->drupalPost('admin/config/people/cas/attributes', $edit, t('Save configuration'));
     $this->drupalGet('user/' . $this->admin_user->uid . '/edit');
-    $this->drupalGet('admin/user/cas/attributes/cas');
+    $this->drupalGet('admin/config/people/cas/attributes/cas');
     $this->drupalGet('user/' . $this->admin_user->uid . '/edit');
     $this->drupalLogout();
 
@@ -121,7 +129,7 @@ class CasAttributesTestCase extends CasAttributesTestHelper {
     // evaluate to nothing.
     $this->assertEqual($this->loggedInUser->name, $cas_name);
     $this->assertEqual($this->loggedInUser->mail, "$cas_name@example.com");
-    $this->assertEqual($this->loggedInUser->test_user_memberof, 'CN=Staff,OU=Groups,DC=example,DC=edu');
-    $this->assertEqual($this->loggedInUser->test_user_name, 'John Smith');
+    $this->assertEqual($this->loggedInUser->test_user_memberof[LANGUAGE_NONE][0]['value'], 'CN=Staff,OU=Groups,DC=example,DC=edu');
+    $this->assertEqual($this->loggedInUser->test_user_name[LANGUAGE_NONE][0]['value'], 'John Smith');
   }
 }

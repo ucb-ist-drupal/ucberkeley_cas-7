@@ -36,7 +36,7 @@ function cas_attributes_admin_settings() {
   );
 
   $form['cas_attributes']['relations']['help'] = array(
-    '#markup' => t('Token replacement strings used to populate each <a href="@url">user field</a>? Entries left blank will be ignored.', array('@url' => url('admin/user/profile'))),
+    '#markup' => t('Token replacement strings used to populate each <a href="@url">user field</a>?  Only text fields are eligible to be populated.  Entries left blank will be ignored.', array('@url' => url('admin/config/people/accounts/fields'))),
   );
 
   // Provide fields for username and e-mail address.
@@ -56,19 +56,31 @@ function cas_attributes_admin_settings() {
   );
 
   // Provide fields for fields attached to the user bundle.
-  foreach (_cas_attributes_get_profile_fields() as $fid => $instance) {
-    $form['cas_attributes']['relations'][$fid] = array(
-      '#type' => 'textfield',
-      '#title' => check_plain($instance->title),
-      '#default_value' => isset($relations[$fid]) ? $relations[$fid] : '',
-      '#size' => 50,
-      '#description' => t('The LDAP attribute containing the account field with name %field_name', array('%field_name' => $instance->name)),
-    );
+  foreach (field_info_instances('user', 'user') as $name => $instance) {
+    $field = field_info_field($instance['field_name']);
+    if ($field['type'] == 'text') {
+      $form['cas_attributes']['relations'][$name] = array(
+        '#type' => 'textfield',
+        '#title' => t($instance['label']),
+        '#default_value' => isset($relations[$name]) ? $relations[$name] : '',
+        '#size' => 50,
+        '#description' => t('The account field with name %field_name.', array('%field_name' => $instance['field_name'])),
+      );
+    }
   }
 
-  $form['token_tree'] = array(
-    '#value' => theme('token_tree', array('cas'), FALSE),
-  );
+  if (module_exists('token')) {
+    $form['token_tree'] = array(
+      '#theme' => 'token_tree',
+      '#token_types' => array('cas'),
+      '#global_types' => FALSE,
+    );
+  }
+  else {
+    $form['token_tree'] = array(
+      '#markup' => '<p>' . t('Enable the <a href="@drupal-token">Token module</a> to view the available token browser.', array('@drupal-token' => 'http://drupal.org/project/token')) . '</p>',
+    );
+  }
 
   return system_settings_form($form);
 }
@@ -91,7 +103,7 @@ function cas_attributes_list() {
       $value = $value[0];
     }
     $rows[] = array(
-      t('[cas-attribute-@attribute]', array('@attribute' => drupal_strtolower($attribute))),
+      t('[cas:attribute:@attribute]', array('@attribute' => drupal_strtolower($attribute))),
       check_plain($value),
     );
   }
@@ -107,6 +119,6 @@ function cas_attributes_list() {
     );
   }
 
-  return theme('table', $header, $rows);
+  return theme('table', array('header' => $header, 'rows' => $rows));
 }
 

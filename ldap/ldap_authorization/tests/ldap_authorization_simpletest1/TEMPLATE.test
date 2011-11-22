@@ -1,0 +1,43 @@
+<?php
+// $Id$
+/**
+ * @file
+ * see getInfo() for test summary
+ */
+
+require_once(drupal_get_path('module', 'ldap_authorization') . '/tests/LdapAuthorizationTestCase.class.php');
+
+class LdapAuthorizationTestCaseTEMPLATE extends LdapAuthorizationTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Dont Use.',
+      'description' => 'This is an unfinished attempt at configuring simpletest to use features module output for configuration.  Test case for using features to store configuration data for simpletests.',
+      'group' => 'LDAP Authorization'
+    );
+  }
+
+  function testLogon() {
+    $this->ldapTestId = 'TEMPLATE test case';
+    $this->useFeatureData = TRUE;
+    $this->featureName = 'ldap_authorization_simpletest1';
+    $this->prepTestData();
+
+    $edit = array(
+      'name' => 'verykool',
+      'pass' => 'goodpwd',
+    );
+    $this->drupalPost('user', $edit, t('Log in'));
+    $this->assertText(t('Member for'), 'New Ldap user with good password authenticated.', $this->ldapTestId);
+    $this->assertTrue($this->testFunctions->ldapUserIsAuthmapped('verykool'), 'Ldap user properly authmapped.', $this->ldapTestId);
+
+    $verykool = user_load_by_name('verykool');
+    $this->assertTrue((is_object($verykool) && @(int)$verykool->uid > 1), 'Ldap user exists with uid > 1.', $this->ldapTestId);
+
+    $correct_roles = in_array('netadmins', array_values($verykool->roles));
+    $this->assertTrue($correct_roles, 'verykool granted  roles on actual logon "netadmins" drupal roles ', $this->ldapTestId);
+
+    $this->drupalGet('user/logout');
+  }
+
+}

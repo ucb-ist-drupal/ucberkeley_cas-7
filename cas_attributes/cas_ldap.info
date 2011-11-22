@@ -1,14 +1,16 @@
 name = CAS LDAP Tokens
 description = "Provides tokens for LDAP attributes for CAS users."
-core = 6.x
+core = 7.x
 package = Central Authentication Service
 
 dependencies[] = cas_attributes
-dependencies[] = ldapauth
+dependencies[] = ldap_servers
+
+configure = admin/config/people/cas/attributes
 
 ; Information added by drupal.org packaging script on 2011-04-30
-version = "6.x-3.0-beta2"
-core = "6.x"
+version = "7.x-1.0-beta2"
+core = "7.x"
 project = "cas_attributes"
-datestamp = "1304124110"
+datestamp = "1304124111"
 

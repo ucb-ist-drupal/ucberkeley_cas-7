@@ -6,41 +6,50 @@
  */
 
 /**
- * Implements hook_token_list().
+ * Implements hook_token_info_alter().
  */
-function _cas_attributes_token_list($type = 'all') {
-  $tokens = array();
-
-  if ($type == 'cas' || $type == 'all') {
-    if (function_exists('cas_phpcas_attributes')) {
-      $tokens['cas']['cas-attribute-?'] = t('A CAS attribute of the user. Replace ? with the attribute name in lower case. (Only available if user is logged into CAS). <a href="@url">Available tokens</a>.', array('@url' => url('admin/user/cas/attributes/cas')));
-      // $tokens['cas']['cas-attribute-?-raw'] = t('A CAS attribute of the user. Replace ? with the attribute name in lower case. (Only available if user is logged into CAS). <a href="@url">Available tokens</a>.', array('@url' => url('admin/user/cas/attributes/cas')));
-    }
+function cas_attributes_token_info_alter(&$data) {
+  if (function_exists('cas_phpcas_attributes')) {
+    $data['tokens']['cas']['attribute'] = array(
+      'name' => t('Attribute'),
+      'description' => t('A CAS attribute of the user. (Only available if user is logged into CAS). <a href="@url">Available tokens</a>.', array('@url' => url('admin/config/people/cas/attributes/cas'))),
+      'dynamic' => TRUE,
+    );
   }
-
-  return $tokens;
 }
 
 /**
- * Implements hook_token_values.
+ * Implements hook_tokens().
  */
-function _cas_attributes_token_values($type, $object = NULL) {
-  $values = array();
+function cas_attributes_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $sanitize = !empty($options['sanitize']);
+  $replacements = array();
 
-  if ($type == 'cas' && !empty($object)) {
-    $cas = $object;
-    $attributes = array_change_key_case(cas_phpcas_attributes($cas));
-    foreach ($attributes as $key => $value) {
-      if (is_array($value)) {
-        $value = $value[0];
+  if ($type == 'cas' && !empty($data['cas'])) {
+    $cas = $data['cas'];
+
+    // Provide [cas:attribute:?] dynamic tokens.
+    if ($attribute_tokens = token_find_with_prefix($tokens, 'attribute')) {
+      $attribute = array_change_key_case(cas_phpcas_attributes($cas));
+      foreach ($attribute_tokens as $name => $original) {
+        $name = drupal_strtolower($name);
+        if (isset($attribute[$name])) {
+          $value = $attribute[$name];
+          if (is_array($value)) {
+            $value = $value[0];
+          }
+          $replacements[$original] = $sanitize ? check_plain($value) : $value;
+        }
+        elseif ($name == '?') {
+          $keys = array_keys($attribute);
+          if ($sanitize) {
+            $keys = array_map('check_plain', $keys);
+          }
+          $replacements[$original] = t('Available attributes: %keys', array('%keys' => implode(', ', $keys)));
+        }
       }
-      $values['cas-attribute-' . $key] = check_plain($value);
-      // $values['cas-attribute-' . $key . '-raw'] = $value;
     }
-    $keys = array_keys($attributes);
-    $values['cas-attribute-?'] = t('Available attributes: %keys', array('%keys' => implode(', ', $keys)));
-    // $values['cas-attribute-?-raw'] = $values['cas-attribute-?'];
   }
 
-  return $values;
+  return $replacements;
 }

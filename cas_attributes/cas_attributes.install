@@ -26,7 +26,7 @@ function cas_attributes_requirements($phase) {
         'title' => $t('CAS'),
         'value' => $t('Outdated'),
         'severity' => REQUIREMENT_WARNING,
-        'description' => $t('CAS attributes requires <a href="@url">CAS</a> version 6.x-3.0 or later.', array('@url' => 'http://drupal.org/project/cas')),
+        'description' => $t('CAS attributes requires <a href="@url">CAS</a> version 7.x-1.0 or later.', array('@url' => 'http://drupal.org/project/cas')),
       );
     }
 

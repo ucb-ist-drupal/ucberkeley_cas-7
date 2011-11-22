@@ -1,0 +1,134 @@
+<?php
+// $Id: user.test,v 1.111 2010/12/18 00:56:18 dries Exp $
+
+/**
+ * @file
+ * simpletest for ldap aservers
+ *
+ */
+
+
+/** could replace mock server class with overriding ldap_* functions
+ *
+ *  the following functions would be candidates for overriding:
+ *  ldap_bind,  ldap_connect, ldap_search,
+ *  ldap_errno, ldap_err2str
+ *
+ */
+
+require_once('LdapTestFunctions.class.php');
+class LdapServersTestCase extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => 'LDAP Servers Tests',
+      'description' => 'Test ldap servers.  Servers module is primarily a storage
+        tool for ldap server configuration, so most of testing is just form and db testing.
+        there are some api like functions that could be tested.',
+      'group' => 'LDAP Server'
+    );
+  }
+
+  public $module_name = 'ldap_servers';
+
+  protected $ldap_test_data;
+
+  /**
+   *  create one or more server configurations in such as way
+   *  that this setUp can be a prerequisite for ldap_authentication and ldap_authorization
+   */
+  public function setUp() {
+    parent::setUp(array('ldap_servers'));
+    variable_set('ldap_simpletest', 1);
+    variable_set('ldap_help_watchdog_detail', 1);
+  }
+
+  function tearDown() {
+    parent::tearDown();
+    variable_del('ldap_help_watchdog_detail');
+    variable_del('ldap_simpletest');
+  }
+
+  public function testInstall() {
+    $group = 'ldap_servers: install and uninstall';
+    $install_tables = array('ldap_servers');
+    // disable, uninstall, and enable/install module
+    $modules = array($this->module_name);
+    module_disable($modules, TRUE); // disable dependent modules
+    drupal_uninstall_modules($modules);
+    module_enable($modules, TRUE);
+    foreach ($install_tables as $table) {
+      $this->assertTrue(db_table_exists($table), $table . ' table creates', $group);
+    }
+    $var_created = $this->assertTrue(TRUE, 'ldap_servers_encryption variable initialized', $group);
+    $var_created = $this->assertTrue(variable_get('ldap_servers_encrypt_key', FALSE), 'ldap_servers_encrypt_key variable initialized', $group);
+
+    module_disable($modules, TRUE); // disable dependent modules
+    drupal_uninstall_modules($modules);
+    foreach ($install_tables as $table) {
+      $this->assertFalse(db_table_exists($table), $table . ' table removed', $group);
+    }
+    $var_created = $this->assertFalse(variable_get('ldap_servers_encryption', FALSE), 'ldap_servers_encryption variable removed', $group);
+    $var_created = $this->assertFalse(variable_get('ldap_servers_encrypt_key', FALSE), 'ldap_servers_encrypt_key variable removed', $group);
+
+    module_enable($modules, TRUE);
+  }
+
+/**
+ private function testEncryption() {
+    // test that pwds in config files are encrypted.
+    // test that switching encryption, decrypes and reincrypts pwd.
+  }
+
+ private function testHttps() {
+    // enable https required
+    // get logon form over http and see if disabled
+  }
+
+
+
+
+ private function testServerCRUD() {
+    // add, edit, and delete a server.
+    // test critical validations
+    // test if server object can be instantiated from server record
+  }
+
+ private function testLdap() {
+    // test some basic ldap functions just to see if ldap connection is real.
+
+
+
+  }
+
+ private function testAPIFunctions() {
+    // test some functions in the api
+
+HTTPS
+-----------------------
+Tests and desired results.
+-----------------------
+
+LDAP_servers.HTTPS.user_profile_form.overhttps
+LDAP_servers.HTTPS.user_profile_form.overhttp
+LDAP_servers.HTTPS.user_login_block.overhttps
+LDAP_servers.HTTPS.user_login_block.overhttp
+LDAP_servers.HTTPS.user_login.overhttps
+LDAP_servers.HTTPS.user_login.overhttp
+
+
+-------------------------
+Encryption (ENCR)
+-------------------------
+Tests and desired results.
+-----------------------
+LDAP_servers.ENCR.on -- desired result:  password encypted in db
+LDAP_servers.ENCR.off -- desired result:  password encypted in db
+LDAP_servers.ENCR.mcrypt.off -- desired result:  password encypt checkbox not visible and suggestion to enable it.
+LDAP_servers.ENCR.off.on -- desired result:  when encyrption turned on pwd is encypted, and still works
+LDAP_servers.ENCR.on.off -- desired result:  when encyrption turned off pwd is dencypted, and still works
+
+
+  }
+ */
+
+}

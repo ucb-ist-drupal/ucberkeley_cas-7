@@ -24,16 +24,16 @@ function cas_server_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['cas/proxyValidate'] = array(
+  $items['cas/serviceValidate'] = array(
     'page callback' => 'cas_server_service_validate',
-    'title' => 'CAS Proxy Service Validate',
+    'title' => 'CAS Service Validate',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
 
-  $items['cas/serviceValidate'] = array(
+  $items['cas/proxyValidate'] = array(
     'page callback' => 'cas_server_service_validate',
-    'title' => 'CAS Service Validate',
+    'title' => 'CAS Proxy Ticket Validate',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
@@ -47,13 +47,33 @@ function cas_server_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_theme().
+ */
+function cas_server_theme() {
+  return array(
+    'cas_service_validate_success' => array(
+      'variables' => array('name' => NULL, 'attributes' => NULL),
+      'file' => 'cas_server.response.inc',
+    ),
+    'cas_service_validate_attributes' => array(
+      'variables' => array('attributes' => NULL, 'style' => 'jasig'),
+      'file' => 'cas_server.response.inc',
+    ),
+    'cas_service_validate_failure' => array(
+      'variables' => array('ticket' => NULL, 'error_code' => NULL),
+      'file' => 'cas_server.response.inc',
+    ),
+  );
+}
+
 function cas_server_service_return() {
   global $user;
   $service = $_COOKIE[CAS_LOGIN_COOKIE];
   if ($service && $user->uid) {
     $ticket = _cas_server_save_ticket($user->uid, $service);
     setcookie(CAS_LOGIN_COOKIE, "", -3600);
-    drupal_goto($service, 'ticket='. urlencode($ticket));
+    drupal_goto($service, array('query' => array('ticket' => $ticket)));
   }
 }
 
@@ -64,6 +84,7 @@ function cas_server_service_return() {
 function cas_server_login() {
   // Set login cookie so that we know we're in the process of logging in
   global $user;
+  $output='';
   if ($user->uid) {
     if ($_GET['service']) {
       $_COOKIE[CAS_LOGIN_COOKIE] = $_REQUEST['service'];
@@ -72,7 +93,7 @@ function cas_server_login() {
     cas_server_service_return();
   }
   else {
-    if ($_GET['gateway'] && $_GET['service']) {
+    if (isset($_GET['gateway']) && isset($_GET['service'])) {
       drupal_goto($_GET['service']);
     }
     else {
@@ -80,8 +101,8 @@ function cas_server_login() {
       if ($_GET['service']) {
         setcookie(CAS_LOGIN_COOKIE, $_REQUEST['service']);
       }
-      $output .= l(t('Login'), 'user', array('query' => 'destination=cas/login'));
-      drupal_goto('user', 'destination=cas/login');
+      $output .= l(t('Login'), 'user', array('query' => array('destination' => 'cas/login')));
+      drupal_goto('user', array('query' => array('destination' => 'cas/login')));
     }
   }
   return $output;
@@ -119,20 +140,20 @@ function cas_server_service_validate() {
   header('Content-type:', 'text/xml');
   if ($user_name) {
     //@TODO Generate proxy granting ticket
-    print "<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>\n".
-          "  <cas:authenticationSuccess>\n".
-          "    <cas:user>$user_name</cas:user>\n".
-          "  </cas:authenticationSuccess>\n".
+    print "<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>\n" .
+          "  <cas:authenticationSuccess>\n" .
+          "    <cas:user>$user_name</cas:user>\n" .
+          "  </cas:authenticationSuccess>\n" .
           "</cas:serviceResponse>\n";
     watchdog('cas', 'User %name CAS sucessully authenticated.', array('%name' => $user_name));
   }
   else {
-    print "<cas:serviceReponse xmlns:cas='http://www.yale.edu/tp/cas'>\n".
-          "  <cas:authenticationFailure code=\"$cas_error\">\n".
-          "     Ticket $ticket not recognized.\n".
-          "  </cas:authenticationFailure>".
+    print "<cas:serviceReponse xmlns:cas='http://www.yale.edu/tp/cas'>\n" .
+          "  <cas:authenticationFailure code=\"$cas_error\">\n" .
+          "     Ticket $ticket not recognized.\n" .
+          "  </cas:authenticationFailure>" .
           "</cas:serviceResponse>";
-    watchdog('cas', 'User %name authentication failed!', array('%name' => $user_name));
+    watchdog('cas', 'Ticket %ticket for service %service not recognized.', array('%ticket' => $ticket, '%service' => $service));
   }
 }
 
@@ -145,14 +166,16 @@ function cas_server_service_validate() {
 function _cas_server_validate($service, $ticket) {
   // Look up the ticket
   $user_name='';
-  $ticket_info=array($service, $ticket);
-  $result = db_query_range("SELECT u.name FROM {cas_server_tickets} t JOIN {users} u ON t.uid=u.uid  WHERE t.service = '%s' and t.ticket = '%s'", $ticket_info, 0, 1);
+  $ticket_info=array(':service' => $service, ':ticket' => $ticket);
+  $result = db_query_range("SELECT u.name FROM {cas_server_tickets} t JOIN {users} u ON t.uid=u.uid  WHERE t.service = :service and t.ticket = :ticket", 0, 1, $ticket_info);
   if ($result !== FALSE) {
-    while ($ticket_data = db_fetch_object($result)) {
+    foreach ($result as $ticket_data) {
       $user_name = $ticket_data->name;
     }
   }
-  db_query("DELETE FROM {cas_server_tickets} WHERE ticket='%s'", array($ticket));
+  db_delete('cas_server_tickets')
+    ->condition('ticket', $ticket)
+    ->execute();
 
   return $user_name;
 }
@@ -164,16 +187,16 @@ function _cas_server_validate($service, $ticket) {
  */
 function _cas_server_save_ticket($uid, $service) {
   // Generate the ticket
-  $time = time();
-  $ticket = 'ST-'. user_password();
-
-  $ticket_data = array($uid, $service, $ticket, $time);
+  $time = REQUEST_TIME;
+  $ticket = 'ST-' . user_password();
+  $ticket_data = array('uid' => $uid, 'service' => $service, 'ticket' => $ticket, 'timestamp' => $time);
   // Save the ticket to the db
   if ($uid && $service) {
-    db_query("INSERT INTO {cas_server_tickets} (uid, service, ticket, timestamp) VALUES (%d, '%s', '%s', %d)", $ticket_data);
+    db_insert('cas_server_tickets')->fields($ticket_data)->execute();
   }
   return $ticket;
 }
+
 /**
  * Cas Logout
  * @TODO: Implement single sign out support
@@ -184,7 +207,7 @@ function cas_server_logout() {
   module_invoke_all('user', 'logout', NULL, $user);
   $output = t('<p>You have been logged out successfully</p>');
   if ($_GET['url'])  {
-    $output .= '<p>'. l(t('Continue'), $_GET['url']) .'</p>';
+    $output .= '<p>' . l(t('Continue'), $_GET['url']) . '</p>';
   }
   return $output;
 }

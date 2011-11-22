@@ -1,0 +1,15 @@
+core = "7.x"
+dependencies[] = "ldap_authorization"
+dependencies[] = "strongarm"
+description = "Ldap Authorization SimpleTest 1"
+name = "Ldap Authorization SimpleTest"
+package = "Features"
+project = "ldap_authorization_simpletest1"
+version = "7.x-1.0"
+
+; Information added by drupal.org packaging script on 2011-10-10
+version = "7.x-1.0-beta5"
+core = "7.x"
+project = "ldap"
+datestamp = "1318263413"
+

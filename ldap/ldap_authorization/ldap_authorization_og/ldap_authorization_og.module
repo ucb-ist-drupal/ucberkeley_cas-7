@@ -1,0 +1,108 @@
+<?php
+// $Id: ldap_authorization_og.module,v 1.2 2010/12/13 02:28:51 johnbarclay Exp $
+
+
+
+
+/** @file
+ *
+ *  maps ldap data to og groups
+ *
+ */
+
+/**
+ * Implements hook_ldap_authorization_consumer().
+ */
+function ldap_authorization_og_ldap_authorization_consumer() {
+  $types['og_group'] =  array(
+    'consumer_name' => t('OG group'),
+    'consumer_name_plural' => t('OG groups'),
+    'consumer_short_name' => t('group'),
+    'consumer_short_name_plural' => t('groups'),
+    'consumer_description' => t('An OG group.'),
+    'consumer_class_name' => 'LdapAuthorizationConsumerOG',
+    'consumer_class_file' => 'LdapAuthorizationConsumerOG.class.php',
+    'consumer_module' => 'ldap_authorization_og',
+  );
+
+  return $types;
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function ldap_authorization_og_menu() {
+  $items = array();
+
+  $items['admin/config/people/ldap_authorization_og'] = array(
+    'title' => 'LDAP Authorization OG',
+    'description' => 'Configuration for LDAP Authorization OG module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ldap_authorization_og_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+
+/**
+ * Form function, called by drupal_get_form()
+ * in ldap_authorization_og_menu().
+ */
+function ldap_authorization_og_form($form, &$form_state) {
+
+
+// TODO: get this to work properly for creating new groups.
+/*
+  $result = db_query('SELECT uid, name FROM {users} ORDER BY uid ASC');
+  $allUsers = $result->fetchAllKeyed();
+
+  $form['ldap_authorization_og_drupal_author'] = array(
+    '#type' => 'select',
+    '#title' => t('Drupal author'),
+    '#default_value' => variable_get('ldap_authorization_og_drupal_author', 0),
+    '#options' => $allUsers,
+    '#description' => t('A node will be created with this user as the author.'),
+    '#required' => TRUE,
+  );
+*/
+
+  $result = db_query('SELECT type, name FROM {node_type} ORDER BY name ASC');
+  $allNodeTypes = $result->fetchAllKeyed();
+  $groupNodeTypes = NULL;
+
+  foreach($allNodeTypes as $nodeType => $nodeTypeName){
+  	if(og_is_group_type('node',$nodeType)){
+  		$groupNodeTypes[$nodeType] = $nodeTypeName;
+  	}
+  }
+
+  $form['ldap_authorization_og_node_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Node Type'),
+    '#default_value' => variable_get('ldap_authorization_og_node_type', 'group'),
+    '#required' => TRUE,
+    '#options' => $groupNodeTypes,
+  );
+
+
+  $OGroles = og_roles(0);
+
+  $form['ldap_authorization_og_role_assigned'] = array(
+    '#type' => 'select',
+    '#title' => t('OG Role'),
+    '#default_value' => variable_get('ldap_authorization_og_role_assigned', 2),
+    '#options' => $OGroles,
+    '#description' => t('The user added to the Organic Group will be assigned this role.'),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+  //return $form;
+}
+
+
+

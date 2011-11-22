@@ -1,12 +1,16 @@
 name = "CAS module tests"
 description = "Support module for CAS testing."
 package = Testing
-core = 6.x
+core = 7.x
 hidden = TRUE
 
-; Information added by drupal.org packaging script on 2011-04-28
-version = "6.x-3.x-dev"
-core = "6.x"
+; Normally one should not enable both CAS and CAS Server. However, to reduce
+; code duplication we use several themes defined by that module.
+dependencies[] = cas_server
+
+; Information added by drupal.org packaging script on 2011-11-07
+version = "7.x-1.1"
+core = "7.x"
 project = "cas"
-datestamp = "1303949059"
+datestamp = "1320700229"
 

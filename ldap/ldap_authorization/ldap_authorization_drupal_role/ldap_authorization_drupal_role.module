@@ -1,0 +1,29 @@
+<?php
+// $Id: ldap_authorization_drupal_role.module,v 1.2 2010/12/13 02:28:51 johnbarclay Exp $
+
+
+
+
+/** @file
+ *
+ *  maps ldap data to drupal roles
+ *
+ */
+
+/**
+ * Implements hook_ldap_authorization_consumer().
+ */
+function ldap_authorization_drupal_role_ldap_authorization_consumer() {
+  $types['drupal_role'] =  array(
+    'consumer_name' => t('drupal role'),
+    'consumer_name_plural' => t('drupal roles'),
+    'consumer_short_name' => t('role'),
+    'consumer_short_name_plural' => t('roles'),
+    'consumer_description' => t('A Drupal Role.'),
+    'consumer_class_name' => 'LdapAuthorizationConsumerDrupalRole',
+    'consumer_class_file' => 'LdapAuthorizationConsumerRole.class.php',
+    'consumer_module' => 'ldap_authorization_drupal_role',
+  );
+
+  return $types;
+}

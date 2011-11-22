@@ -6,7 +6,7 @@
  */
 
 /**
- * Implementation of hook_schema().
+ * Implements hook_schema().
  */
 function cas_schema() {
   $schema = array();
@@ -58,30 +58,21 @@ function cas_schema() {
       'cas_name' => array('cas_name'),
     ),
     'primary key' => array('aid'),
-    // 'foreign keys' => array(
-    //   'user' => array(
-    //     'table' => 'users',
-    //     'columns' => array('uid' => 'uid'),
-    //   ),
-    // ),
+    'foreign keys' => array(
+      'user' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
   );
 
   return $schema;
 }
 
 /**
- * Implementation of hook_install().
- */
-function cas_install() {
-  drupal_install_schema('cas');
-}
-
-/**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function cas_uninstall() {
-  drupal_uninstall_schema('cas');
-
   // Delete variables.
   variable_del('cas_access');
   variable_del('cas_allow_rememberme');
@@ -147,14 +138,14 @@ function cas_requirements($phase) {
     else {
       $requirements['phpcas']['value'] = $t('Not found');
       $requirements['phpcas']['severity'] = REQUIREMENT_ERROR;
-      $requirements['phpcas']['description'] = $t('phpCAS could not be loaded. Please <a href="@phpcas_url">download phpCAS</a> and <a href="@cas_url">configure its location</a>.', array('@phpcas_url' => $phpcas_url, '@cas_url' => url('admin/user/cas')));
+      $requirements['phpcas']['description'] = $t('phpCAS could not be loaded. Please <a href="@phpcas_url">download phpCAS</a> and <a href="@cas_url">configure its location</a>.', array('@phpcas_url' => $phpcas_url, '@cas_url' => url('admin/config/people/cas')));
     }
   }
   return $requirements;
 }
 
 /**
- * Implementation of hook_update_N().
+ * Creates CAS login data table for Single-Sign-Out.
  */
 function cas_update_1() {
   $schema = array();
@@ -179,9 +170,7 @@ function cas_update_1() {
     'primary key' => array('cas_session_id'),
   );
 
-  $ret = array();
-  db_create_table($ret, 'cas_login_data', $schema['cas_login_data']);
-  return $ret;
+  db_create_table('cas_login_data', $schema['cas_login_data']);
 }
 
 /**
@@ -191,8 +180,6 @@ function cas_update_6300() {
   if (variable_get('cas_cert_verify', 'none') == 'verify') {
     variable_set('cas_cert_verify', 'none');
   }
-  $ret = array();
-  return $ret;
 }
 
 /**
@@ -228,32 +215,38 @@ function cas_update_6301() {
       'cas_name' => array('cas_name'),
     ),
     'primary key' => array('aid'),
-    // 'foreign keys' => array(
-    //   'user' => array(
-    //     'table' => 'users',
-    //     'columns' => array('uid' => 'uid'),
-    //   ),
-    // ),
+    'foreign keys' => array(
+      'user' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
   );
 
   // Create {cas_user} table.
-  $ret = array();
-  db_create_table($ret, 'cas_user', $schema['cas_user']);
+  db_create_table('cas_user', $schema['cas_user']);
 
   // Migrate entries from {authmap} to {cas_user}.
-  db_query('INSERT INTO {cas_user} (uid, cas_name) SELECT a.uid AS uid, a.authname AS cas_name FROM {authmap} a WHERE a.module = "cas" AND a.uid <> 0');
+  $query = db_select('authmap', 'a')
+    ->condition('module', 'cas')
+    ->condition('uid', 0, '<>');
+  $query->addField('a', 'uid');
+  $query->addField('a', 'authname', 'cas_name');
+  db_insert('cas_user')
+    ->from($query)
+    ->execute();
 
   // Remove old entries in {authmap}.
-  db_query('DELETE FROM {authmap} WHERE module = "cas"');
-
-  return $ret;
+  db_delete('authmap')
+    ->condition('module', 'cas')
+    ->execute();
 }
 
 /**
  * Remove 'hijack user' and 'Drupal is CAS user repository' options.
  */
 function cas_update_6302() {
-  $messages = array();
+  $message = NULL;
   $t = get_t();
 
   if (variable_get('cas_authmap', 0) || variable_get('cas_hijack_user', 0)) {
@@ -263,17 +256,26 @@ function cas_update_6302() {
     //   SELECT u.uid AS uid, u.name as cas_name
     //   FROM users u
     //   WHERE uid <> 0 AND NOT EXISTS (SELECT cas_name FROM cas_user c WHERE c.cas_name = u.name);
-    db_query("INSERT INTO {cas_user} (uid, cas_name) SELECT u.uid AS uid, u.name AS cas_name FROM {users} u WHERE uid <> 0 AND NOT EXISTS (SELECT cas_name FROM {cas_user} c WHERE c.cas_name = u.name)");
 
-    $messages[] = array(
-      'success' => TRUE,
-      'query' => $t('Users have been automatically assigned their CAS username. For more information, see "Associating CAS usernames with Drupal users" in the CAS module README.txt.'),
+    $query = db_select('users', 'u');
+    $query->addField('u', 'uid', 'uid');
+    $query->addField('u', 'name', 'cas_name');
+    $query->condition('uid', 0, '<>');
+    $query->notExists(
+      db_select('cas_user', 'c')
+      ->fields('c', array('cas_name'))
+      ->where('c.cas_name = u.name')
     );
+    db_insert('cas_user')
+      ->from($query)
+      ->execute();
+
+    $message = $t('Users have been automatically assigned their CAS username. For more information, see "Associating CAS usernames with Drupal users" in the CAS module README.txt.');
   }
 
   variable_del('cas_authmap');
   variable_del('cas_hijack_user');
-  return $messages;
+  return $message;
 }
 
 /**
@@ -329,11 +331,20 @@ function cas_update_6304() {
   // links at runtime. Since the menu items 'cas' and 'caslogout' are not
   // functional without the destination parameter, we do this for all menu
   // links, even custom defined ones (i.e., those with module = 'menu').
-  $link_paths = array('cas', 'cas_logout');
-  $result = db_query("SELECT mlid FROM {menu_links} WHERE link_path IN (" . db_placeholders($link_paths, 'varchar') . ")", $link_paths);
-  while ($record = db_fetch_object($result)) {
+  $result = db_query("SELECT mlid FROM {menu_links} WHERE link_path IN (:link_path)", array(':link_path' => array('cas', 'caslogout')));
+  foreach ($result as $record) {
     $link = menu_link_load($record->mlid);
     menu_link_save($link);
   }
-  return array();
+}
+
+/**
+ * Transform numeric block deltas to string block deltas.
+ */
+function cas_update_7000(&$sandbox) {
+  $renamed_deltas = array(
+    'cas' => array('0' => 'login'),
+  );
+  $moved_deltas = array();
+  update_fix_d7_block_deltas($sandbox, $renamed_deltas, $moved_deltas);
 }

@@ -6,34 +6,15 @@
  */
 
 /**
- * Implements hook_theme().
- */
-function cas_test_theme() {
-  return array(
-    'cas_service_validate_success' => array(
-      'arguments' => array('name' => NULL, 'attributes' => array(), 'style' => 'jasig'),
-      'file' => 'cas_test.response.inc',
-    ),
-    'cas_service_validate_attributes' => array(
-      'arguments' => array('attributes' => array(), 'style' => 'jasig'),
-      'file' => 'cas_test.response.inc',
-    ),
-    'cas_service_validate_failure' => array(
-      'arguments' => array('ticket' => NULL, 'error_code' => NULL),
-      'file' => 'cas_test.response.inc',
-    ),
-  );
-}
-
-/**
  *
  */
 function cas_test_cas_phpcas_alter() {
 
   // Set the User-Agent field which is used by SimpleTest to identify testing
   // requests.
-  if (preg_match('/simpletest\d+/', $GLOBALS['db_prefix'], $matches)) {
-    phpCAS::setExtraCurlOption(CURLOPT_USERAGENT, drupal_generate_test_ua($matches[0]));
+  $test_info = &$GLOBALS['drupal_test_info'];
+  if (!empty($test_info['test_run_id'])) {
+    phpCAS::setExtraCurlOption(CURLOPT_USERAGENT, drupal_generate_test_ua($test_info['test_run_id']));
   }
 
   // Set all CAS server URLs manually, as this is the only way to specify an
@@ -127,13 +108,13 @@ function cas_test_login() {
     // Generate a ticket and redirect to the service URL with the login ticket.
     $ticket = _cas_test_ticket_generate($service, $cas_user);
     // Force redirection.
-    unset($_REQUEST['destination']);
-    drupal_goto($service, array('ticket' => $ticket));
+    unset($_GET['destination']);
+    drupal_goto($service, array('query' => array('ticket' => $ticket)));
   }
   elseif (isset($_GET['gateway']) && $_GET['gateway'] == 'true') {
     // We were not able to log in the user, so redirect to the service URL.
     // Force redirection.
-    unset($_REQUEST['destination']);
+    unset($_GET['destination']);
     drupal_goto($service);
   }
   else {
@@ -172,11 +153,11 @@ function cas_test_service_validate() {
 
   header('Content-type:', 'text/xml');
   if ($cas_user = _cas_test_ticket_validate($service, $ticket)) {
-    print theme('cas_service_validate_success', $cas_user['name'], $cas_user['attributes']);
+    print theme('cas_service_validate_success', $cas_user);
   }
   else {
-    $cas_error = (!$ticket || !$service) ? 'INVALID_REQUEST' : 'INVALID_TICKET';
-    print theme('cas_service_validate_failure', $ticket, $error_code);
+    $error_code = (!$ticket || !$service) ? 'INVALID_REQUEST' : 'INVALID_TICKET';
+    print theme('cas_service_validate_failure', array('ticket' => $ticket, 'error_code' => $error_code));
   }
   exit();
 }
@@ -263,10 +244,14 @@ function cas_test_single_sign_out($cas_name) {
       );
 
       // Sign out the user.
-      $headers = array(
-        'Content-Type' => 'application/x-www-form-urlencoded',
+      $options = array(
+        'method' => 'POST',
+        'headers' => array(
+          'Content-Type' => 'application/x-www-form-urlencoded',
+        ),
+        'data' => drupal_http_build_query($data),
       );
-      drupal_http_request($service, $headers, 'POST', http_build_query($data, '' , '&'));
+      drupal_http_request($service, $options);
     }
   }
   unset($sso[$cas_name]);
@@ -277,6 +262,6 @@ function cas_test_single_sign_out($cas_name) {
  * Evaluate the specified token.
  */
 function cas_test_token_evaluate() {
-  print token_replace_multiple($_GET['token'], array('cas' => $_GET['name']));
+  print token_replace($_GET['token'], array('cas' => $_GET['name']));
   exit(0);
 }

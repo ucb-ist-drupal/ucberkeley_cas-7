@@ -5,10 +5,7 @@ function ucb_cas_requirements($phase) {
   $sub_modules = array("cas_ldap",
                        "cas_attributes",
                        "cas",
-                       "ldapdata",
-                       "ldapgroups",
-                       "ldapauth",
-                       "token",
+                       "ldap_servers",
   );
   variable_set("ucb_cas_sub_modules", $sub_modules);
   
@@ -17,7 +14,7 @@ function ucb_cas_requirements($phase) {
     foreach ($sub_modules as $sm) {
       $path = drupal_get_path('module', $sm);
       // If ucb_cas is in the path, it's ours
-      if (strpos($path, 'ucb_cas') === false) {
+      if (strpos($path, 'ucb_cas') === FALSE) {
         if (!in_array($path, $paths)) $paths[] = $path;
       }
     }
@@ -41,35 +38,105 @@ function ucb_cas_install() {
   $sub_modules = variable_get("ucb_cas_sub_modules", array());
 
   //TODO: Check to see if they are installed first, if yes skip...?
-  drupal_install_modules($sub_modules);
+  module_enable($sub_modules);
   drupal_set_message("Installed ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
 
-  /* Settings */
-  db_query("INSERT INTO `ldapauth` (`sid`, `name`, `status`, `server`, `port`, `tls`, `encrypted`, `basedn`
-  , `user_attr`, `mail_attr`, `binddn`, `bindpw`, `login_php`, `filter_php`, `weight`, `ldapdata_binddn`
-  , `ldapdata_bindpw`, `ldapdata_rwattrs`, `ldapdata_roattrs`, `ldapdata_mappings`, `ldapdata_attrs`
-  , `ldapdata_filter_php`, `ldapgroups_in_dn`, `ldapgroups_dn_attribute`, `ldapgroups_attr`, `ldapgroups_in_attr`
-  , `ldapgroups_as_entries`, `ldapgroups_entries`, `ldapgroups_entries_attribute`, `ldapgroups_mappings`
-  , `ldapgroups_mappings_filter`, `ldapgroups_filter_php`, `ldapgroups_groups`) 
-  VALUES
-  (1, 'ldap-test.berkeley.edu', 1, 'ldap-test.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail'
-  , '', '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL),
-  (2, 'ldap.berkeley.edu', 1, 'ldap.berkeley.edu', 389, 0, 0, 'ou=people,dc=berkeley,dc=edu', 'uid', 'mail', '', '', NULL, NULL
-  , 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL)
-  ");
-
+  /*** Settings ***/
+  /* LDAP */
+  $ldap_servers = array(
+    array(
+      'sid' => 'ucb_test',
+      'numeric_sid' => 0,
+      'name' => 'ldap-test.berkeley.edu',
+      'status' => 1,
+      'ldap_type' => 'default',
+      'address' => 'ldap-test.berkeley.edu',
+      'port' => 389,
+      'tls' => 0,
+      'bind_method' => 3,
+      'binddn' => '',
+      'bindpw' => '',
+      'basedn' => 'a:1:{i:0;s:28:"ou=people,dc=berkeley,dc=edu";}',
+      'user_attr' => 'uid',
+      'mail_attr' => 'mail',
+      'mail_template' => '',
+      'allow_conflicting_drupal_accts' => 0,
+      'unique_persistent_attr' => '',
+      'user_dn_expression' => '',
+      'ldap_to_drupal_user' => '',
+      'testing_drupal_username' => 213108,
+      'weight' => 0,
+    ),
+    array(
+      'sid' => 'ucb_prod',
+      'numeric_sid' => 0,
+      'name' => 'ldap.berkeley.edu',
+      'status' => 1,
+      'ldap_type' => 'default',
+      'address' => 'ldap.berkeley.edu',
+      'port' => 389,
+      'tls' => 0,
+      'bind_method' => 3,
+      'binddn' => '',
+      'bindpw' => '',
+      'basedn' => 'a:1:{i:0;s:28:"ou=people,dc=berkeley,dc=edu";}',
+      'user_attr' => 'uid',
+      'mail_attr' => 'mail',
+      'mail_template' => '',
+      'allow_conflicting_drupal_accts' => 0,
+      'unique_persistent_attr' => '',
+      'user_dn_expression' => '',
+      'ldap_to_drupal_user' => '',
+      'testing_drupal_username' => 213108,
+      'weight' => 0,
+    ),
+  );
+  
+  $query = db_insert('ldap_servers')
+    ->fields(array('sid',
+                   'numeric_sid',
+                   'name',
+                   'status',
+                   'ldap_type',
+                   'address',
+                   'port',
+                   'tls',
+                   'bind_method',
+                   'binddn',
+                   'bindpw',
+                   'basedn',
+                   'user_attr',
+                   'mail_attr',
+                   'mail_template',
+                   'allow_conflicting_drupal_accts',
+                   'unique_persistent_attr',
+                   'user_dn_expression',
+                   'ldap_to_drupal_user',
+                   'testing_drupal_username',
+                   'weight',
+                  ));
+  foreach($ldap_servers as $ls) {
+    $query->values($ls);
+  }
+  $query->execute();
+  
+  /* CAS Variables */
   variable_set("cas_access",  "0");
   variable_set("cas_attributes",  array(
     'sync_every_login' => 1,
     'relations' => array(
-            'name' => '[cas-ldap-displayname]',
-            'mail' => '[cas-ldap-mail]',
+            'name' => '[cas:ldap:displayname]',
+            'mail' => '[cas:ldap:mail]',
   ),
     'ldap' => array(
-            'server' => 1,
+            'server' => 'ucb_prod',
   ),
   ));
-  variable_set("cas_auto_assigned_role",  array(null, null,1,0));
+  variable_set("cas_auto_assigned_role",  array(4 => 4,
+                                                2 => 1,
+                                                3 => 0, 
+                                                5 => 0,
+                                                ));
   variable_set("cas_cert",  "");
   variable_set("cas_changePasswordURL",  "https://net-auth.berkeley.edu/cgi-bin/krbcpw");
   variable_set("cas_check_first",  0);
@@ -81,13 +148,12 @@ function ucb_cas_install() {
   variable_set("cas_hide_password",  1);
   variable_set("cas_library_dir",  "CAS");
   variable_set("cas_login_drupal_invite",  "");
-  variable_set("cas_login_form",  "1");
-  variable_set("cas_login_invite",  "Log in using CAS");
+  variable_set("cas_login_form",  "2");
+  variable_set("cas_login_invite",  "Log in using CalNet");
   variable_set("cas_login_message",  "Logged in via CalNet as %cas_username.");
-  variable_set("cas_login_redir_message",  "You will be redirected to the secure CAS login page.");
+  variable_set("cas_login_redir_message",  "You will be redirected to the secure CalNet login page.");
   variable_set("cas_logout_destination",  "");
-  variable_set("cas_pages",  "services/*
-node/add/*
+  variable_set("cas_pages",  "node/add/*
 node/*/edit/*");
   variable_set("cas_pgtformat",  "plain");
   variable_set("cas_pgtpath",  "");
@@ -104,18 +170,18 @@ node/*/edit/*");
 
 function ucb_cas_uninstall() {
   /* Remove modules */
-
   $sub_modules = variable_get("ucb_cas_sub_modules", array());
-  //include_once('includes/install.inc');
-  //module_rebuild_cache();
-  module_disable($sub_modules, TRUE);
-  foreach ($sub_modules as $sm) {
-    drupal_uninstall_module($sm);
+  module_disable($sub_modules, FALSE);
+  if (drupal_uninstall_modules($sub_modules, FALSE)) {  
+    drupal_set_message("Uninstalled ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
   }
-  drupal_set_message("Uninstalled ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
+  else {
+      drupal_set_message("One or more of these modules could not be uninstalled: " . implode(', ', $sub_modules), 'warning');
+  }
 
   /* Clear settings */
   // most settings are removed by uninstalling the sub modules.
   variable_del("ucb_cas_sub_modules");
+
 }
 

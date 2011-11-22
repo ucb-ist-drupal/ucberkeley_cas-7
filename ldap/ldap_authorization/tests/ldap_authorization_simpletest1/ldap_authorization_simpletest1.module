@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Ldap Authorization SimpleTest feature.
+ */
+
+include_once('ldap_authorization_simpletest1.features.inc');

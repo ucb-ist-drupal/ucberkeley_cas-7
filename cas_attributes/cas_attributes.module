@@ -13,7 +13,7 @@
 function cas_attributes_menu() {
   $items = array();
 
-  $items['admin/user/cas/attributes'] = array(
+  $items['admin/config/people/cas/attributes'] = array(
     'title' => 'Attributes',
     'description' => 'Manage the relationships between CAS attributes and user fields.',
     'page callback' => 'drupal_get_form',
@@ -23,7 +23,7 @@ function cas_attributes_menu() {
     'type' => MENU_LOCAL_TASK,
     'weight' => -8,
   );
-  $items['admin/user/cas/attributes/cas'] = array(
+  $items['admin/config/people/cas/attributes/cas'] = array(
     'title' => 'CAS Attribute Tokens',
     'description' => 'Get a list of all available CAS Attributes',
     'page callback' => 'cas_attributes_list',
@@ -34,22 +34,6 @@ function cas_attributes_menu() {
   );
 
   return $items;
-}
-
-/**
- * Implements hook_token_list().
- */
-function cas_attributes_token_list($type = 'all') {
-  module_load_include('tokens.inc', 'cas_attributes');
-  return _cas_attributes_token_list($type);
-}
-
-/**
- * Implements hook_token_values().
- */
-function cas_attributes_token_values($type, $object = NULL) {
-  module_load_include('tokens.inc', 'cas_attributes');
-  return _cas_attributes_token_values($type, $object);
 }
 
 /**
@@ -67,49 +51,18 @@ function cas_attributes_cas_user_presave(&$edit, $account) {
 
   $data = array('cas' => $edit['cas_user']['name']);
 
-  $profile_fields = _cas_attributes_get_profile_fields();
-
   // Set each drupal field to its mapped attribute.
   foreach ($cas_attributes['relations'] as $drupal_field => $text) {
-    $result = trim(token_replace_multiple($text, $data, TOKEN_PREFIX, TOKEN_SUFFIX, array('clear' => TRUE)));
+    $result = trim(token_replace($text, $data, array('clear' => TRUE)));
 
     // Only update the fields if there is data to set.
     if (!empty($result)) {
-      // Is it a profile field? We unfortunately cannot just set this in edit, as
-      // profile is braindead.
-      if (is_numeric($drupal_field)) {
-        if (isset($profile_fields[$drupal_field]) && $instance = $profile_fields[$drupal_field]) {
-          $value = $result;
-          if (_profile_field_serialize($instance->type)) {
-            $value = serialize($value);
-          }
-          if ($row = db_fetch_array(db_query("SELECT value FROM {profile_values} WHERE fid = '%d' AND uid = '%d'", $drupal_field, $account->uid))) {
-            if ($row['value'] != $value)
-              db_query("UPDATE {profile_values} SET value = '%s' WHERE fid = '%d' AND uid = '%d'", $value, $drupal_field, $account->uid);
-          }
-          else {
-            db_query("INSERT INTO {profile_values} (value, fid, uid) VALUES ('%s', '%d', '%d')", $value, $drupal_field, $account->uid);
-          }
-        }
-      }
-      else {
-        // It is a Drupal field like 'mail' or 'name'.
+      if ($drupal_field == 'name' || $drupal_field == 'mail') {
         $edit[$drupal_field] = $result;
       }
+      else {
+        $edit[$drupal_field][LANGUAGE_NONE][0]['value'] = $result;
+      }
     }
   }
-}
-
-/**
- * Retrieve profile fields.
- */
-function _cas_attributes_get_profile_fields() {
-  $fields = array();
-  if (module_exists('profile')) {
-    $result = db_query("SELECT fid, name, title, type FROM {profile_fields}");
-    while ($row = db_fetch_object($result)) {
-      $fields[$row->fid] = $row;
-    }
-  }
-  return $fields;
 }

@@ -6,39 +6,48 @@
  */
 
 /**
- * Implements hook_token_list().
+ * Implements hook_token_info_alter().
  */
-function _cas_ldap_token_list($type = 'all') {
-  $tokens = array();
-
-  if ($type == 'cas' || $type == 'all') {
-    $tokens['cas']['cas-ldap-?'] = t('An LDAP attribute of the user. Replace ? with the attribute name in lower case. <a href="@url">Available tokens</a>.', array('@url' => url('admin/user/cas/attributes/ldap')));
-    // $tokens['cas']['cas-ldap-?-raw'] = t('A CAS attribute of the user. Replace ? with the attribute name in lower case. <a href="@url">Available tokens</a>.', array('@url' => url('admin/user/cas/attributes/ldap')));
-  }
-
-  return $tokens;
+function cas_ldap_token_info_alter(&$data) {
+  $data['tokens']['cas']['ldap'] = array(
+    'name' => t('LDAP'),
+    'description' => t('An LDAP attribute of the CAS user. <a href="@url">Available tokens</a>.', array('@url' => url('admin/config/people/cas/attributes/ldap'))),
+    'dynamic' => TRUE,
+  );
 }
 
 /**
- * Implements hook_token_values.
+ * Implements hook_tokens().
  */
-function _cas_ldap_token_values($type, $object = NULL) {
-  $values = array();
+function cas_ldap_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $sanitize = !empty($options['sanitize']);
+  $replacements = array();
 
-  if ($type == 'cas' && !empty($object)) {
-    $cas = $object;
-    $attributes = cas_ldap_attributes($cas);
-    foreach ($attributes as $key => $value) {
-      if (is_array($value)) {
-        $value = $value[0];
+  if ($type == 'cas' && !empty($data['cas'])) {
+    $cas = $data['cas'];
+
+    // Provide [cas:attribute:?] dynamic tokens.
+    if ($attribute_tokens = token_find_with_prefix($tokens, 'ldap')) {
+      $attribute = cas_ldap_attributes($cas);
+      foreach ($attribute_tokens as $name => $original) {
+        $name = drupal_strtolower($name);
+        if (isset($attribute[$name])) {
+          $value = $attribute[$name];
+          if (is_array($value)) {
+            $value = $value[0];
+          }
+          $replacements[$original] = $sanitize ? check_plain($value) : $value;
+        }
+        elseif ($name == '?') {
+          $keys = array_keys($attribute);
+          if ($sanitize) {
+            $keys = array_map('check_plain', $keys);
+          }
+          $replacements[$original] = t('Available attributes: %keys', array('%keys' => implode(', ', $keys)));
+        }
       }
-      $values['cas-ldap-' . $key] = check_plain($value);
-      // $values['cas-attribute-' . $key . '-raw'] = $value;
     }
-    $keys = array_keys($attributes);
-    $values['cas-ldap-?'] = t('Available attributes: %keys', array('%keys' => implode(', ', $keys)));
-    // $values['cas-ldap-?-raw'] = $values['cas-attribute-?'];
   }
 
-  return $values;
+  return $replacements;
 }

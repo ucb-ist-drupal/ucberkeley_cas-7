@@ -164,24 +164,23 @@ function cas_admin_settings() {
   );
 
   // Taken from Drupal's User module.
-  if (user_access('administer permissions')) {
-    $roles = array_map('check_plain', user_roles(TRUE));
-    $checkbox_authenticated = array(
-      '#type' => 'checkbox',
-      '#title' => $roles[DRUPAL_AUTHENTICATED_RID],
-      '#default_value' => TRUE,
-      '#disabled' => TRUE,
-    );
-    unset($roles[DRUPAL_AUTHENTICATED_RID]);
-    $form['account']['cas_auto_assigned_role'] = array(
-      '#type' => 'checkboxes',
-      '#title' => t('Roles'),
-      '#description' => t('The selected roles will be automatically assigned to each CAS user on login. Use this to automatically give CAS users additional privileges or to identify CAS users to other modules.'),
-      '#default_value' => variable_get('cas_auto_assigned_role', array()),
-      '#options' => $roles,
-      DRUPAL_AUTHENTICATED_RID => $checkbox_authenticated,
-    );
-  }
+  $roles = array_map('check_plain', user_roles(TRUE));
+  $checkbox_authenticated = array(
+    '#type' => 'checkbox',
+    '#title' => $roles[DRUPAL_AUTHENTICATED_RID],
+    '#default_value' => TRUE,
+    '#disabled' => TRUE,
+  );
+  unset($roles[DRUPAL_AUTHENTICATED_RID]);
+  $form['account']['cas_auto_assigned_role'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Roles'),
+    '#description' => t('The selected roles will be automatically assigned to each CAS user on login. Use this to automatically give CAS users additional privileges or to identify CAS users to other modules.'),
+    '#default_value' => variable_get('cas_auto_assigned_role', array()),
+    '#options' => $roles,
+    '#access' => user_access('administer permissions'),
+    DRUPAL_AUTHENTICATED_RID => $checkbox_authenticated,
+  );
 
   $form['account']['cas_hide_email'] = array(
     '#type' => 'checkbox',
@@ -194,7 +193,7 @@ function cas_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Users cannot change password'),
     '#default_value' => variable_get('cas_hide_password', 0),
-    '#description' => t('Hide password field on the edit user form.'),
+    '#description' => t('Hide password field on the edit user form. This also removes the requirement to enter your current password before changing your e-mail address.'),
   );
 
   if (module_exists('persistent_login')) {
@@ -303,6 +302,14 @@ function cas_admin_settings() {
     '#description' => t('Initialize phpCAS as a proxy rather than a client. The proxy ticket returned by the CAS server allows access to external services as the CAS user.')
   );
 
+  $form['advanced']['cas_proxy_settings'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      'invisible' => array(
+        'input[name="cas_proxy"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
   $form['advanced']['cas_proxy_settings']['cas_pgtformat'] = array(
     '#type' => 'radios',
     '#title' => t('CAS PGT storage file format'),

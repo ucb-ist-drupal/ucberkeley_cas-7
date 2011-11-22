@@ -21,7 +21,8 @@ function cas_add_user_form() {
     '#weight' => -10,
   );
 
-  $form['submit'] = array(
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Create new account'),
   );
@@ -45,5 +46,6 @@ function cas_add_user_form_submit($form, &$form_state) {
   $form_state['user'] = $account;
   $form_state['values']['uid'] = $account->uid;
 
-  drupal_set_message(t('Created a new user account for <a href="@url">%name</a>. No e-mail has been sent.', array('@url' => url("user/$account->uid"), '%name' => $account->name)));
+  $uri = entity_uri('user', $account);
+  drupal_set_message(t('Created a new user account for <a href="@url">%name</a>. No e-mail has been sent.', array('@url' => url($uri['path'], $uri['options']), '%name' => $account->name)));
 }
