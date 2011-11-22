@@ -37,7 +37,13 @@ function ucb_cas_install() {
   /* Install modules */
   $sub_modules = variable_get("ucb_cas_sub_modules", array());
 
-  //TODO: Check to see if they are installed first, if yes skip...?
+  /* 
+   *  Why not just make the sub_modules dependencies of ucb_cas? Since
+   *  we inject config into schemas created by these modules, we need
+   *  to module_enable() so that we know for sure that the target
+   *  tables exist. There are probably other ways to skin this cat...
+   */
+
   module_enable($sub_modules);
   drupal_set_message("Installed ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
 
