@@ -8,6 +8,11 @@ TABLE OF CONTENTS
 6. Launching your site (Important)
 7. Authors
 
+***** IMPORTANT ******
+This was adapted from the 6.x README. There may be some D6-specific
+things still to be corrected.
+***** IMPORTANT ******
+
 PURPOSE
 -------
 
@@ -28,28 +33,34 @@ is created on your site.)
 
 REQUIREMENTS
 ------------
+The modules installed by UCB CAS are:
 
-Since UCB CAS installs multiple modules on your site, it is best to
-ensure that those modules do not already exist on your site.  The files for these modules should not exist in any of the directories that drupal scans for module files (e.g. sites/all/modules, sites/EXAMPLE/modules, sites/modules/EXAMPLE/, profiles/EXAMPLE...).  If you are already using any of these modules on your site, do the following:
+cas
+cas_attributes (includes cas_ldap)
+ldap (includes ldap_servers and others)
+
+Since UCB CAS installs multiple modules on your site, it's install
+process will ensure that those modules do not already exist on your
+site.  If conflicting files are found an friendly message will appear and the
+installer will abort.
+
+If you see this error message when you enable the module, check the
+directories that drupal scans for module files
+(e.g. sites/all/modules, sites/EXAMPLE/modules,
+sites/modules/EXAMPLE/, profiles/EXAMPLE...) for conflicting modules.
+If you find conflicts:
 
 1. Disable the modules at admin/build/modules
 2. Remove the files for the modules from your site
 3. Install UCB CAS
 4. Run update.php
 
-The modules installed by UCB CAS are:
-
-cas
-cas_attributes (includes cas_ldap)
-ldap_integration (includes ldapauth, ldapdata, ldapgroups)
-pathauto
-token
 
 INSTALLING
 ----------
 
 1. Make sure your site meets the requirements above.
-2. Download ucb_cas-6.x-x.x.tar.gz to the computer running your Drupal site.
+2. Download ucb_cas-7.x-x.x.tar.gz to the computer running your Drupal site.
 3. Unarchive the module in sites/all/modules
 4. Enable the module at admin/build/modules.  You ONLY need to enable the UCB CAS module the other modules will be enabled and configured for you. 
 5. Test your site:
