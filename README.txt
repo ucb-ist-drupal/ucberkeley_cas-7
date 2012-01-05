@@ -1,12 +1,13 @@
 TABLE OF CONTENTS
 -----------------
 1. Purpose
-2. Requirements
-3. Installing
-4. Uninstalling
-5. Configuration Details
-6. Launching your site (Important)
-7. Authors
+2. Registration
+3. Requirements
+4. Installing
+5. Uninstalling
+6. Configuration Details
+7. Launching your site (Important)
+8. Authors
 
 ***** IMPORTANT ******
 This was adapted from the 6.x README. There may be some D6-specific
@@ -31,6 +32,22 @@ whether or not to assign them your "editor" role.  (The Rules module
 can be used to send you automatic emails each time a new user account
 is created on your site.)
 
+If you do not want Drupal to create accounts for everyone who attempts to log 
+in to your site, go to admin/config/people/cas, open the User Accounts 
+section, and uncheck Automatically create Drupal accounts.
+
+REGISTRATION
+------------
+
+In order to use CalNet authentication, your website must be registered with 
+CalNet. Make sure your registration is approved before you install UCB CAS 
+on a production site.
+
+Developers working locally may use either localhost or 127.0.0.1, with or 
+without a port number, as their site URL without needing to register.
+
+To register, see https://wikihub.berkeley.edu/display/calnet/CAS+Registration.
+
 REQUIREMENTS
 ------------
 The modules installed by UCB CAS are:
@@ -39,9 +56,9 @@ cas
 cas_attributes (includes cas_ldap)
 ldap (includes ldap_servers and others)
 
-Since UCB CAS installs multiple modules on your site, it's install
+Since UCB CAS installs multiple modules on your site, its install
 process will ensure that those modules do not already exist on your
-site.  If conflicting files are found an friendly message will appear and the
+site.  If conflicting files are found a friendly message will appear and the
 installer will abort.
 
 If you see this error message when you enable the module, check the
@@ -50,7 +67,7 @@ directories that drupal scans for module files
 sites/modules/EXAMPLE/, profiles/EXAMPLE...) for conflicting modules.
 If you find conflicts:
 
-1. Disable the modules at admin/build/modules
+1. Disable the modules at admin/modules
 2. Remove the files for the modules from your site
 3. Install UCB CAS
 4. Run update.php
@@ -62,7 +79,7 @@ INSTALLING
 1. Make sure your site meets the requirements above.
 2. Download ucb_cas-7.x-x.x.tar.gz to the computer running your Drupal site.
 3. Unarchive the module in sites/all/modules
-4. Enable the module at admin/build/modules.  You ONLY need to enable the UCB CAS module the other modules will be enabled and configured for you. 
+4. Enable the module at admin/modules.  You ONLY need to enable the UCB CAS module the other modules will be enabled and configured for you. 
 5. Test your site:
 
 If your site runs at http://example-dev.berkeley.edu, go to
@@ -78,10 +95,10 @@ UNINSTALLING
 
 To remove UCB CAS from your site do the following:
 
-1. Disable the UCB CAS module at admin/build/modules. (You do not need
+1. Disable the UCB CAS module at admin/modules. (You do not need
 to disable each individual module that UCB CAS installed.)
 
-2. Uninstall the UCB CAS module at admin/build/modules/uninstall.
+2. Uninstall the UCB CAS module at admin/modules/uninstall.
 This step will disable and uninstall each module that UCB CAS
 installed.  It will also remove variables that UCB CAS added your
 site's variables table.
@@ -95,13 +112,20 @@ are aimed at defining "best practices" for using CAS and LDAP with
 your Drupal site.  That said, if you don't like our decisions, you can
 override them on the appropriate admin page on your site.
 
-CAS Configuration at admin/user/cas:
+CAS Configuration at admin/config/people/cas:
 
   *Inital login destination* and *Logout destination*
 
 	You may want to customize these. Feel free...
 
-  *Users cannont change password*
+  *Automatically create Drupal accounts* 
+  
+       If you do not want Drupal to create accounts for every CalNet user 
+	   who attempts to log in to your site, go to admin/config/people/cas, 
+	   open the User Accounts section, and uncheck Automatically create 
+	   Drupal accounts.
+  
+  *Users cannot change password*
 
        Unchecking this is very likely to cause confusion.  Users
        should change their passwords via CalNet. See *Change password
@@ -129,7 +153,7 @@ CAS Configuration at admin/user/cas:
 	  and standard Drupal authentication on a site. Email
 	  ist-drupal@lists.berkeley.edu for more information.)
 
-Cas Attributes configuration (admin/user/cas/attributes)
+Cas Attributes configuration (admin/config/people/cas/attributes)
 
   *Fetch CAS Attributes*
 
@@ -147,8 +171,8 @@ LAUNCHING YOUR SITE (IMPORTANT)
 	live, you should change these servers to ldap.berkeley.edu and
 	auth.berkeley.edu. Make these changes at:
 
-        admin/user/cas
-        admin/user/cas/attributes
+        admin/config/people/cas
+        admin/config/people/cas/attributes
 
         (A module to help automate this is in the works.)
 
