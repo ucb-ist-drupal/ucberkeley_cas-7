@@ -32,8 +32,8 @@ whether or not to assign them your "editor" role.  (The Rules module
 can be used to send you automatic emails each time a new user account
 is created on your site.)
 
-If you do not want Drupal to create accounts for everyone who attempts to log 
-in to your site, go to admin/config/people/cas, open the User Accounts 
+If you do not want Drupal to create accounts for everyone who attempts to 
+log in to your site, go to admin/config/people/cas, open the User Accounts 
 section, and uncheck Automatically create Drupal accounts.
 
 REGISTRATION
