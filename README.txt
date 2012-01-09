@@ -4,9 +4,9 @@ TABLE OF CONTENTS
 2. Standard Configuration (IMPORTANT)
 2. UCB CalNet Registration
 3. Requirements
-4. Installing ucb_cas
-5. Disabling ucb_cas
-6. Uninstalling ucb_cas
+4. Installing
+5. Disabling 
+6. Uninstalling 
 7. Configuration Details
 8. Launching your site (Important)
 9. Authors
