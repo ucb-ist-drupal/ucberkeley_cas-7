@@ -171,9 +171,15 @@ node/*/edit/*");
   variable_set("cas_user_register",  1);
   variable_set("cas_version",  "2.0");
 
+  //enforce use of /caslogout
+  $alias = array('source'=>'caslogout', 'alias'=>'logout');
+  path_save($alias);
 
 }
 
+/**
+ * Implementation of hook_disable().
+ */
 function ucb_cas_disable() {
 	drupal_set_message('Note: Disabling ucb_cas does not disable its companion modules.  (However uninstalling ucb_cas *will* uninstall its companion modules. See README.txt)', 'status');
 }
