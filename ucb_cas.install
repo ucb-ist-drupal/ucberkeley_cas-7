@@ -1,13 +1,10 @@
 <?php
+define('SUBMODULES', 'cas_ldap,cas_attributes,cas,ldap_servers');
+
 function ucb_cas_requirements($phase) {
   $requirements = array();
   $t = get_t();
-  $sub_modules = array("cas_ldap",
-                       "cas_attributes",
-                       "cas",
-                       "ldap_servers",
-  );
-  variable_set("ucb_cas_sub_modules", $sub_modules);
+  $sub_modules = explode(',', SUBMODULES);
   
   if ($phase == 'install') {
     $paths = array();
@@ -35,7 +32,7 @@ function ucb_cas_requirements($phase) {
 
 function ucb_cas_install() {
   /* Install modules */
-  $sub_modules = variable_get("ucb_cas_sub_modules", array());
+	$sub_modules = explode(',', SUBMODULES);
 
   /* 
    *  Why not just make the sub_modules dependencies of ucb_cas? Since
@@ -186,7 +183,7 @@ function ucb_cas_disable() {
 
 function ucb_cas_uninstall() {
   /* Remove modules */
-  $sub_modules = variable_get("ucb_cas_sub_modules", array());
+  $sub_modules = explode(',', SUBMODULES);
   module_disable($sub_modules, FALSE);
   if (drupal_uninstall_modules($sub_modules, FALSE)) {  
     drupal_set_message("Uninstalled ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
