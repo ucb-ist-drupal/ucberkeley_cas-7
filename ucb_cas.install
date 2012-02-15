@@ -141,7 +141,7 @@ function ucb_cas_install() {
                                                 5 => 0,
                                                 ));
   variable_set("cas_cert",  "");
-  variable_set("cas_changePasswordURL",  "https://net-auth.berkeley.edu/cgi-bin/krbcpw");
+  variable_set("cas_changePasswordURL",  "");
   variable_set("cas_check_first",  0);
   variable_set("cas_debugfile",  "");
   variable_set("cas_domain",  "");
