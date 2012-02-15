@@ -1,0 +1,7 @@
+ucb_cas NEXT RELEASE
+=====================
+* Remove $sub_modules variable_get/set and use a PHP constant.
+  Required for Pantheon install profile compatibility.
+
+ucb_cas 7.1-1.x-beta1
+=====================
