@@ -1,5 +1,7 @@
 ucb_cas NEXT RELEASE
 =====================
+DUPCODE-7: remove https://net-auth.berkeley.edu/cgi-bin/krbcpw as logout location.
+
 * Remove $sub_modules variable_get/set and use a PHP constant.
   Required for Pantheon install profile compatibility.
 
