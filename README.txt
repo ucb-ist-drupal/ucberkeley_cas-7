@@ -1,3 +1,5 @@
+ucb_cas-7.x
+
 TABLE OF CONTENTS
 -----------------
 1. Purpose
@@ -65,12 +67,10 @@ ldap (includes ldap_servers and others)
 
 Since UCB CAS installs multiple modules on your site, its install
 process will ensure that those modules do not already exist on your
-site.  If conflicting files are found a friendly message will appear and the
-installer will abort.
-
-If you see this error message when you enable the module, check the
-directories that drupal scans for module files
-(e.g. sites/all/modules, sites/EXAMPLE/modules,
+site.  If conflicting files are found a friendly message will appear
+and the installer will abort. If you see this error message when you
+enable the module, check the directories that drupal scans for module
+files (e.g. sites/all/modules, sites/EXAMPLE/modules,
 sites/modules/EXAMPLE/, profiles/EXAMPLE...) for conflicting modules.
 If you find conflicts:
 
@@ -153,6 +153,18 @@ CAS Configuration at admin/config/people/cas:
        Unchecking this is very likely to cause confusion.  Users
        should change their passwords via CalNet. See *Change password
        URL* further down.
+
+  *Change Password URL*
+
+     This setting is blank because it can cause confusion. The
+     intention of ucb_cas is that all users log into the site using
+     Calnet/CAS authentication as opposed to Drupal's standard
+     authentication.  Therefore changing your site password would
+     require changing your Calnet password (which can be done at
+     https://net-auth.berkeley.edu/cgi-bin/krbcpw) and would result in
+     your password changing for all Calnet authenticated applications.
+     A user presented with a "change password" url might not
+     understand the ramifications here.
 
   *Drupal Login Invitation*
 
