@@ -1,8 +1,7 @@
 <?php
 
-// Drupal needs this blank file.
 /**
- * Implements hook_form_alter().
+ * Implements hook_menu().
  *
  * Create a back door to prevent admin lockouts
  */

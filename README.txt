@@ -1,12 +1,14 @@
 README ucb_cas-7.x
-------------------
+==================
 
 TABLE OF CONTENTS
 -----------------
 1.   Purpose
 2.   Quick Start
 3.   Standard Configuration 
-3.1  User Account creation (IMPORTANT)
+3.1.   Security
+3.2.   User Account creation (IMPORTANT)
+3.3.   Standard configuration doesn't support "mixed mode authentication"
 4.   Requirements
 5.   UCB CalNet Registration
 6.   Installing
@@ -26,13 +28,19 @@ UCB CAS is a collection of modules needed use UC Berkeley CalNet
 authentication and UC Berkeley LDAP with a Drupal site. Once UCB CAS
 is enabled logging into your site via CalNet should "just work."
 
+UCB CAS applies a default configuration to the modules it
+installs. This configuration assumes that everyone, including the site
+administrators, will login to the site using Calnet/CAS.  See Standard
+Configuration.
+
 QUICK START
 -----------
 
-1. Install and enable ucb_cas. (More info: Installing)
-2. Visit (the unpublicized) login url http://example.com/cas and login
+1. See: Requirements
+2. Install and enable ucb_cas. (More info: Installing)
+3. Visit (the unpublicized) login url http://example.com/cas and login
 with your calnet id.
-3. As User 1 edit the new user that got created in step 2 and assign
+4. As User 1 edit the new user that got created in step 2 and assign
 it the "administrator" role. (More info: Setup a Calnet-authenticated
 administrator)
 
@@ -43,6 +51,8 @@ The ucb_cas module has made some configuration decisions for you.
 These decsions can be overridden by you. See the Configuration Details
 section below.
 
+*Security*
+
 By default ucb_cas is configured so that anyone logging into your site
 must use UCB Calnet authentication. The reason for this is that
 Drupal's standard authentication is insecure, unless used in
@@ -51,7 +61,12 @@ vulnerable to 1) username/password interception (especially if a
 wireless network is in use) and 2) session hijacking. (See "Setup a
 Calnet-authenticated administrator.")
 
-User account creation (IMPORTANT)
+(Calnet/CAS authentication is not immune to attack on a site running
+under http.  In this scenario the CAS ticket could possibly be
+hijacked. The combination of https with ucb_cas's default
+configuration is a good idea.)
+
+*User account creation (IMPORTANT)*
 
 With the ucb_cas standard configuration, when a user logs in via
 CalNet for the first time Drupal will create an account for them and
@@ -65,11 +80,27 @@ your "editor" role.  (The Rules module can be used to send you
 automatic emails each time a new user account is created on your
 site.)
 
+*Standard configuration doesn't support "mixed mode authentication"*
+
+"Mixed mode authentication" describes then scenario where a site is
+configured to allow some users to authenticate using Calnet and others
+to authenticate using Drupal standard authentication. The ucb_cas
+standard configuration is not geared towards this scenario.  Instead
+all users are directed to Calnet for authentication.
+
+Mixed mode authentication presents user experience challenges. The
+user must be presented with two different login mechanisms and must
+choose between them everytime they login to the site. A module
+(ucb_mma) is planned to address this use case.  Until then you may
+choose to adjust the ucb_cas default settings, if mma is what you
+need. Please remember that you should be running your UCB site using
+SSL (https) if you are using Drupal standard authentication.
+
 REQUIREMENTS
 ------------
 Your Drupal site must be registered with the UCB Calnet service. (See: UCB Calnet Registration)
 
-The modules installed by UCB CAS are:
+The modules installed by ucb_cas-7.x are:
 
 cas
 cas_attributes (includes cas_ldap)
@@ -105,7 +136,7 @@ To register, see https://wikihub.berkeley.edu/display/calnet/CAS+Registration.
 
 INSTALLING
 ----------
-
+(This process is tested with drush.)
 1. Make sure your site meets the requirements above.
 2. Download ucb_cas-7.x-x.x.tar.gz to the computer running your Drupal site.
 3. Unarchive the module in sites/all/modules
@@ -126,7 +157,7 @@ address that was retrieved from LDAP for your account.
 SETUP A CALNET-AUTHENTICATED ADMINISTRATOR
 ------------------------------------------
 
-User 1 (often named "admin) is the "superuser" on a Drupal
+User 1 (the account is often named "admin) is the "superuser" on a Drupal
 site. Instead of using logging in as this user, you should grant your
 Calnet-authenticated user account the administrator role and always
 login (via Calnet) with that account.  Here's how:
@@ -155,6 +186,7 @@ the Drupal standard authentication vulnerabilities described above.
 
 DISABLING
 ---------
+(This process is tested with drush.)
 
 For maximum flexibilty, disabling ucb_cas does not disable the
 companion cas_attributes nor ldap modules. However uninstalling
@@ -168,6 +200,7 @@ at admin/modules/uninstall.
 
 UNINSTALLING
 ------------
+(This process is tested with drush.)
 
 To remove UCB CAS from your site do the following:
 
@@ -198,9 +231,9 @@ CAS Configuration at admin/config/people/cas:
   *Automatically create Drupal accounts* 
   
        If you do not want Drupal to create accounts for every CalNet user 
-	   who attempts to log in to your site, go to admin/config/people/cas, 
-	   open the User Accounts section, and uncheck Automatically create 
-	   Drupal accounts.
+       who attempts to log in to your site, go to admin/config/people/cas, 
+       open the User Accounts section, and uncheck Automatically create 
+       Drupal accounts.
   
   *Users cannot change password*
 
@@ -268,3 +301,7 @@ LAUNCHING YOUR SITE (IMPORTANT)
 AUTHORS
 -------
 Brian Wood, UC Berkeley, http://drupal.org/user/164217
+
+CONTRIBUTORS
+------------
+Caroline Boyden, UC Berkeley
