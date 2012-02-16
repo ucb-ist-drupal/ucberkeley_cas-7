@@ -18,7 +18,8 @@ TABLE OF CONTENTS
 10.  Uninstalling 
 11.  Configuration Details
 12.  Launching your site (Important)
-13.  Authors
+13.  FAQ
+14.  Authors
 
 
 PURPOSE
@@ -297,6 +298,19 @@ LAUNCHING YOUR SITE (IMPORTANT)
         admin/config/people/cas/attributes
 
         (A module to help automate this is in the works.)
+
+FAQ
+---
+
+Q. When logging in I get the error "user warning: Duplicate entry
+'Brian Wood' for key 'name' query: UPDATE users SET name = 'Brian
+Wood', mail = 'bwood@example.com', data = 'a:0:{}' WHERE uid = 7 in
+/Users/bwood/Sites/dev6/modules/user/user.module on line 248."
+
+A. Check to see if there is already a user named with the same *Calnet
+UID* as Brian Wood (e.g a user called "214898").  Delete that user and
+try authenticating again.  This is rare, but could happen if you
+previously had a problem with your LDAP configuration.
 
 AUTHORS
 -------
