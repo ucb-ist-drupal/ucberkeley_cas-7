@@ -59,21 +59,3 @@ function ucb_cas_admin_login($form) {
   return $form;
 }
 
-/*
-function ucb_cas_form_alter(&$form, &$form_state, $form_id) {
-
-  //drupal_set_message($form_id.'<pre>'.print_r($form,1).'</pre>');
-  switch ($form_id) {
-    case 'user_login':
-    	// reset the form_id so that the cas_form_alter will miss it
-    	//$form['#form_id'] = $form['form_id']['#value'] = $form_id = 'admin_login';
-    	$form['#after_build'][] = 'ucb_cas_user_login_after_build';
-    	break;
-  }   	
-}
-
-function ucb_cas_user_login_after_build($form, &$form_state) {
-  $form['#form_id'] = $form['form_id']['#value'] = $form_id = 'admin_login';
-  return $form;
-}
-*/
