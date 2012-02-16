@@ -1,3 +1,79 @@
 <?php
 
 // Drupal needs this blank file.
+/**
+ * Implements hook_form_alter().
+ *
+ * Create a back door to prevent admin lockouts
+ */
+
+function ucb_cas_menu() {
+  $items['user/admin_login'] = array (
+    'title' => 'Admin Login',
+    'page callback' => 'ucb_cas_admin_login_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function ucb_cas_admin_login_page() {
+	global $user;
+  if ($user->uid) {
+    menu_set_active_item('user/' . $user->uid);
+    return menu_execute_active_handler(NULL, FALSE);
+  }
+  else {
+    //$form = drupal_get_form('user_login');
+    $form = drupal_get_form('ucb_cas_admin_login');
+    return $form;
+  }
+	
+}
+
+function ucb_cas_admin_login($form) {
+	include_once(drupal_get_path('module', 'user') . '/user.module');
+
+	drupal_set_message('Admins should login via Calnet whenever possible.  Unless this site is running https, this form is not secure. See the ucb_cas <a href=sites/all/modules/ucb_cas/README.txt>README.txt</a>', 'warning', false);
+  //see user.module user_login_block() 
+  $form['#action'] = url($_GET['q'], array('query' => drupal_get_destination()));
+  $form['#id'] = 'ucb-cas-admin-login-form';
+  $form['#validate'] = user_login_default_validators();
+  $form['#submit'][] = 'user_login_submit';
+  $form['name'] = array('#type' => 'textfield',
+    '#title' => t('Username'),
+    '#maxlength' => USERNAME_MAX_LENGTH,
+    '#size' => 15,
+    '#required' => TRUE,
+  );
+  $form['pass'] = array('#type' => 'password',
+    '#title' => t('Password'),
+    '#maxlength' => 60,
+    '#size' => 15,
+    '#required' => TRUE,
+  );
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array('#type' => 'submit',
+    '#value' => t('Log in'),
+  );
+  return $form;
+}
+
+/*
+function ucb_cas_form_alter(&$form, &$form_state, $form_id) {
+
+  //drupal_set_message($form_id.'<pre>'.print_r($form,1).'</pre>');
+  switch ($form_id) {
+    case 'user_login':
+    	// reset the form_id so that the cas_form_alter will miss it
+    	//$form['#form_id'] = $form['form_id']['#value'] = $form_id = 'admin_login';
+    	$form['#after_build'][] = 'ucb_cas_user_login_after_build';
+    	break;
+  }   	
+}
+
+function ucb_cas_user_login_after_build($form, &$form_state) {
+  $form['#form_id'] = $form['form_id']['#value'] = $form_id = 'admin_login';
+  return $form;
+}
+*/

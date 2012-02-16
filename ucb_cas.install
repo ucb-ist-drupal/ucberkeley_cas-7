@@ -31,7 +31,7 @@ function ucb_cas_requirements($phase) {
 }
 
 function ucb_cas_install() {
-  /* Install modules */
+	/* Install modules */
 	$sub_modules = explode(',', SUBMODULES);
 
   /* 
@@ -44,6 +44,17 @@ function ucb_cas_install() {
   module_enable($sub_modules);
   drupal_set_message("Installed ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
 
+  /* Set a lighter weight than cas.module. (See ucb_cas_form_alter())*/
+  $result = db_query("SELECT weight FROM {system} WHERE type = 'module' AND name = 'cas'");
+  $weight = $result->fetchCol();
+
+  db_update('system')
+    ->fields(array(
+    'weight' => (int)$weight[0] - 1,
+  ))
+  ->condition('name', 'ucb_cas', '=')
+  ->execute();
+  
   /*** Settings ***/
   /* LDAP */
   $ldap_servers = array(

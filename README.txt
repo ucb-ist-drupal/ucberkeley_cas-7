@@ -1,22 +1,23 @@
-ucb_cas-7.x
+README ucb_cas-7.x
+------------------
 
 TABLE OF CONTENTS
 -----------------
-1. Purpose
-2. Standard Configuration (IMPORTANT)
-2. UCB CalNet Registration
-3. Requirements
-4. Installing
-5. Disabling 
-6. Uninstalling 
-7. Configuration Details
-8. Launching your site (Important)
-9. Authors
+1.   Purpose
+2.   Quick Start
+3.   Standard Configuration 
+3.1  User Account creation (IMPORTANT)
+4.   Requirements
+5.   UCB CalNet Registration
+6.   Installing
+7.   Setup a Calnet-authenticated Administrator
+8.   Administrator "back door" for lockouts
+9.   Disabling 
+10.  Uninstalling 
+11.  Configuration Details
+12.  Launching your site (Important)
+13.  Authors
 
-***** IMPORTANT ******
-This was adapted from the 6.x README. There may be some D6-specific
-things still to be corrected.
-***** IMPORTANT ******
 
 PURPOSE
 -------
@@ -25,6 +26,16 @@ UCB CAS is a collection of modules needed use UC Berkeley CalNet
 authentication and UC Berkeley LDAP with a Drupal site. Once UCB CAS
 is enabled logging into your site via CalNet should "just work."
 
+QUICK START
+-----------
+
+1. Install and enable ucb_cas. (More info: Installing)
+2. Visit (the unpublicized) login url http://example.com/cas and login
+with your calnet id.
+3. As User 1 edit the new user that got created in step 2 and assign
+it the "administrator" role. (More info: Setup a Calnet-authenticated
+administrator)
+
 STANDARD CONFIGURATION
 ----------------------
 
@@ -32,33 +43,32 @@ The ucb_cas module has made some configuration decisions for you.
 These decsions can be overridden by you. See the Configuration Details
 section below.
 
-IMPORTANT: User account creation: With the ucb_cas standard
-configuration, when a user logs in via CalNet for the first time
-Drupal will create an account for them and assign them to the
-"authenticated user" role. Be very cautious with assigning the
-"authenticated user" role any privileges beyond what the "anonymous
-user" role has. The best way to manange privileges for your CalNet
-users is to create a role like "editor" which is allowed to create
-content. You should then review each new person in the "authenticated
-user" role and decide whether or not to assign them your "editor"
-role.  (The Rules module can be used to send you automatic emails each
-time a new user account is created on your site.)
+By default ucb_cas is configured so that anyone logging into your site
+must use UCB Calnet authentication. The reason for this is that
+Drupal's standard authentication is insecure, unless used in
+conjunction with SSL (https). Drupal standard authentication is
+vulnerable to 1) username/password interception (especially if a
+wireless network is in use) and 2) session hijacking. (See "Setup a
+Calnet-authenticated administrator.")
 
+User account creation (IMPORTANT)
 
-UCB CALNET REGISTRATION
------------------------
-
-In order to use CalNet authentication, your website must be registered with 
-CalNet. Make sure your registration is approved before you install UCB CAS 
-on a production site.
-
-Developers working locally may use either localhost or 127.0.0.1, with or 
-without a port number, as their site URL without needing to register.
-
-To register, see https://wikihub.berkeley.edu/display/calnet/CAS+Registration.
+With the ucb_cas standard configuration, when a user logs in via
+CalNet for the first time Drupal will create an account for them and
+assign them to the "authenticated user" role. Be very cautious with
+assigning the "authenticated user" role any privileges beyond what the
+"anonymous user" role has. The best way to manange privileges for your
+CalNet users is to create a role like "editor" which is allowed to
+create content. You should then review each new person in the
+"authenticated user" role and decide whether or not to assign them
+your "editor" role.  (The Rules module can be used to send you
+automatic emails each time a new user account is created on your
+site.)
 
 REQUIREMENTS
 ------------
+Your Drupal site must be registered with the UCB Calnet service. (See: UCB Calnet Registration)
+
 The modules installed by UCB CAS are:
 
 cas
@@ -80,6 +90,19 @@ If you find conflicts:
 4. Run update.php
 
 
+UCB CALNET REGISTRATION
+-----------------------
+
+In order to use CalNet authentication, your website must be registered with 
+CalNet. Make sure your registration is approved before you install UCB CAS 
+on a production site.
+
+Developers working locally may use either localhost or 127.0.0.1, with or 
+without a port number, as their site URL without needing to register.
+
+To register, see https://wikihub.berkeley.edu/display/calnet/CAS+Registration.
+
+
 INSTALLING
 ----------
 
@@ -98,6 +121,37 @@ your Drupal site and you should see "Logged in as YOUR NAME."
 
 Go to http://example-dev.berkeley.edu/user.  You should see the email
 address that was retrieved from LDAP for your account.
+
+
+SETUP A CALNET-AUTHENTICATED ADMINISTRATOR
+------------------------------------------
+
+User 1 (often named "admin) is the "superuser" on a Drupal
+site. Instead of using logging in as this user, you should grant your
+Calnet-authenticated user account the administrator role and always
+login (via Calnet) with that account.  Here's how:
+
+1. Enable the ucb_cas module
+2. Login to your site by visiting http://example.com/cas
+3. Drupal creates a user for you upon successful authentication. Visit
+http://example.com/admin/people, edit your user and assign it the
+"administrator role.
+
+Now your Calnet user can do anything that User 1 can do.
+
+
+THE ADMINISTRATOR "BACK DOOR" FOR LOCKOUTS
+------------------------------------------
+
+If for some reason you can't login as your calnet-authenticated
+administrator, you can login as User 1 at
+http://example.com/user/admin_login.
+
+WARNING: The admin_login page is included to help people who are
+otherwised locked out of their sites.  It should only be used to
+recover from a lockout. It is not a secure form and it suffers from
+the Drupal standard authentication vulnerabilities described above.
+
 
 DISABLING
 ---------
