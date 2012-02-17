@@ -1,4 +1,7 @@
 <?php
+define('CHANGE_TEXT', '<font color = "red">consider changing your settings.</font>');
+define('GOOD_TEXT', '<font color = "green">your settings are probably good.</font>');
+
 
 /**
  * Implements hook_menu().
@@ -11,6 +14,13 @@ function ucb_cas_menu() {
     'title' => 'Admin Login',
     'page callback' => 'ucb_cas_admin_login_page',
     'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+    $items['admin/config/people/ucbcas'] = array (
+    'title' => 'UCB CAS',
+    'description' => 'UCB CAS settings.',
+    'page callback' => 'ucb_cas_admin',
+    'access arguments' => array('administer cas'),
     'type' => MENU_CALLBACK,
   );
   return $items;
@@ -30,6 +40,11 @@ function ucb_cas_admin_login_page() {
 	
 }
 
+/**
+ * 
+ * Page: Admin login back door
+ * @param $form
+ */
 function ucb_cas_admin_login($form) {
 	include_once(drupal_get_path('module', 'user') . '/user.module');
 
@@ -58,3 +73,147 @@ function ucb_cas_admin_login($form) {
   return $form;
 }
 
+/**
+ * Page: UCB CAS admin page
+ */
+function ucb_cas_admin() {
+
+	$out = '<h2>' . t('UCB CAS Configuration Review') . '</h2>';
+  $use_case_text = <<<EOT
+These are the most common ways Drupal is being used at UC Berkeley.  
+Think about which case applies to your site, and then consider the configuration
+recommentations below.
+EOT;
+	$out .= '<h3>' . t('Common Drupal Site Use Cases') . '</h3>';
+	$out .= t($use_case_text);	
+	$out .= '<ol>';
+	$out .= '<li>' . t("Visitors to the site do not need to login. Site content is maintained by team of content editors.") . '</li>' ;
+	$out .= '<li>'. t("Visitors to the site need to login to post comments, write reviews, submit webforms, etc.") . '</li>';
+	$out .= '</ol>';
+	 
+	 /* Login blocks */
+	//TODO make collapsible
+	$out .= ucb_cas_fieldset("Login Blocks", ucb_cas_login_blocks_recommendations());
+	
+	return $out;
+}
+
+/**
+ * login blocks recommendations
+ */
+function ucb_cas_login_blocks_recommendations() {
+	global $base_url;
+	$change_text = CHANGE_TEXT;
+  $good_text = GOOD_TEXT;
+
+  $login_blocks_no_link_why = "<p>This way there is no link encouraging people who shouldn't be logging in to your site to authenticate. This prevents unwanted accounts from being created on your site.</p>";
+
+	$modules = ucb_cas_login_blocks_check();
+	//$out .= '<h3>' . t('Login Blocks') . '</h3>';
+	//$out .= '<legend class="collapse-processed">' . t('Login Blocks') . '</legend>';
+	$login_blocks_text = <<<EOT
+Depending on your use case, you may or may not want to display a login block on you site.
+EOT;
+	$out = t($login_blocks_text);
+	$login_blocks_on_advice_on_1 = <<<EOT
+<b>If this site follows use case #1</b>,&nbsp;$change_text<br/>
+<ul>
+<li><a href="/admin/structure/block" target = "_new">Disable these login blocks</a> by setting Region to 'None' and saving the form. (Then reload this page).</li>
+<li>If you are using a custom theme, don't add a login link there.</li>
+<li>Inform your team of content editors that they can login at <b>$base_url/cas</b></li>
+</ul>
+$login_blocks_no_link_why
+EOT;
+
+	$login_blocks_on_advice_on_2 = <<<EOT
+<b>If this site follows use case #2</b>,&nbsp;$good_text<br/>
+<ul>
+<li>Displaying these login blocks is probably appropriate.</li>
+<li>Additonally requiring a CAS login for certain nodes may be a good idea:</li>
+  <ul>
+  <li>For example if you have a webform at <b>node/1234</b> that requires the user to be logged in, you can add <b>node/1234</b>
+  to Redirection > Specific Pages, and select "Require CAS loogin for specific pages" on the <a href="/admin/config/people/cas" 
+  target = "_new">CAS settings page</a>.
+  </li> 
+  </ul>
+</ul>
+EOT;
+
+	$login_blocks_on_advice_off_1 = <<<EOT
+<b>If this site follows use case #1</b>,&nbsp;$good_text<br/>
+<ul>
+<li>(If you are using a custom theme, don't add a login link there.)</li>
+<li>Inform your team of content editors that they can login at <b>$base_url/cas</b></li>
+</ul>
+$login_blocks_no_link_why
+EOT;
+
+	$login_blocks_on_advice_off_2 = <<<EOT
+<b>If this site follows use case #2</b>,&nbsp;$change_text<br/>
+<ul>
+<li>Since users need to authenticate to your site, you should consider <a href="/admin/structure/block" target = "_new">enabling a login block</a>. 
+Find the User Login block and set a region for it. (Then reload this page.)</li>
+EOT;
+
+	
+	if (count($modules) > 0) {
+    $out .= '<h4>' . t('Currently you have login blocks enabled') . '</h4>';
+		$out .= '<table>';
+		$out .= '<tr><th>Block Name</th><th>Region</th><th>Module Providing Block</th></tr>';
+		foreach($modules as $m) {
+			$out .= '<tr>';
+			$out .= "<td>". ucfirst($m->module)." Login</td>";
+			$out .= "<td>". $m->region." </td>";
+			$out .= "<td>". $m->module."</td>";						
+			$out .= '</tr>';			
+		}
+
+    $out .= '</table>';		
+    $out .= '<h4>Recommentations</h4>';		
+    $out .= t($login_blocks_on_advice_on_1);
+    $out .= t($login_blocks_on_advice_on_2);
+	} 
+	else {
+		$out .= '<h4><i>' . t('No login blocks enabled') . '</i></h4>';
+    $out .= '<h4>Recommentations</h4>';		
+    $out .= t($login_blocks_on_advice_off_1);
+    $out .= t($login_blocks_on_advice_off_2);
+
+	}
+	return $out;
+}
+/**
+ * Check login blocks
+ */
+function ucb_cas_login_blocks_check() {
+  $theme = variable_get('theme_default');
+  $result = db_query("SELECT module, region FROM `block` WHERE delta like 'login' and region <> -1 and theme = :theme", array(':theme' => $theme));
+  $modules = $result->fetchAll();
+  return $modules;
+}
+
+/**
+ * Return a fieldset
+ */
+ function ucb_cas_fieldset($title, $content, $collapsible = TRUE, $expanded = TRUE) {
+ 	$fieldset = array('element' => array(
+   '#theme' => 'fieldset',
+   '#title' => $title,
+   '#description' => $content,
+ 	 '#children' => NULL,
+ 	//doesn't make fields collapsible
+   '#collapsible' => $collapsible,
+   // although the following works
+   '#attached' => array(
+        'js' => array(
+          'misc/form.js',
+          'misc/collapse.js',
+        ),
+   ),
+   '#attributes' => array(
+          'class' => array('collapsible', $expanded),
+        ),
+  ));
+  $html = theme_fieldset($fieldset);
+  return $html;
+ }
