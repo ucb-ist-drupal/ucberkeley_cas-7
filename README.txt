@@ -9,6 +9,7 @@ TABLE OF CONTENTS
 3.1.   Security
 3.2.   User Account creation (IMPORTANT)
 3.3.   Standard configuration doesn't support "mixed mode authentication"
+3.4.   Admin recommendations page
 4.   Requirements
 5.   UCB CalNet Registration
 6.   Installing
@@ -96,6 +97,12 @@ choose between them everytime they login to the site. A module
 choose to adjust the ucb_cas default settings, if mma is what you
 need. Please remember that you should be running your UCB site using
 SSL (https) if you are using Drupal standard authentication.
+
+*Admin recommendations page*
+
+After installation see /admin/config/people/ucbcas for recommendations
+on fine tuning your CAS configuration according to common UCB Drupal
+site use cases.
 
 REQUIREMENTS
 ------------

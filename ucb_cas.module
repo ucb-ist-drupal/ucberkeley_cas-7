@@ -18,10 +18,10 @@ function ucb_cas_menu() {
   );
     $items['admin/config/people/ucbcas'] = array (
     'title' => 'UCB CAS',
-    'description' => 'UCB CAS settings.',
+    'description' => 'UCB CAS recommendations and review.',
     'page callback' => 'ucb_cas_admin',
     'access arguments' => array('administer cas'),
-    'type' => MENU_CALLBACK,
+    'type' => MENU_NORMAL_ITEM,
   );
   return $items;
 }
