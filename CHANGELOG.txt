@@ -1,5 +1,8 @@
 ucb_cas NEXT RELEASE
 =====================
+
+DUPCODE-8: UCB CAS admin page: Reommendations about login blocks
+DUPCODE-1: Admin back door to prevent user1 lockouts
 DUPCODE-7: remove https://net-auth.berkeley.edu/cgi-bin/krbcpw as logout location.
 
 * Remove $sub_modules variable_get/set and use a PHP constant.

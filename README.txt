@@ -45,6 +45,9 @@ with your calnet id.
 4. As User 1 edit the new user that got created in step 2 and assign
 it the "administrator" role. (More info: Setup a Calnet-authenticated
 administrator)
+5. Visit http://example.com/admin/config/people/ucbcas
+
+Note: See Administrator "back door" for lockouts
 
 STANDARD CONFIGURATION
 ----------------------
