@@ -115,7 +115,7 @@ function ucb_cas_login_blocks_recommendations() {
 	//$out .= '<h3>' . t('Login Blocks') . '</h3>';
 	//$out .= '<legend class="collapse-processed">' . t('Login Blocks') . '</legend>';
 	$login_blocks_text = <<<EOT
-Depending on your use case, you may or may not want to display a login block on you site.
+Depending on your use case, you may or may not want to display a login block on your site.
 EOT;
 	$out = t($login_blocks_text);
 	$login_blocks_on_advice_on_1 = <<<EOT
