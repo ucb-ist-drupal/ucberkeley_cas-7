@@ -233,6 +233,16 @@ are aimed at defining "best practices" for using CAS and LDAP with
 your Drupal site.  That said, if you don't like our decisions, you can
 override them on the appropriate admin page on your site.
 
+UCB CAS Configuration at /admin/config/people/cas:
+
+  *Logout Behavior*
+ 
+    UCB CAS configures the site to request destruction of the CAS
+    ticket when the user logs out. This is considered more secure. You
+    can change this if you need "single signon" behavior. See
+    /admin/config/people/cas.
+   
+
 CAS Configuration at admin/config/people/cas:
 
   *Inital login destination* and *Logout destination*

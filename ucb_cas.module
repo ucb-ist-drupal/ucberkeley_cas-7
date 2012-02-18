@@ -94,10 +94,12 @@ EOT;
 
 	 /* Login blocks */
 	//TODO make collapsible
-		drupal_add_js('misc/collapse.js');
-			drupal_add_js('misc/form.js');
+	drupal_add_js('misc/collapse.js');
+	drupal_add_js('misc/form.js');
 	$out .= ucb_cas_fieldset("Login Blocks", ucb_cas_login_blocks_recommendations());
 	
+	/* Logout caslogout */
+	$out .= ucb_cas_fieldset("Logout Behavior", ucb_cas_logout_recommendations());
 	return $out;
 }
 
@@ -225,4 +227,35 @@ function ucb_cas_login_blocks_check() {
   ));
   $html = theme_fieldset($fieldset);
   return $html;
+ }
+ 
+ /**
+  * Logout info
+  */
+ function ucb_cas_logout_recommendations() {
+	$out = <<<EOT
+There are two logout options:
+<ol>
+<li>The most secure logout configuration is to send the user to http://auth.berkeley.edu/logout when they logout of Drupal.  This destroys their
+CAS ticket.  It means that they will have to type their username/password into the Calnet login form again the next time they want to login 
+to the site.</li>
+
+<li>The alternative to this is simply to log the user out of Drupal but not to send them to http://auth.berkeley.edu/logout.  This means that their 
+CAS ticket will remain in their browser.  If they return to the site's login link they will be logged in immediately without needing to re-enter their 
+username/password. </li>
+</ol>
+<p>
+Scenario #2 is considered <b>less secure than #1</b>. The reason is that if Jane is at a public terminal at the library the next person to use that computer
+could click the back button and be logged in as Jane.  If Jane doesn't use a screen lock and leaves her computer unattended, the same 
+scenario could occur.
+</p>
+<p>
+However some websites want to use "single signon." If that is the case, they may want to use scenario #2 above.
+<p>
+<b>UCB CAS has configured your site to use the first option.</b> If you want to change that, <a href="/admin/config/search/path" target="_new">go to the url 
+aliases page</a>, filter on 'logout' and delete the alias.  (If you change your mind later, you can either 1) manually re-create the alias or 
+2) disable, uninstall, and re-enable the ucb_cas module.) 
+EOT;
+ 	
+ 	return $out;
  }

@@ -168,10 +168,9 @@ node/*/edit/*");
   variable_set("cas_user_register",  1);
   variable_set("cas_version",  "2.0");
 
-  //enforce use of /caslogout
+  //Create alias: enforce use of /caslogout
   $alias = array('source'=>'caslogout', 'alias'=>'logout');
   path_save($alias);
-
 }
 
 /**
@@ -192,8 +191,8 @@ function ucb_cas_uninstall() {
       drupal_set_message("One or more of these modules could not be uninstalled: " . implode(', ', $sub_modules), 'warning');
   }
 
-  /* Clear settings */
-  // most settings are removed by uninstalling the sub modules.
-  variable_del("ucb_cas_sub_modules");
+  //delete alias: enforce use of /caslogout
+  $alias = array('source'=>'caslogout', 'alias'=>'logout');
+  path_delete($alias);
 
 }
