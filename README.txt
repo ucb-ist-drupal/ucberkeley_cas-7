@@ -7,7 +7,7 @@ TABLE OF CONTENTS
 2.   Quick Start
 3.   Standard Configuration 
 3.1.   Security
-3.2.   User Account creation (IMPORTANT)
+3.2.   User Account creation (*Important*)
 3.3.   Standard configuration doesn't support "mixed mode authentication"
 3.4.   Admin recommendations page
 4.   Requirements
@@ -17,6 +17,8 @@ TABLE OF CONTENTS
 8.   Administrator "back door" for lockouts
 9.   Disabling 
 10.  Uninstalling 
+10.1   Uninstalling/re-installing and preserving your Calnet users 
+       (Important)
 11.  Configuration Details
 12.  Launching your site (Important)
 13.  FAQ
@@ -224,6 +226,62 @@ This step will disable and uninstall each module that UCB CAS
 installed.  It will also remove variables that UCB CAS added your
 site's variables table.
 
+*Uninstalling/re-installing and preserving your Calnet users*
+
+In order to reset the site to the default ucb_cas configuration,
+administrators may decide to uninstall and then re-install ucb_cas.
+If you have accounts on your site that were created while the UCB CAS
+module was enabled, care should be taken with this
+uninstalling/reinstalling. If you simply uninstall ucb_cas (or the cas
+submodule) and then reinstall it, you will find that your existing
+Calnet-authenticated accounts can no longer login. They will be
+greeted with a PHP error like
+
+  Integrity constraint violation: 1062 Duplicate entry 'Brian Wood'...
+
+The reason for this error is that the uninstallation removed the
+cas_users database table and the data it contained.  This is not an
+issue with ucb_cas, but with the cas module itself.
+
+In order to preserve your Calnet-authenticated accounts follow this
+uninstall/reinstall procedure:
+
+1. Using phpMyAdmin (or the mysql command line client), export the
+contents of your ucb_cas table to a file. In phpMyAdmin click on the
+cas_user table then click on the Export link at the bottom of the
+page.  Choose "Dump all rows" at the next screen and submit the
+form. This will download a file called cas_user.sql which will contain
+data like:
+
+  INSERT INTO `cas_user` (`aid`, `uid`, `cas_name`) VALUES
+  (1, 15, '212373'),
+  (3, 19, '212372');
+
+2. Uncheck the UCB CAS module on the Modules administration page and
+submit the form. 
+
+3. Click the Uninstall tab at the top of the page and uninstall UCB
+CAS.
+
+4. Reinstall the UCB CAS module by checking it on the Modules
+administration page and submitting the form.
+
+5. In phpMyAdmin select your database and choose the SQL tab. Replace
+the contents of the sql query text area with the insert statements
+from step 1. Submit the form. 
+
+Now your existing Calnet-authenticated accounts should be able to
+login via CAS.
+
+Alternative procedure:
+
+You could also simply delete all of your existing calnet users and
+then recreate them by having the users log in again after you
+reinstall the ucb_cas module.  If you do this, the recreated users
+will no longer be the owners of any content that they created. The sql
+solution above will preserve the users association to their content.
+
+
 CONFIGURATION DETAILS
 ---------------------
 
@@ -305,7 +363,7 @@ Cas Attributes configuration (admin/config/people/cas/attributes)
        will not reflect changes made to LDAP after the user account
        was created on your site.
 
-LAUNCHING YOUR SITE (IMPORTANT)
+LAUNCHING YOUR SITE (Important)
 -------------------------------
 
 	Your site is using the servers ldap-test.berkeley.edu and
@@ -327,10 +385,7 @@ Q. When logging in I get the error "user warning: Duplicate entry
 Wood', mail = 'bwood@example.com', data = 'a:0:{}' WHERE uid = 7 in
 /Users/bwood/Sites/dev6/modules/user/user.module on line 248."
 
-A. Check to see if there is already a user named with the same *Calnet
-UID* as Brian Wood (e.g a user called "214898").  Delete that user and
-try authenticating again.  This is rare, but could happen if you
-previously had a problem with your LDAP configuration.
+A. See "Uninstalling/re-installing and preserving your Calnet users."
 
 AUTHORS
 -------
