@@ -387,6 +387,18 @@ Wood', mail = 'bwood@example.com', data = 'a:0:{}' WHERE uid = 7 in
 
 A. See "Uninstalling/re-installing and preserving your Calnet users."
 
+
+Q. When I try to edit a user created by the cas module, I get a
+validation error on the email address.  Why is this?
+
+A. All accounts on a Druapl site must have unique email addresses.
+Ofter a site admin user their own address for User 1 and then they
+Calnet authenticate to create a new account for themselves.  The
+account gets created, but if they try to edit it, they get a
+validation error on the email field since it is the email that is
+already in use by User 1. To fix this, change the User 1 email.
+
+
 AUTHORS
 -------
 Brian Wood, UC Berkeley, http://drupal.org/user/164217
