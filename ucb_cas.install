@@ -151,7 +151,6 @@ function ucb_cas_install() {
   variable_set("cas_hide_password",  1);
   variable_set("cas_library_dir",  "CAS");
   variable_set("cas_login_drupal_invite",  "");
-  variable_set("cas_login_form",  "2");
   variable_set("cas_login_invite",  "Log in using CalNet");
   variable_set("cas_login_message",  "Logged in via CalNet as %cas_username.");
   variable_set("cas_login_redir_message",  "You will be redirected to the secure CalNet login page.");
@@ -168,6 +167,15 @@ node/*/edit/*");
   variable_set("cas_user_register",  1);
   variable_set("cas_version",  "2.0");
 
+  //Play nicely with the ucb_mma module
+  if (module_exists('ucb_mma')) {
+    variable_set("cas_login_form",  "0");
+  } 
+  else {
+  	variable_set("cas_login_form",  "2");
+  }
+
+  
   //Create alias: enforce use of /caslogout
   $alias = array('source'=>'caslogout', 'alias'=>'/user/logout');
   path_save($alias);
