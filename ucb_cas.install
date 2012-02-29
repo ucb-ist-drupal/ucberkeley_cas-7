@@ -132,7 +132,7 @@ function ucb_cas_install() {
             'mail' => '[cas:ldap:mail]',
   ),
     'ldap' => array(
-            'server' => 'ucb_prod',
+            'server' => 'ucb_test',
   ),
   ));
   variable_set("cas_auto_assigned_role",  array(4 => 4,
