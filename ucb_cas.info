@@ -1,8 +1,8 @@
 core = 7.x
-description = Enabling JUST this module. It will enable: CAS (including the phpCAS library), CAS Attributes, LDAP, Token. Implements: standard UCB configuration.
+description = Installs and auto-configures everything you need to use CAS/Calnet with your site. (Enable JUST this module. It will enable: CAS, CAS Attributes, LDAP, Token. Disabling then uninstalling JUST this module will reverse the process.) 
 dependencies[] = token
 name = " UCB CAS"
 package = "Central Authentication Service"
 project = ucb_cas
-version = 7.x-0.1
-#project status url = "http://drupal_berkeley.localhost:8082/fserver"
+version = 7.x-1.0-beta1
+project status url = "http://drupal-apps.berkeley.edu/fserver"
