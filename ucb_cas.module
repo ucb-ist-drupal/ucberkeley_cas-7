@@ -10,11 +10,24 @@ define('GOOD_TEXT', '<font color = "green">your settings are probably good.</fon
  */
 function ucb_cas_apps_app_info() {
 	return array(
-    'configure form' => 'ucb_cas_admin',
-    'status callback' => 'ucb_cas_app_status',
+    'configure form' => 'ucb_cas_apps_app_configure_form',
+    //'status callback' => 'ucb_cas_app_status',
 	);
 }
 
+/**
+ *
+ * Implementation of hook_apps_app_configure_form 
+ *
+ * TODO: move to ucb_cas.app.inc
+ */
+function ucb_cas_apps_app_configure_form() {
+	$form = array();
+	$form['test'] = array(
+	  '#markup' => t('See the ') .  l(t('UCB CAS recommendations page'), 'admin/config/people/ucbcas') . '.',
+	);
+	return $form;
+}
 /**
  * Apps status
  */
