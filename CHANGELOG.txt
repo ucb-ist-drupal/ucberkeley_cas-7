@@ -1,7 +1,18 @@
 ucb_cas NEXT RELEASE
 =====================
 
+ucb_cas 7.1-1.x-beta4
+=====================
+* Apps configure form
+
+ucb_cas 7.1-1.x-beta3
+=====================
+
+* Apps compatibility
 * Friendly messages with links added to hook_install
+
+ucb_cas 7.1-1.x-beta2
+=====================
 DUPCODE-2: logout defaults to /caslogout
 DUPCODE-8: UCB CAS admin page: Reommendations about login blocks
 DUPCODE-1: Admin back door to prevent user1 lockouts

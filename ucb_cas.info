@@ -4,5 +4,5 @@ dependencies[] = token
 name = " UCB CAS"
 package = "Central Authentication Service"
 project = ucb_cas
-version = 7.x-1.0-beta1
+version = 7.x-1.0-beta4
 project status url = "http://drupal-apps.berkeley.edu/fserver"
