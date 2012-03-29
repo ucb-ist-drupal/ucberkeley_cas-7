@@ -1,17 +1,20 @@
-ucb_cas NEXT RELEASE
+ucb_cas 7.1.1-beta1
 =====================
+* CAS will play nicely with libraries.module
+* phpCAS 1.3.0 update
 
-ucb_cas 7.1-1.x-beta4
+
+ucb_cas 7.1-1.0-beta4
 =====================
 * Apps configure form
 
-ucb_cas 7.1-1.x-beta3
+ucb_cas 7.1-1.0-beta3
 =====================
 
 * Apps compatibility
 * Friendly messages with links added to hook_install
 
-ucb_cas 7.1-1.x-beta2
+ucb_cas 7.1-1.0-beta2
 =====================
 DUPCODE-2: logout defaults to /caslogout
 DUPCODE-8: UCB CAS admin page: Reommendations about login blocks
@@ -21,5 +24,5 @@ DUPCODE-7: remove https://net-auth.berkeley.edu/cgi-bin/krbcpw as logout locatio
 * Remove $sub_modules variable_get/set and use a PHP constant.
   Required for Pantheon install profile compatibility.
 
-ucb_cas 7.1-1.x-beta1
+ucb_cas 7.1-1.0-beta1
 =====================
