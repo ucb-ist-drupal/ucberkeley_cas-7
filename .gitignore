@@ -2,6 +2,10 @@
 
 # Drupal #
 ##########
+# we dont' version control the submodules
+cas
+cas_attributes
+ldap
 
 # Packages #
 ############
