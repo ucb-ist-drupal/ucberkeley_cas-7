@@ -19,10 +19,11 @@ TABLE OF CONTENTS
 10.  Uninstalling 
 10.1   Uninstalling/re-installing and preserving your Calnet users 
        (Important)
-11.  Configuration Details
-12.  Launching your site (Important)
-13.  FAQ
-14.  Authors
+11.  Upgrading to a new version of ucb_cas
+12.  Configuration Details
+13.  Launching your site (Important)
+14.  FAQ
+15.  Authors
 
 
 PURPOSE
@@ -280,6 +281,27 @@ then recreate them by having the users log in again after you
 reinstall the ucb_cas module.  If you do this, the recreated users
 will no longer be the owners of any content that they created. The sql
 solution above will preserve the users association to their content.
+
+
+UPGRADING TO A NEW VERSION OF UCB_CAS
+-------------------------------------
+Follow this procedure to upgrade ucb_cas:
+
+Upgrade the module on your developement site first and test it.
+Before you upgrade the module on your live site, make a backup of your
+live site's database just in case there is a problem.
+
+(Do not disable and uninstall ucb_cas at /admin/modules.)
+
+1. delete the ucb_cas folder form your modules directory
+
+2. replace it with the new version of the module downloaded which you
+downloaded and unarchived
+
+3. run update.php on your drupal site
+
+The new version should now be working.  Test it on your development
+site to make sure that logging in and out of the site is working.
 
 
 CONFIGURATION DETAILS
