@@ -22,8 +22,9 @@ TABLE OF CONTENTS
 11.  Upgrading to a new version of ucb_cas
 12.  Configuration Details
 13.  Launching your site (Important)
-14.  FAQ
-15.  Authors
+14.  Drush vget (varaible get) may not be accurate for the cas_server variable
+15.  FAQ
+16.  Authors
 
 
 PURPOSE
@@ -398,6 +399,24 @@ LAUNCHING YOUR SITE (Important)
         admin/config/people/cas/attributes
 
         (A module to help automate this is in the works.)
+
+
+DRUSH VGET (VARAIBLE GET) MAY NOT BE ACCURATE FOR THE CAS_SERVER VARIABLE
+-------------------------------------------------------------------------
+
+This only applies to sites using the ucb_envconf module:
+
+drush @somealias vget cas_server
+
+Because this module applies configuration on hook_boot() and because
+hook_boot doesn't run when you issue 'drush vget', you will encounter
+situations where 'drush vget' reports the wrong value.  If you visit
+the corresponding admin page, you should see the right value.
+
+Theorectically you could get the correct value with 
+
+drush @somealias php-eval "echo variable_get('cas_server', NULL);"
+
 
 FAQ
 ---
