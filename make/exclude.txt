@@ -1,0 +1,6 @@
+.buildpath
+.git
+.gitignore
+.project
+.settings
+make
