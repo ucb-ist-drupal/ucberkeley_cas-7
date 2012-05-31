@@ -1,3 +1,7 @@
+next
+====
+* DUPCODE-2: user/logout was not redirecting to caslogout. Fixed.
+
 ucb_cas 7.1.2-beta1
 ===================
 * update modules

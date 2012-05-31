@@ -181,7 +181,7 @@ node/*/edit/*");
 
   
   //Create alias: enforce use of /caslogout
-  $alias = array('source'=>'caslogout', 'alias'=>'/user/logout');
+  $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
   path_save($alias);
 }
 
@@ -204,7 +204,7 @@ function ucb_cas_uninstall() {
   }
 
   //delete alias: enforce use of /caslogout
-  $alias = array('source'=>'caslogout', 'alias'=>'/user/logout');
+  $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
   path_delete($alias);
 
 }
