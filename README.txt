@@ -323,7 +323,11 @@ UCB CAS Configuration at /admin/config/people/cas:
     can change this if you need "single signon" behavior. See
     /admin/config/people/cas.
    
+  */user/logout takes you to /caslogout*
 
+    This is considered best practice on campus.  If you need to change 
+    this remove the alias at /admin/config/search/path.
+     
 CAS Configuration at admin/config/people/cas:
 
   *Inital login destination* and *Logout destination*
