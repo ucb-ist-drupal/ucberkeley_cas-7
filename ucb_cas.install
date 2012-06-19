@@ -31,7 +31,8 @@ function ucb_cas_requirements($phase) {
 }
 
 function ucb_cas_install() {
-	/* Install modules */
+  global $base_url;
+  /* Install modules */
 	$sub_modules = explode(',', SUBMODULES);
 
   /* 
@@ -49,14 +50,36 @@ function ucb_cas_install() {
   
   /*** Settings ***/
   /* LDAP */
+  $prod_ldap_server = 'ldap.berkeley.edu';
+  $test_ldap_server = 'ldap-test.berkeley.edu';
+
+  //If they had ldap installed earlier they might already have ucb ldap servers defined
+  //if so disable them and add ones we know to be correct.
+  $result = db_query('SELECT sid, numeric_sid, name, address FROM  `ldap_servers` WHERE  `address` IN (:prod, :test)', array(':prod' => $prod_ldap_server, ':test' => $test_ldap_server));
+  foreach ($result as $r) {
+    db_update('ldap_servers')
+    ->fields(array(
+    'sid' => $r->sid . '_old',
+    'name' => 'DISABLED-'. $r->name,
+    'address' => 'DISABLED-' . $r->address,
+    'status' => 0,
+    ))
+    ->condition('name', $r->name, '=')
+    ->execute();
+    //Notify the user
+    drupal_set_message(t("Your ldap servers have been updated at ") . l(t("/admin/config/people/ldap/servers"), 'admin/config/people/ldap/servers') . '.');
+    watchdog('ucb_cas', "Replaced existing ldap server: %existing", array('%existing' => $r->address), WATCHDOG_NOTICE, l(t("View LDAP Servers"), $base_url . '/admin/config/people/ldap/servers') );
+  }
+  
+  //Canonical ldap server info
   $ldap_servers = array(
     array(
       'sid' => 'ucb_test',
       'numeric_sid' => 0,
-      'name' => 'ldap-test.berkeley.edu',
+      'name' => $test_ldap_server,
       'status' => 1,
       'ldap_type' => 'default',
-      'address' => 'ldap-test.berkeley.edu',
+      'address' => $test_ldap_server,
       'port' => 389,
       'tls' => 0,
       'bind_method' => 3,
@@ -76,10 +99,10 @@ function ucb_cas_install() {
     array(
       'sid' => 'ucb_prod',
       'numeric_sid' => 0,
-      'name' => 'ldap.berkeley.edu',
+      'name' => $prod_ldap_server,
       'status' => 1,
       'ldap_type' => 'default',
-      'address' => 'ldap.berkeley.edu',
+      'address' => $prod_ldap_server,
       'port' => 389,
       'tls' => 0,
       'bind_method' => 3,
