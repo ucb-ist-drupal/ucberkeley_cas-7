@@ -17,10 +17,10 @@ TABLE OF CONTENTS
 *   Setup a Calnet-authenticated Administrator
 *   Administrator "back door" for lockouts
 *   Disabling 
-*  Uninstalling 
+*   Uninstalling 
     *   Uninstalling/re-installing and preserving your Calnet users (Important)
-* Upgrading to a new version of ucb_cas
-* Configuration Details
+*  Upgrading to a new version of ucb_cas
+*  Configuration Details
 *  Launching your site (Important)
 *  Drush vget (varaible get) may not be accurate for the cas_server variable
 *  FAQ
