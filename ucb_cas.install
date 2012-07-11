@@ -5,26 +5,40 @@ function ucb_cas_requirements($phase) {
   $requirements = array();
   $t = get_t();
   $sub_modules = explode(',', SUBMODULES);
-  
+
   if ($phase == 'install') {
     $paths = array();
-    foreach ($sub_modules as $sm) {
-      $path = drupal_get_path('module', $sm);
-      // If ucb_cas is in the path, it's ours
-      if (strpos($path, 'ucb_cas') === FALSE) {
-        if (!in_array($path, $paths)) $paths[] = $path;
+    $enabled = array();
+
+    //$args = array_merge($sub_modules, array('ucb_cas'));
+    /*
+     *  Disable any ldap modules that aren't ours. Don't have them disable cas modules because,
+     *  it's not necessary and if they get zealous and *uninstall* the cas module they'll loose
+     *  their cas_users data.
+     */
+    $result = db_query("SELECT name, status, filename from {system} WHERE name IN (:modules) and filename NOT LIKE '%%ucb_cas%%'", array(':modules'=>$sub_modules));
+    foreach ($result as $r) {
+      if ((strpos($r->name, 'cas') === FALSE) && ($r->status == 1)) {
+        $enabled[] = $r->name;
       }
+      $paths[] = preg_replace('@/[^/.]+.module$@', '', $r->filename);
     }
-    if (count($paths) > 0 ) {
-      $msg = "The UCB CAS module is trying to install modules which already exist on your site.  <p>1. Please ensure these modules are disabled at admin/build/modules.<br/>2. Then remove these files: <br/><ul><li>" . implode('<li> ', $paths) . "</ul>";
-      if (!function_exists('cas_phpcas_attributes')) {
-        $requirements['cas_attributes'] = array(
+
+    $msg = "The UCB CAS module is trying to install modules which already exist on your site.";
+
+    if (count($enabled) > 0) {
+      $msg .= "\n<p>Please disable these modules at admin/modules: <br/><ul><li>" . implode('<li> ', $enabled) . "</ul></p>";
+    }
+    if (count($paths) > 0) {
+      $msg .= "\n<p>Please remove these directories and any files they contain: <br/><ul><li>" . implode('<li> ', $paths) . "</ul></p>";
+    }
+    if ((count($paths) > 0 ) || (count($enabled) > 0)) {
+      $requirements['ucb_cas'] = array(
         'title' => $t('UCB CAS'),
         'value' => $t('Conflict'),
         'severity' => REQUIREMENT_ERROR,
         'description' => $t($msg),
-        );
-      }
+      );
     }
   }
   return $requirements;
@@ -33,9 +47,9 @@ function ucb_cas_requirements($phase) {
 function ucb_cas_install() {
   global $base_url;
   /* Install modules */
-	$sub_modules = explode(',', SUBMODULES);
+  $sub_modules = explode(',', SUBMODULES);
 
-  /* 
+  /*
    *  Why not just make the sub_modules dependencies of ucb_cas? Since
    *  we inject config into schemas created by these modules, we need
    *  to module_enable() so that we know for sure that the target
@@ -47,7 +61,7 @@ function ucb_cas_install() {
   //drush-friendly links
   drupal_set_message("You can now login using cas at ". l(t("/cas"), 'cas') . '. (' . t("Do this in a different browser or logout of your admin account first.") . ')');
   drupal_set_message(t("View UCB CAS recommendations at ") . l(t("/admin/config/people/ucbcas"), 'admin/config/people/ucbcas') . '.');
-  
+
   /*** Settings ***/
   /* LDAP */
   $prod_ldap_server = 'ldap.berkeley.edu';
@@ -70,10 +84,10 @@ function ucb_cas_install() {
     drupal_set_message(t("Your ldap servers have been updated at ") . l(t("/admin/config/people/ldap/servers"), 'admin/config/people/ldap/servers') . '.');
     watchdog('ucb_cas', "Replaced existing ldap server: %existing", array('%existing' => $r->address), WATCHDOG_NOTICE, l(t("View LDAP Servers"), $base_url . '/admin/config/people/ldap/servers') );
   }
-  
+
   //Canonical ldap server info
   $ldap_servers = array(
-    array(
+  array(
       'sid' => 'ucb_test',
       'numeric_sid' => 0,
       'name' => $test_ldap_server,
@@ -95,8 +109,8 @@ function ucb_cas_install() {
       'ldap_to_drupal_user' => '',
       'testing_drupal_username' => 213108,
       'weight' => 0,
-    ),
-    array(
+  ),
+  array(
       'sid' => 'ucb_prod',
       'numeric_sid' => 0,
       'name' => $prod_ldap_server,
@@ -118,11 +132,11 @@ function ucb_cas_install() {
       'ldap_to_drupal_user' => '',
       'testing_drupal_username' => 213108,
       'weight' => 0,
-    ),
+  ),
   );
-  
+
   $query = db_insert('ldap_servers')
-    ->fields(array('sid',
+  ->fields(array('sid',
                    'numeric_sid',
                    'name',
                    'status',
@@ -143,12 +157,12 @@ function ucb_cas_install() {
                    'ldap_to_drupal_user',
                    'testing_drupal_username',
                    'weight',
-                  ));
+  ));
   foreach($ldap_servers as $ls) {
     $query->values($ls);
   }
   $query->execute();
-  
+
   /* CAS Variables */
   variable_set("cas_access",  "0");
   variable_set("cas_attributes",  array(
@@ -162,10 +176,10 @@ function ucb_cas_install() {
   ),
   ));
   variable_set("cas_auto_assigned_role",  array(4 => 4,
-                                                2 => 1,
-                                                3 => 0, 
-                                                5 => 0,
-                                                ));
+  2 => 1,
+  3 => 0,
+  5 => 0,
+  ));
   variable_set("cas_cert",  "");
   variable_set("cas_changePasswordURL",  "");
   variable_set("cas_check_first",  0);
@@ -197,12 +211,12 @@ node/*/edit/*");
   //Play nicely with the ucb_mma module
   if (module_exists('ucb_mma')) {
     variable_set("cas_login_form",  "0");
-  } 
+  }
   else {
-  	variable_set("cas_login_form",  "2");
+    variable_set("cas_login_form",  "2");
   }
 
-  
+
   //Create alias: enforce use of /caslogout
   $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
   path_save($alias);
@@ -212,18 +226,18 @@ node/*/edit/*");
  * Implementation of hook_disable().
  */
 function ucb_cas_disable() {
-	drupal_set_message('Note: Disabling ucb_cas does not disable its companion modules.  (However uninstalling ucb_cas *will* uninstall its companion modules. See README.txt)', 'status');
+  drupal_set_message('Note: Disabling ucb_cas does not disable its companion modules.  (However uninstalling ucb_cas *will* uninstall its companion modules. See README.txt)', 'status');
 }
 
 function ucb_cas_uninstall() {
   /* Remove modules */
   $sub_modules = explode(',', SUBMODULES);
   module_disable($sub_modules, FALSE);
-  if (drupal_uninstall_modules($sub_modules, FALSE)) {  
+  if (drupal_uninstall_modules($sub_modules, FALSE)) {
     drupal_set_message("Uninstalled ucb_cas dependencies: " . implode(', ', $sub_modules), 'status');
   }
   else {
-      drupal_set_message("One or more of these modules could not be uninstalled: " . implode(', ', $sub_modules), 'warning');
+    drupal_set_message("One or more of these modules could not be uninstalled: " . implode(', ', $sub_modules), 'warning');
   }
 
   //delete alias: enforce use of /caslogout
