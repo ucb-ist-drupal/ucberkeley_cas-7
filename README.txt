@@ -3,28 +3,28 @@ README ucb_cas-7.x
 
 TABLE OF CONTENTS
 -----------------
-1.   Purpose
-2.   Quick Start
-3.   Standard Configuration 
-3.1.   Security
-3.2.   User Account creation (*Important*)
-3.3.   Standard configuration doesn't support "mixed mode authentication"
-3.4.   Admin recommendations page
-4.   Requirements
-5.   UCB CalNet Registration
-6.   Installing
-7.   Setup a Calnet-authenticated Administrator
-8.   Administrator "back door" for lockouts
-9.   Disabling 
-10.  Uninstalling 
-10.1   Uninstalling/re-installing and preserving your Calnet users 
-       (Important)
-11.  Upgrading to a new version of ucb_cas
-12.  Configuration Details
-13.  Launching your site (Important)
-14.  Drush vget (varaible get) may not be accurate for the cas_server variable
-15.  FAQ
-16.  Authors
+*   Purpose
+*   Quick Start
+*   Standard Configuration 
+    *   Security
+    *   User Account creation (*Important*)
+    *   Standard configuration doesn't support "mixed mode authentication"
+    *   Admin recommendations page
+*   Requirements
+*   UCB CalNet Registration
+*   Installing
+    * Installing if your site already uses the modules that ucb_cas provides
+*   Setup a Calnet-authenticated Administrator
+*   Administrator "back door" for lockouts
+*   Disabling 
+*  Uninstalling 
+    *   Uninstalling/re-installing and preserving your Calnet users (Important)
+* Upgrading to a new version of ucb_cas
+* Configuration Details
+*  Launching your site (Important)
+*  Drush vget (varaible get) may not be accurate for the cas_server variable
+*  FAQ
+*  Authors
 
 
 PURPOSE
@@ -167,6 +167,31 @@ your Drupal site and you should see "Logged in as YOUR NAME."
 
 Go to http://example-dev.berkeley.edu/user.  You should see the email
 address that was retrieved from LDAP for your account.
+
+Installing if your site already uses the modules that ucb_cas provides
+----------------------------------------------------------------------
+
+1. Remove the directories for cas, cas_attributes and ldap from
+site/all/modules (or wherever they reside).
+
+2. Disable the ldap configuration modules from /admin/modules
+(the module administsration page). You don't need to disable the cas
+modules.  (Do not run the uninstall process for the cas module at
+/admin/modules.)
+
+3. Unpack ucb_cas into sites/all/modules.
+
+4. At admin/modules enable the UCB CAS module. UCB CAS will tell
+you if there is anything wrong.
+
+5. Run update.php.
+
+If UCB CAS finds that you have setup LDAP servers, it will rename, and
+disable them, but they will be preserved in case you need to refer
+back to them.  Then it will install LDAP servers with parameters known
+to work. If you are using UCB CAS with UCB Environments
+Configurations, it's important that your LDAP servers have the "sids"
+(see the database) specified by ucb_cas.install.
 
 
 SETUP A CALNET-AUTHENTICATED ADMINISTRATOR
