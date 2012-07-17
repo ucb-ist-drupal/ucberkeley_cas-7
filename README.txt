@@ -418,17 +418,22 @@ Cas Attributes configuration (admin/config/people/cas/attributes)
 LAUNCHING YOUR SITE (Important)
 -------------------------------
 
-	Your site is using the servers ldap-test.berkeley.edu and
-	auth-test.berkeley.edu.  These are the correct servers to use
-	for site development and testing.  When you make your site
-	live, you should change these servers to ldap.berkeley.edu and
-	auth.berkeley.edu. Make these changes at:
+The module [ucb_envconf](http://drupal-apps.berkeley.edu/node/4)
+ensures that your cas and ldap server settings are correct based on
+your development environment on Pantheon. If you are not using this
+module, you'll need to manually edit these server settings when
+whenever you migrate your site (or just the database) between you dev,
+test and live environments. Here's the information for non-users of
+ucb_envconf:
 
-        admin/config/people/cas
-        admin/config/people/cas/attributes
+Your site is using the servers ldap-test.berkeley.edu and
+auth-test.berkeley.edu.  These are the correct servers to use
+for site development and testing.  When you make your site
+live, you should change these servers to ldap.berkeley.edu and
+auth.berkeley.edu. Make these changes at:
 
-        (A module to help automate this is in the works.)
-
+admin/config/people/cas
+admin/config/people/cas/attributes
 
 DRUSH VGET (VARAIBLE GET) MAY NOT BE ACCURATE FOR THE CAS_SERVER VARIABLE
 -------------------------------------------------------------------------
