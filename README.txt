@@ -473,6 +473,16 @@ account gets created, but if they try to edit it, they get a
 validation error on the email field since it is the email that is
 already in use by User 1. To fix this, change the User 1 email.
 
+Q. I created a new role and I noticed that newly added CAS users 
+were automatically being assigned to this role.
+
+A. Prior to 7.x-1.3-beta2, if you created a new role after 
+installing ucb_cas newly added users were automatically assigned
+the new role in some situations. Take a look at 
+/admin/config/people/cas > User Accounts and ensure that the correct
+roles are selected there.  If you find incorrect roles selected, just
+unselect them.  This problem in the installer has been fixed.
+
 
 AUTHORS
 -------
