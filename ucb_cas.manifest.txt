@@ -1,0 +1,8 @@
+name = UCB CAS
+description = Enables UC Berkeley CalNet authentication and UC Berkeley LDAP.
+machine_name = ucb_cas
+version = 7.x-1.3-beta2 
+downloadable = ucb_cas 7.x-1.3-beta2 
+author = IST Drupal, Brian Wood 
+author_url = http://drupal-apps.berkeley.edu/
+downloadables[ucb_cas 7.x-1.3-beta2] = http://drupal-apps.berkeley.edu/sites/default/files/ucb_cas-7.x-1.3-beta2.tar.gz

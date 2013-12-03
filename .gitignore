@@ -1,0 +1,44 @@
+# Replace EXAMPLE with your site name.
+
+# Drupal #
+##########
+# we dont' version control the submodules
+cas
+cas_attributes
+ldap
+
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+
+# OS generated files #
+######################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+._*
+
+# Eclipse files #
+#################
+.buildpath
+.project
+.settings/*
+dummy.php
+
+# Emacs files #
+###############
+*~
+\#*#
