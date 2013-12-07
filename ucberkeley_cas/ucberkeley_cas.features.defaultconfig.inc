@@ -105,7 +105,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_attributes';
   $strongarm->value = array(
-    'sync_every_login' => 1,
+    'sync_every_login' => '0',
     'relations' => array(
       'name' => '[cas:ldap:displayname]',
       'mail' => '[cas:ldap:mail]',
