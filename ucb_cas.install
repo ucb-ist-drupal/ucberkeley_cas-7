@@ -1,9 +1,26 @@
 <?php
-
-
+/**
+ * Implementation of hook_install().
+ */
 function ucb_cas_install() {
-  //Create alias: enforce use of /caslogout
-  $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
-  path_save($alias);
+  $aliases[] = array('source' => 'caslogout', 'alias' => 'user/logout');
+  $aliases[] = array('source' => 'caslogout', 'alias' => 'logout');
+
+  //Create aliases
+  foreach ($aliases as $alias) {
+    path_save($alias);
+  }
 }
 
+/**
+ * Implementation of hook_uninstall().
+ */
+function ucb_cas_uninstall() {
+  $aliases[] = array('source' => 'caslogout', 'alias' => 'user/logout');
+  $aliases[] = array('source' => 'caslogout', 'alias' => 'logout');
+
+  //Delete aliases
+  foreach ($aliases as $alias) {
+    path_delete($alias);
+  }
+}
