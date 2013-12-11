@@ -1,5 +1,75 @@
 <?php
 /**
+ * Implementation of hook requirements:
+ * This helps the user upgrade from ucb_cas-7.x-1.x to ucberkeley_cas-7.x-2.x
+ *
+ * @param $phase
+ * @return array
+ */
+function ucberkeley_cas_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  $sub_modules = array('cas_ldap', 'cas_attributes', 'cas', 'ldap_servers');
+  $update_message =<<<EOT
+<p>The module UC Berkeley CAS (ucberkeley_cas) is a replacement for UCB CAS (ucb_cas).  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.</p>
+
+<p>Here's what to do:</p>
+<p>
+1. Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module.<br />
+2. Simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).<br />
+3. Check that you have added the other modules required by UC Berkeley CAS to your site. (These modules (cas, ldap...) might already be in the ucberkeley_cas folder.)<br />
+4. Enable UC Berkeley CAS.<br />
+5. Run update.php.<br />
+</p>
+EOT;
+
+  if ($phase == 'install') {
+    if (module_exists('ucb_cas')) {
+      $requirements['ucberkeley_cas'] = array(
+        'title' => $t('UC Berkeley CAS'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t($update_message),
+      );
+      return $requirements;
+    }
+
+    $paths = array();
+    $enabled = array();
+
+    /*
+     *  Disable any ldap modules that aren't ours. Don't have them disable cas modules because,
+     *  it's not necessary and if they get zealous and *uninstall* the cas module they'll loose
+     *  their cas_users data.
+     */
+    $result = db_query("SELECT name, status, filename from {system} WHERE name IN (:modules) and filename NOT LIKE '%%ucberkeley_cas%%'", array(':modules'=>$sub_modules));
+    foreach ($result as $r) {
+      if ((strpos($r->name, 'cas') === FALSE) && ($r->status == 1)) {
+        $enabled[] = $r->name;
+      }
+      $paths[] = preg_replace('@/[^/.]+.module$@', '', $r->filename);
+    }
+
+    $msg = "The UC Berkeley CAS module is trying to install modules which already exist on your site.";
+
+    if (count($enabled) > 0) {
+      $msg .= "\n<p>Please disable these modules at admin/modules: <br/><ul><li>" . implode('<li> ', $enabled) . "</ul></p>";
+    }
+    if (count($paths) > 0) {
+      $msg .= "\n<p>Please remove these directories and any files they contain: <br/><ul><li>" . implode('<li> ', $paths) . "</ul></p>";
+    }
+    if ((count($paths) > 0 ) || (count($enabled) > 0)) {
+      $requirements['ucb_cas'] = array(
+        'title' => $t('UC Berkeley CAS'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t($msg),
+      );
+    }
+  }
+  return $requirements;
+}
+
+
+/**
  * Implementation of hook_install
  */
 function ucberkeley_cas_install() {
