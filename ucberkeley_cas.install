@@ -1,0 +1,19 @@
+<?php
+/**
+ * Implementation of hook_install
+ */
+function ucberkeley_cas_install() {
+  //Create alias: enforce use of /caslogout
+  $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
+  path_save($alias);
+}
+
+/**
+ * Implementation of hook_uninstall
+ */
+function ucberkeley_cas_uninstall() {
+  //delete alias: enforce use of /caslogout
+  $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
+  path_delete($alias);
+
+}
