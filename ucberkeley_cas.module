@@ -73,7 +73,7 @@ function ucberkeley_cas_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
 	);
-	$items['admin/config/people/ucbcas'] = array (
+	$items['admin/config/people/ucberkeley_cas'] = array (
     'title' => 'UCB CAS',
     'description' => 'UCB CAS recommendations and review.',
     'page callback' => 'ucberkeley_cas_admin',

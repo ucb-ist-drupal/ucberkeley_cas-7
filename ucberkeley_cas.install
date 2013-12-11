@@ -15,11 +15,19 @@ function ucberkeley_cas_requirements($phase) {
 
 <p>Here's what to do:</p>
 <p>
-1. Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module.<br />
-2. Simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).<br />
-3. Check that you have added the other modules required by UC Berkeley CAS to your site. (These modules (cas, ldap...) might already be in the ucberkeley_cas folder.)<br />
-4. Enable UC Berkeley CAS.<br />
-5. Run update.php.<br />
+1. Disable UCB CAS by unchecking its entry at sites/all/modules and clicking submit (or by using drush).<br />
+2. Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module.<br />
+3. Simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).<br />
+4. Check that you have added the other modules required by UC Berkeley CAS to your site. (These modules (cas, cas_attributes, ldap...) might already be in the ucberkeley_cas folder.)<br />
+5. Enable UC Berkeley CAS.<br />
+6. Run update.php.<br />
+</p>
+
+<p>At this point it's a good idea to:</p>
+
+<p>
+a. Visit admin/reports/updates and verify that you have the latest version of cas, cas_attributes and ldap.<br />
+b. Visit admin/reports/status and verify that you have the latest version of the phpCAS library.  (Compare http://downloads.jasig.org/cas-clients/php/current/).<br />
 </p>
 EOT;
 
@@ -31,38 +39,6 @@ EOT;
         'description' => $t($update_message),
       );
       return $requirements;
-    }
-
-    $paths = array();
-    $enabled = array();
-
-    /*
-     *  Disable any ldap modules that aren't ours. Don't have them disable cas modules because,
-     *  it's not necessary and if they get zealous and *uninstall* the cas module they'll loose
-     *  their cas_users data.
-     */
-    $result = db_query("SELECT name, status, filename from {system} WHERE name IN (:modules) and filename NOT LIKE '%%ucberkeley_cas%%'", array(':modules'=>$sub_modules));
-    foreach ($result as $r) {
-      if ((strpos($r->name, 'cas') === FALSE) && ($r->status == 1)) {
-        $enabled[] = $r->name;
-      }
-      $paths[] = preg_replace('@/[^/.]+.module$@', '', $r->filename);
-    }
-
-    $msg = "The UC Berkeley CAS module is trying to install modules which already exist on your site.";
-
-    if (count($enabled) > 0) {
-      $msg .= "\n<p>Please disable these modules at admin/modules: <br/><ul><li>" . implode('<li> ', $enabled) . "</ul></p>";
-    }
-    if (count($paths) > 0) {
-      $msg .= "\n<p>Please remove these directories and any files they contain: <br/><ul><li>" . implode('<li> ', $paths) . "</ul></p>";
-    }
-    if ((count($paths) > 0 ) || (count($enabled) > 0)) {
-      $requirements['ucb_cas'] = array(
-        'title' => $t('UC Berkeley CAS'),
-        'severity' => REQUIREMENT_ERROR,
-        'description' => $t($msg),
-      );
     }
   }
   return $requirements;
@@ -76,6 +52,11 @@ function ucberkeley_cas_install() {
   //Create alias: enforce use of /caslogout
   $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
   path_save($alias);
+
+  //Some friendly messages
+  drupal_set_message("You can now login using cas at ". l(t("/cas"), 'cas') . '. (' . t("Do this in a different browser or logout of your admin account first.") . ')');
+  drupal_set_message(t("View UCB CAS recommendations at ") . l(t("/admin/config/people/ucberkeley_cas"), 'admin/config/people/ucbcas') . '.');
+
 }
 
 /**
