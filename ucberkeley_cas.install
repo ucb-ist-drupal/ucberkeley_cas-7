@@ -15,9 +15,9 @@ function ucberkeley_cas_requirements($phase) {
 
 <p>Here's what to do:</p>
 <p>
-1. Disable UCB CAS by unchecking its entry at sites/all/modules and clicking submit (or by using drush).<br />
-2. Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module.<br />
-3. Simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).<br />
+1. Disable UCB CAS by unchecking its entry at /admin/modules and clicking submit (or by using drush).<br />
+2. Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module. By this we mean do not use the "Uninstall" tab which is available at the /admin/modules path when you are logged into your site as an administrator. Also do not use the drush pm-uninstall command to unistall these modules.<br />
+3. Using your file mananger simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).<br />
 4. Check that you have added the other modules required by UC Berkeley CAS to your site. (These modules (cas, cas_attributes, ldap...) might already be in the ucberkeley_cas folder.)<br />
 5. Enable UC Berkeley CAS.<br />
 6. Run update.php.<br />
