@@ -105,7 +105,7 @@ function ucberkeley_cas_admin_login_page() {
 function ucberkeley_cas_admin_login($form) {
 	include_once(drupal_get_path('module', 'user') . '/user.module');
 
-	drupal_set_message('Admins should login via Calnet whenever possible.  Unless this site is running https, this form is not secure. See the ucberkeley_cas <a href=sites/all/modules/ucberkeley_cas/README.txt>README.txt</a>', 'warning', false);
+	drupal_set_message('Admins should login via Calnet whenever possible.  Unless this site is running https, this form is not secure. See README.md included with the ucberkeley_cas module for more information.', 'warning', false);
 	//see user.module user_login_block()
 	$form['#action'] = url($_GET['q'], array('query' => drupal_get_destination()));
 	$form['#id'] = 'ucb-cas-admin-login-form';
