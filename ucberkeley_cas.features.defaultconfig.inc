@@ -116,12 +116,14 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   );
   $export['cas_attributes'] = $strongarm;
 
+  // Ensure that we have the correct rid for authenticated user.  The rid could be something other than "2"
+  $rid_auth_user = array_search('authenticated user', user_roles());
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_auto_assigned_role';
   $strongarm->value = array(
-    2 => 1,
+    $rid_auth_user => 1,
   );
   $export['cas_auto_assigned_role'] = $strongarm;
 
