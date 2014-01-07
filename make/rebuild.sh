@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Example:
-# sh ucberkeley_cas-build-standalone.sh /some/directory
+# sh rebuild.sh /some/directory
 
 if [ -d "$@" ];
 then
