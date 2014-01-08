@@ -6,12 +6,12 @@ define('GOOD_TEXT', '<font color = "green">your settings are probably good.</fon
  *
  * Implementation of hook_apps_app_info
  *
- * TODO: move to ucb_cas.app.inc
+ * TODO: move to ucberkeley_cas.app.inc
  */
-function ucb_cas_apps_app_info() {
+function ucberkeley_cas_apps_app_info() {
 	return array(
-    'configure form' => 'ucb_cas_apps_app_configure_form',
-    //'status callback' => 'ucb_cas_app_status',
+    'configure form' => 'ucberkeley_cas_apps_app_configure_form',
+    //'status callback' => 'ucberkeley_cas_app_status',
 	);
 }
 
@@ -19,9 +19,9 @@ function ucb_cas_apps_app_info() {
  *
  * Implementation of hook_apps_app_configure_form 
  *
- * TODO: move to ucb_cas.app.inc
+ * TODO: move to ucberkeley_cas.app.inc
  */
-function ucb_cas_apps_app_configure_form() {
+function ucberkeley_cas_apps_app_configure_form() {
 	$form = array();
 	$form['test'] = array(
 	  '#markup' => t('See the ') .  l(t('UCB CAS recommendations page'), 'admin/config/people/ucbcas') . '.',
@@ -31,7 +31,7 @@ function ucb_cas_apps_app_configure_form() {
 /**
  * Apps status
  */
-function ucb_cas_app_status() {
+function ucberkeley_cas_app_status() {
 	$items = array();
 
 	//TODO; check for conflicts as in .install?
@@ -66,24 +66,24 @@ function ucb_cas_app_status() {
  * Create a back door to prevent admin lockouts
  */
 
-function ucb_cas_menu() {
+function ucberkeley_cas_menu() {
 	$items['user/admin_login'] = array (
     'title' => 'Admin Login',
-    'page callback' => 'ucb_cas_admin_login_page',
+    'page callback' => 'ucberkeley_cas_admin_login_page',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
 	);
-	$items['admin/config/people/ucbcas'] = array (
+	$items['admin/config/people/ucberkeley_cas'] = array (
     'title' => 'UCB CAS',
     'description' => 'UCB CAS recommendations and review.',
-    'page callback' => 'ucb_cas_admin',
+    'page callback' => 'ucberkeley_cas_admin',
     'access arguments' => array('administer cas'),
     'type' => MENU_NORMAL_ITEM,
 	);
 	return $items;
 }
 
-function ucb_cas_admin_login_page() {
+function ucberkeley_cas_admin_login_page() {
 	global $user;
 	if ($user->uid) {
 		menu_set_active_item('user/' . $user->uid);
@@ -91,7 +91,7 @@ function ucb_cas_admin_login_page() {
 	}
 	else {
 		//$form = drupal_get_form('user_login');
-		$form = drupal_get_form('ucb_cas_admin_login');
+		$form = drupal_get_form('ucberkeley_cas_admin_login');
 		return $form;
 	}
 
@@ -102,10 +102,10 @@ function ucb_cas_admin_login_page() {
  * Page: Admin login back door
  * @param $form
  */
-function ucb_cas_admin_login($form) {
+function ucberkeley_cas_admin_login($form) {
 	include_once(drupal_get_path('module', 'user') . '/user.module');
 
-	drupal_set_message('Admins should login via Calnet whenever possible.  Unless this site is running https, this form is not secure. See the ucb_cas <a href=sites/all/modules/ucb_cas/README.txt>README.txt</a>', 'warning', false);
+	drupal_set_message('Admins should login via Calnet whenever possible.  Unless this site is running https, this form is not secure. See README.md included with the ucberkeley_cas module for more information.', 'warning', false);
 	//see user.module user_login_block()
 	$form['#action'] = url($_GET['q'], array('query' => drupal_get_destination()));
 	$form['#id'] = 'ucb-cas-admin-login-form';
@@ -133,7 +133,7 @@ function ucb_cas_admin_login($form) {
 /**
  * Page: UCB CAS admin page
  */
-function ucb_cas_admin() {
+function ucberkeley_cas_admin() {
 
 	$out = '<h2>' . t('UCB CAS Configuration Review') . '</h2>';
 	$use_case_text = <<<EOT
@@ -154,24 +154,24 @@ EOT;
 	//FIXME: Declare css and js in info file
 	drupal_add_js('misc/collapse.js');
 	drupal_add_js('misc/form.js');
-	$out .= ucb_cas_fieldset("Login Blocks", ucb_cas_login_blocks_recommendations());
+	$out .= ucberkeley_cas_fieldset("Login Blocks", ucberkeley_cas_login_blocks_recommendations());
 
 	/* Logout caslogout */
-	$out .= ucb_cas_fieldset("Logout Behavior", ucb_cas_logout_recommendations());
+	$out .= ucberkeley_cas_fieldset("Logout Behavior", ucberkeley_cas_logout_recommendations());
 	return $out;
 }
 
 /**
  * login blocks recommendations
  */
-function ucb_cas_login_blocks_recommendations() {
+function ucberkeley_cas_login_blocks_recommendations() {
 	global $base_url;
 	$change_text = CHANGE_TEXT;
 	$good_text = GOOD_TEXT;
 
 	$login_blocks_no_link_why = "<p>This way there is no link encouraging people who shouldn't be logging in to your site to authenticate. This prevents unwanted accounts from being created on your site.</p>";
 
-	$login_blocks = ucb_cas_login_blocks_check();
+	$login_blocks = ucberkeley_cas_login_blocks_check();
 	//$out .= '<h3>' . t('Login Blocks') . '</h3>';
 	//$out .= '<legend class="collapse-processed">' . t('Login Blocks') . '</legend>';
 	$login_blocks_text = <<<EOT
@@ -249,7 +249,7 @@ EOT;
 /**
  * Check login blocks
  */
-function ucb_cas_login_blocks_check() {
+function ucberkeley_cas_login_blocks_check() {
 	$login_blocks = array();
 	//D7: block.module could be disabled.
 	if (!module_exists("block")) return $login_blocks;
@@ -266,7 +266,7 @@ function ucb_cas_login_blocks_check() {
 /**
  * Return a fieldset
  */
-function ucb_cas_fieldset($title, $content, $collapsible = TRUE, $expanded = TRUE) {
+function ucberkeley_cas_fieldset($title, $content, $collapsible = TRUE, $expanded = TRUE) {
 	$fieldset = array('element' => array(
    '#theme' => 'fieldset',
    '#title' => $title,
@@ -293,7 +293,7 @@ function ucb_cas_fieldset($title, $content, $collapsible = TRUE, $expanded = TRU
 /**
  * Logout info
  */
-function ucb_cas_logout_recommendations() {
+function ucberkeley_cas_logout_recommendations() {
 	$out = <<<EOT
 There are two logout options:
 <ol>
@@ -315,7 +315,7 @@ However some websites want to use "single signon." If that is the case, they may
 <p>
 <b>UCB CAS has configured your site to use the first option.</b> If you want to change that, <a href="/admin/config/search/path" target="_new">go to the url 
 aliases page</a>, filter on 'logout' and delete the alias.  (If you change your mind later, you can either 1) manually re-create the alias or 
-2) disable, uninstall, and re-enable the ucb_cas module.) 
+2) disable, uninstall, and re-enable the ucberkeley_cas module.)
 EOT;
 
 	return $out;
