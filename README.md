@@ -28,9 +28,9 @@
         *  [Drupal Login Invitation](#drupal_login)
     *  [Cas Attributes configuration](#cas_attributes)
         *  [Fetch CAS Attributes](#fetch_cas)
-*  Launching your site (Important)
-*  Drush vget (varaible get) may not be accurate for the cas_server variable
-*  FAQ
+*  [The UC Berkeley Environment Configurations module](#envconf)
+    *  [Drush vget cas_server with UC Berekeley Environment Configurations](#envconf_drush)
+*  [FAQ](#faq)
 *  [Authors](#authors)
 
 
@@ -357,6 +357,9 @@ with UC Berkeley CAS.  Since the configuration was set using the
 Default Config module, changing these values will not put the UC
 Berkeley CAS ffeature into the "overridden" state.
 
+Before you change the configuration, we recommend that you review the
+configurations notes below.
+
 <a name="cas_configuration">
 ## CAS Configuration ##
 </a>
@@ -399,60 +402,60 @@ logout destination at /admin/config/people/cas Login/Logout Destinations.
 <a name="initial_login">
 ### Inital login destination and Logout destination ###
 </a>
-You may want to customize these. Feel free...
+
+You can configure the landing pages for the user after successful
+login/logout.
 
 <a name="automatically_create">
 ### Automatically create Drupal accounts ###
 </a>  
-If you do not want Drupal to create accounts for every CalNet user 
-who attempts to log in to your site, go to admin/config/people/cas, 
-open the User Accounts section, and uncheck Automatically create 
-Drupal accounts.
+If you do not want Drupal to create accounts for every CalNet user who
+attempts to log in to your site, go to admin/config/people/cas, open
+the User Accounts section, and uncheck Automatically create Drupal
+accounts. As an alternative, you can pre-create CAS users at
+/admin/people/cas/create.
 
 <a name="users_cannot">
 ### Users cannot change password ###
 </a>
 
-       Unchecking this is very likely to cause confusion.  Users
-       should change their passwords via CalNet. See *Change password
-       URL* further down.
+Unchecking this is very likely to cause confusion.  Users
+should change their passwords via CalNet. See [Change password
+URL](#change_password) further down.
 
 <a name="change_password">
 ### Change Password URL ###
 </a>
 
-     This setting is blank because it can cause confusion. The
-     intention of ucberkeley_cas is that all users log into the site using
-     Calnet/CAS authentication as opposed to Drupal's standard
-     authentication.  Therefore changing your site password would
-     require changing your Calnet password (which can be done at
-     https://net-auth.berkeley.edu/cgi-bin/krbcpw) and would result in
-     your password changing for all Calnet authenticated applications.
-     A user presented with a "change password" url might not
-     understand the ramifications here.
+This setting is blank because it can cause confusion.
+
+The intention of ucberkeley_cas is that all users log into the site
+using Calnet/CAS authentication as opposed to Drupal's standard
+authentication.  Therefore changing your site password would require
+changing your Calnet password (which can be done at
+https://net-auth.berkeley.edu/cgi-bin/krbcpw) and would result in your
+password changing for **all** Calnet authenticated applications.  A
+user presented with a "change password" url might not understand the
+ramifications here.
+
 <a name="drupal_login">
 ### Drupal Login Invitation ###
 </a>
 
-	  This setting is blank because it can cause confusion.  It
-	  adds a link to your login block allowing users to login
-	  using Drupal's stadandard authentication instead of CalNet.
-	  It's best to require ALL of your users to login via CAS and
-	  not to give them the option of using Drupal's
-	  authentication.  If you need to allow people who don't have
-	  a CalNet ID to login to your site, you can add a value like
-	  "Non-UCB people login here" to this text box.
+This setting is blank because it can cause confusion.
 
-	  IMPORTANT: If you allow standard Drupal authentication to
-	  your site you MUST run your site at an https URL.  Failure
-	  to do so is a significant security risk yielding multiple
-	  vulnerabilities. For example, anyone logging into your site
-	  from a public wireless network can easily have their
-	  password stolen.
+This adds a link to your login block allowing users to login using
+Drupal's stadandard authentication instead of CalNet.  It's best to
+require ALL of your users to login via CAS and not to give them the
+option of using Drupal's authentication.  If you need to allow people
+who don't have a CalNet ID to login to your site, you can add a value
+like "Non-UCB people login here" to this text box.
 
-	  (There is a module in the works to facilitate using both CAS
-	  and standard Drupal authentication on a site. Email
-	  ist-drupal@lists.berkeley.edu for more information.)
+IMPORTANT: If you allow standard Drupal authentication to your site
+you **are very strongly encouraged** to run your site at an https URL.
+Failure to do so is a significant security. For example, anyone
+logging into your site from a public wireless network can easily have
+their password stolen.
 
 <a name="cas_attributes">
 ## Cas Attributes configuration ##
@@ -464,47 +467,59 @@ Site path: admin/config/people/cas/attributes
 ### Fetch CAS Attributes ###
 </a>
 
-The default setting is "only when a CAS account is created (i.e., the first login of a CAS user)." This means that if a user is allowed to edit their Drupal profile and they wish to change the name or email address that we found for them in LDAP, they may.
+The default setting is "only when a CAS account is created (i.e., the
+first login of a CAS user)."This means that a user can edit their
+Drupal profile (assuming they have permission to do so) and change the
+name or email address that we found for them in LDAP.  Their edits
+will not be over written by a new LDAP lookup on their next login.
 
-LAUNCHING YOUR SITE (Important)
--------------------------------
+<a name = "#envconf">
+# The UC Berkeley Environment Configurations module #
+</a>
 
-The module [ucb_envconf](http://drupal-apps.berkeley.edu/node/4)
+The module
+[UC Berkeley Enviroment Configurations](https://github.com/ucb-ist-drupal/ucb_envconf-7)
 ensures that your cas and ldap server settings are correct based on
-your development environment on Pantheon. If you are not using this
-module, you'll need to manually edit these server settings when
-whenever you migrate your site (or just the database) between you dev,
-test and live environments. Here's the information for non-users of
-ucb_envconf:
+your development environment on [Pantheon](http://getpantheon.com). UC
+Berkeley Enviroment Configurations ensures that your Dev and Test
+sites on Pantehon use:
 
-Your site is using the servers ldap-test.berkeley.edu and
-auth-test.berkeley.edu.  These are the correct servers to use
-for site development and testing.  When you make your site
-live, you should change these servers to ldap.berkeley.edu and
-auth.berkeley.edu. Make these changes at:
+* CAS Server: auth-test.berkeley.edu
+* LDAP Server: ldap-test.berkeley.edu
 
-admin/config/people/cas
-admin/config/people/cas/attributes
+and your Live site uses: 
 
-DRUSH VGET (VARAIBLE GET) MAY NOT BE ACCURATE FOR THE CAS_SERVER VARIABLE
--------------------------------------------------------------------------
+* CAS Server: auth.berkeley.edu
+* LDAP Server: ldap.berkeley.edu
 
-This only applies to sites using the ucb_envconf module:
+If you are not using this module, you'll need to manually edit these
+server settings when you copy your database between the dev, test and
+live environments. To manage this manually make these changes at:
+
+* admin/config/people/cas
+* admin/config/people/cas/attributes
+
+<a name = "#envconf_drush">
+## Drush vget cas_server with UC Berekeley Environment Configurations ##
+</a>
+
+This only applies to sites using the ucberkeley_envconf module:
 
 drush @somealias vget cas_server
 
-Because this module applies configuration on hook_boot() and because
-hook_boot doesn't run when you issue 'drush vget', you will encounter
+Because this module applies configuration on hook\_boot() and because
+hook\_boot doesn't run when you issue 'drush vget', you will encounter
 situations where 'drush vget' reports the wrong value.  If you visit
 the corresponding admin page, you should see the right value.
 
 Theorectically you could get the correct value with 
 
-drush @somealias php-eval "echo variable_get('cas_server', NULL);"
+drush @somealias php-eval "echo variable\_get('cas\_server', NULL);"
 
+<a name = "#faq">
+# FAQ #
+</a>
 
-FAQ
----
 
 Q. When logging in I get the error "user warning: Duplicate entry
 'Brian Wood' for key 'name' query: UPDATE users SET name = 'Brian
@@ -523,16 +538,6 @@ Calnet authenticate to create a new account for themselves.  The
 account gets created, but if they try to edit it, they get a
 validation error on the email field since it is the email that is
 already in use by User 1. To fix this, change the User 1 email.
-
-Q. I created a new role and I noticed that newly added CAS users 
-were automatically being assigned to this role.
-
-A. Prior to 7.x-1.3-beta2, if you created a new role after 
-installing ucberkeley_cas newly added users were automatically assigned
-the new role in some situations. Take a look at 
-/admin/config/people/cas > User Accounts and ensure that the correct
-roles are selected there.  If you find incorrect roles selected, just
-unselect them.  This problem in the installer has been fixed.
 
 <a name="authors">
 # AUTHORS #
