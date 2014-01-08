@@ -1,18 +1,13 @@
-README ucberkeley_cas-7.x
-==================
+# README ucberkeley_cas-7.x #
 
-TABLE OF CONTENTS
------------------
+
+**Table of Contents**
 *   [Purpose]("#purpose")
-*   Quick Start
-*   Standard Configuration 
-    *   Security
-    *   User Account creation (*Important*)
-    *   Standard configuration doesn't support "mixed mode authentication"
+*   [Quick Start](#quick_start)
     *   Admin recommendations page
 *   [Requirements](#requirements)
-*   [UC Berkeley CalNet Registration](#registration)
-*   Installing
+    *   [UC Berkeley CalNet Registration](#registration)
+*   [Installation](#installation) 
     * Installing if your site already uses the modules that ucberkeley_cas provides
 *   Setup a Calnet-authenticated Administrator
 *   Administrator "back door" for lockouts
@@ -20,125 +15,65 @@ TABLE OF CONTENTS
 *   Uninstalling 
     *   Uninstalling/re-installing and preserving your Calnet users (Important)
 *  Upgrading to a new version of ucberkeley_cas
+*   Standard Configuration 
+    *   Security
+    *   User Account creation (*Important*)
+    *   Standard configuration doesn't support "mixed mode authentication"
 *  Configuration Details
 *  Launching your site (Important)
 *  Drush vget (varaible get) may not be accurate for the cas_server variable
 *  FAQ
-*  Authors
+*  [Authors](#authors)
 
 
-<a name="purpose">PURPOSE</a>
--------
-
-UC Berkeley CAS is a collection of modules needed use UC Berkeley CalNet
-authentication and UC Berkeley LDAP with a Drupal site. Once UC Berkeley CAS
-is enabled logging into your site via CalNet should "just work."
+<a name="purpose">
+# Purpose #
+</a>
+UC Berkeley CAS is a Drupal
+["feature"](http://drupal.org/projects/features) a collection of
+modules, including configuration, needed to add UC Berkeley CalNet
+(CAS) authentication to a Drupal site. Once UC Berkeley CAS is enabled
+logging into your site via CalNet should "just work."
 
 UC Berkeley CAS applies a default configuration to the modules it
 installs. This configuration assumes that everyone, including the site
-administrators, will login to the site using Calnet/CAS.  See Standard
+administrators, will login to the site using CalNet.  See Standard
 Configuration.
 
-QUICK START
------------
+<a name="#quick_start">
+# Quick Start #
+</a>
 
 1. See: Requirements
 2. Install and enable ucberkeley_cas. (More info: Installing)
-3. Visit (the unpublicized) login url http://example.com/cas and login
-with your calnet id.
-4. As User 1 edit the new user that got created in step 2 and assign
-it the "administrator" role. (More info: Setup a Calnet-authenticated
-administrator)
-5. Visit http://example.com/admin/config/people/ucbcas
+3. Using a second browser visit the (unpublicized) login url
+http://example.com/cas and login with your calnet id.
+4. In your first browser, as User 1, edit the new user that got
+created in step 2 and assign it the "administrator" role. (More info:
+Setup a Calnet-authenticated administrator)
+5. Visit the path /admin/config/people/ucbcas on your site for recommendations on further configuration.
 
-Note: See Administrator "back door" for lockouts
+<a name="requirements">
+# Requirements #
+</a>
 
-STANDARD CONFIGURATION
-----------------------
+You need the following modules installed:
 
-The ucberkeley_cas module has made some configuration decisions for you.
-These decsions can be overridden by you. See the Configuration Details
-section below.
+* [Features](http://drupal.org/project/features)
+* [Strongarm](http://drupal.org/project/strongarm)
+* [Token](http://drupal.org/project/token)
+* [CTools](http://drupal.org/project/ctools)
+* [Default Config](http://drupal.org/project/defaultconfig)
 
-*Security*
+The UC Berkeley CAS feature already contains these modules:
 
-By default ucberkeley_cas is configured so that anyone logging into your site
-must use UCB Calnet authentication. The reason for this is that
-Drupal's standard authentication is insecure, unless used in
-conjunction with SSL (https). Drupal standard authentication is
-vulnerable to 1> username/password interception (especially if a
-wireless network is in use) and 2> session hijacking. (See "Setup a
-Calnet-authenticated administrator.")
+* CAS
+* CAS Attributes
+* LDAP
 
-(Calnet/CAS authentication is not immune to attack on a site running
-under http.  In this scenario the CAS ticket could possibly be
-hijacked. The combination of https with ucberkeley_cas's default
-configuration is a good idea.)
-
-*User account creation (IMPORTANT)*
-
-With the ucberkeley_cas standard configuration, when a user logs in via
-CalNet for the first time Drupal will create an account for them and
-assign them to the "authenticated user" role. Be very cautious with
-assigning the "authenticated user" role any privileges beyond what the
-"anonymous user" role has. The best way to manange privileges for your
-CalNet users is to create a role like "editor" which is allowed to
-create content. You should then review each new person in the
-"authenticated user" role and decide whether or not to assign them
-your "editor" role.  (The Rules module can be used to send you
-automatic emails each time a new user account is created on your
-site.)
-
-*Standard configuration doesn't support "mixed mode authentication"*
-
-"Mixed mode authentication" describes then scenario where a site is
-configured to allow some users to authenticate using Calnet and others
-to authenticate using Drupal standard authentication. The ucberkeley_cas
-standard configuration is not geared towards this scenario.  Instead
-all users are directed to Calnet for authentication.
-
-Mixed mode authentication presents user experience challenges. The
-user must be presented with two different login mechanisms and must
-choose between them everytime they login to the site. A module
-(ucb_mma) is planned to address this use case.  Until then you may
-choose to adjust the ucberkeley_cas default settings, if mma is what you
-need. Please remember that you should be running your UCB site using
-SSL (https) if you are using Drupal standard authentication.
-
-*Admin recommendations page*
-
-After installation see /admin/config/people/ucbcas for recommendations
-on fine tuning your CAS configuration according to common UCB Drupal
-site use cases.
-
-<a name="requirements">REQUIREMENTS</a>
-------------
-Your Drupal site must be registered with the UCB Calnet service. (See: UCB Calnet Registration)
-
-The modules installed by ucberkeley_cas-7.x are:
-
-cas
-cas_attributes (includes cas_ldap)
-ldap (includes ldap_servers and others)
-
-Since UC Berkeley CAS installs multiple modules on your site, its install
-process will ensure that those modules do not already exist on your
-site.  If conflicting files are found a friendly message will appear
-and the installer will abort. If you see this error message when you
-enable the module, check the directories that drupal scans for module
-files (e.g. sites/all/modules, sites/EXAMPLE/modules,
-sites/modules/EXAMPLE/, profiles/EXAMPLE...) for conflicting modules.
-If you find conflicts:
-
-1. Disable the modules at admin/modules
-2. Remove the files for the modules from your site
-3. Install UC Berkeley CAS
-4. Run update.php
-
-
-<a name="registration">UCB CALNET REGISTRATION</a>
------------------------
-
+<a name="registration">
+## CalNet Registration ##
+</a>
 In order to use CalNet authentication, your website must be registered with 
 CalNet. Make sure your registration is approved before you install UC Berkeley CAS 
 on a production site.
@@ -151,8 +86,12 @@ practice for UC Berkeley Drupal sites. For more about this see [Logout Behavior]
 Developers working local webserver do not need to register URLs like http://localhostand http:127.0.0.1. These urls will work with the CAS server auth-test.berkeley.edu.
 
 
-INSTALLING
-----------
+<a name="installation">
+# Installation #
+</a>
+
+## Steps ##
+
 (This process is tested with drush.)
 1. Make sure your site meets the requirements above.
 2. Download ucberkeley_cas-7.x-x.x.tar.gz to the computer running your Drupal site.
@@ -331,9 +270,66 @@ downloaded and unarchived
 The new version should now be working.  Test it on your development
 site to make sure that logging in and out of the site is working.
 
+STANDARD CONFIGURATION
+----------------------
 
-CONFIGURATION DETAILS
----------------------
+The ucberkeley_cas module has made some configuration decisions for you.
+These decsions can be overridden by you. See the Configuration Details
+section below.
+
+*Security*
+
+By default ucberkeley_cas is configured so that anyone logging into your site
+must use UCB Calnet authentication. The reason for this is that
+Drupal's standard authentication is insecure, unless used in
+conjunction with SSL (https). Drupal standard authentication is
+vulnerable to 1> username/password interception (especially if a
+wireless network is in use) and 2> session hijacking. (See "Setup a
+Calnet-authenticated administrator.")
+
+(Calnet/CAS authentication is not immune to attack on a site running
+under http.  In this scenario the CAS ticket could possibly be
+hijacked. The combination of https with ucberkeley_cas's default
+configuration is a good idea.)
+
+*User account creation (IMPORTANT)*
+
+With the ucberkeley_cas standard configuration, when a user logs in via
+CalNet for the first time Drupal will create an account for them and
+assign them to the "authenticated user" role. Be very cautious with
+assigning the "authenticated user" role any privileges beyond what the
+"anonymous user" role has. The best way to manange privileges for your
+CalNet users is to create a role like "editor" which is allowed to
+create content. You should then review each new person in the
+"authenticated user" role and decide whether or not to assign them
+your "editor" role.  (The Rules module can be used to send you
+automatic emails each time a new user account is created on your
+site.)
+
+*Standard configuration doesn't support "mixed mode authentication"*
+
+"Mixed mode authentication" describes then scenario where a site is
+configured to allow some users to authenticate using Calnet and others
+to authenticate using Drupal standard authentication. The ucberkeley_cas
+standard configuration is not geared towards this scenario.  Instead
+all users are directed to Calnet for authentication.
+
+Mixed mode authentication presents user experience challenges. The
+user must be presented with two different login mechanisms and must
+choose between them everytime they login to the site. A module
+(ucb_mma) is planned to address this use case.  Until then you may
+choose to adjust the ucberkeley_cas default settings, if mma is what you
+need. Please remember that you should be running your UCB site using
+SSL (https) if you are using Drupal standard authentication.
+
+*Admin recommendations page*
+
+After installation see /admin/config/people/ucbcas for recommendations
+on fine tuning your CAS configuration according to common UCB Drupal
+site use cases.
+
+
+# Configuration Details #
 
 In order to make CAS and LDAP work out-of-the-box when you install UCB
 CAS, we've made some configuration decisions for you.  These decisions
@@ -343,8 +339,9 @@ override them on the appropriate admin page on your site.
 
 UC Berkeley CAS Configuration at /admin/config/people/cas:
 
-<a name="Logout_Behavior"></a>  *Logout Behavior*
-
+<a name="Logout_Behavior">
+## Logout Behavior ##
+</a>
 As mentioned in the CalNet Registration section, requesting that the
 UC Berkeley CAS server "require re-authentication" for your site is
 the most secure way of configuring your Drupal site. With this
@@ -510,11 +507,7 @@ the new role in some situations. Take a look at
 roles are selected there.  If you find incorrect roles selected, just
 unselect them.  This problem in the installer has been fixed.
 
-
-AUTHORS
--------
-Brian Wood, UC Berkeley, http://drupal.org/user/164217
-
-CONTRIBUTORS
-------------
-Caroline Boyden, UC Berkeley
+<a name="authors">
+# AUTHORS #
+</a>
+ist-drupal@lists.berkeley.edu
