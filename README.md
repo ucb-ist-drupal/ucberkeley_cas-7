@@ -1,7 +1,4 @@
-# README ucberkeley_cas-7.x #
-
-
-**Table of Contents**
+# ucberkeley_cas-7.x #
 
 *   [Purpose]("#purpose")
 *   [Quick Start](#quick_start)
@@ -20,7 +17,17 @@
     *   Security
     *   User Account creation (*Important*)
     *   Standard configuration doesn't support "mixed mode authentication"
-*  Configuration Details
+*  [Configuration Details](#configuration_details)
+    *  [Is it okay to modify the default configuration?](#okay_modify)
+    *  [CAS Configuration](#cas_configuration)
+        *  [Logout Behavior](#logout_behavior)
+        *  [Inital login destination and Logout destination](#initial_login)
+        *  [Automatically create Drupal accounts](#automatically_create)
+        *  [Users cannot change password](#users_cannot)
+        *  [Change Password URL](#change_password)
+        *  [Drupal Login Invitation](#drupal_login)
+    *  [Cas Attributes configuration](#cas_attributes)
+        *  [Fetch CAS Attributes](#fetch_cas)
 *  Launching your site (Important)
 *  Drush vget (varaible get) may not be accurate for the cas_server variable
 *  FAQ
@@ -329,19 +336,35 @@ After installation see /admin/config/people/ucbcas for recommendations
 on fine tuning your CAS configuration according to common UCB Drupal
 site use cases.
 
-
+<a name="configuration_details">
 # Configuration Details #
-
+</a>
 In order to make CAS and LDAP work out-of-the-box when you install UCB
 CAS, we've made some configuration decisions for you.  These decisions
 are aimed at defining "best practices" for using CAS and LDAP with
 your Drupal site.  That said, if you don't like our decisions, you can
 override them on the appropriate admin page on your site.
 
-UC Berkeley CAS Configuration at /admin/config/people/cas:
+<a name="okay_modify">
+## Is it okay to modify the default configuration?#
+</a>
+Yes.
+
+If you are familiar with Drupal features, you may worry that
+overriding this configuration will result in you having to "revert"
+the feature when it is time to upgrade the code.  This is not the case
+with UC Berkeley CAS.  Since the configuration was set using the
+Default Config module, changing these values will not put the UC
+Berkeley CAS ffeature into the "overridden" state.
+
+<a name="cas_configuration">
+## CAS Configuration ##
+</a>
+
+Site path: admin/config/people/cas:
 
 <a name="Logout_Behavior">
-## Logout Behavior ##
+### Logout Behavior ###
 </a>
 As mentioned in the CalNet Registration section, requesting that the
 UC Berkeley CAS server "require re-authentication" for your site is
@@ -373,31 +396,30 @@ example, your site's homepage after logout, you can 1. delete the
 logout alias at /admin/config/search/path and then 2. specify the
 logout destination at /admin/config/people/cas Login/Logout Destinations.
 
-  */user/logout takes you to /caslogout*
+<a name="initial_login">
+### Inital login destination and Logout destination ###
+</a>
+You may want to customize these. Feel free...
 
-    This is considered best practice on campus.  If you need to change 
-    this remove the alias at /admin/config/search/path.
-     
-CAS Configuration at admin/config/people/cas:
+<a name="automatically_create">
+### Automatically create Drupal accounts ###
+</a>  
+If you do not want Drupal to create accounts for every CalNet user 
+who attempts to log in to your site, go to admin/config/people/cas, 
+open the User Accounts section, and uncheck Automatically create 
+Drupal accounts.
 
-  *Inital login destination* and *Logout destination*
-
-	You may want to customize these. Feel free...
-
-  *Automatically create Drupal accounts* 
-  
-       If you do not want Drupal to create accounts for every CalNet user 
-       who attempts to log in to your site, go to admin/config/people/cas, 
-       open the User Accounts section, and uncheck Automatically create 
-       Drupal accounts.
-  
-  *Users cannot change password*
+<a name="users_cannot">
+### Users cannot change password ###
+</a>
 
        Unchecking this is very likely to cause confusion.  Users
        should change their passwords via CalNet. See *Change password
        URL* further down.
 
-  *Change Password URL*
+<a name="change_password">
+### Change Password URL ###
+</a>
 
      This setting is blank because it can cause confusion. The
      intention of ucberkeley_cas is that all users log into the site using
@@ -408,8 +430,9 @@ CAS Configuration at admin/config/people/cas:
      your password changing for all Calnet authenticated applications.
      A user presented with a "change password" url might not
      understand the ramifications here.
-
-  *Drupal Login Invitation*
+<a name="drupal_login">
+### Drupal Login Invitation ###
+</a>
 
 	  This setting is blank because it can cause confusion.  It
 	  adds a link to your login block allowing users to login
@@ -431,14 +454,17 @@ CAS Configuration at admin/config/people/cas:
 	  and standard Drupal authentication on a site. Email
 	  ist-drupal@lists.berkeley.edu for more information.)
 
-Cas Attributes configuration (admin/config/people/cas/attributes)
+<a name="cas_attributes">
+## Cas Attributes configuration ##
+</a>
 
-  *Fetch CAS Attributes*
+Site path: admin/config/people/cas/attributes
 
-       You can change this to "only when a CAS account is created
-       (i.e., the first login of a CAS user)."  That means your site
-       will not reflect changes made to LDAP after the user account
-       was created on your site.
+<a name="fetch_cas">
+### Fetch CAS Attributes ###
+</a>
+
+The default setting is "only when a CAS account is created (i.e., the first login of a CAS user)." This means that if a user is allowed to edit their Drupal profile and they wish to change the name or email address that we found for them in LDAP, they may.
 
 LAUNCHING YOUR SITE (Important)
 -------------------------------
@@ -511,4 +537,6 @@ unselect them.  This problem in the installer has been fixed.
 <a name="authors">
 # AUTHORS #
 </a>
-ist-drupal@lists.berkeley.edu
+Brian Wood
+Caroline Boyden
+Kathleen Lu
