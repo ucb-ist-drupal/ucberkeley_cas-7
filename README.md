@@ -2,6 +2,7 @@
 
 
 **Table of Contents**
+
 *   [Purpose]("#purpose")
 *   [Quick Start](#quick_start)
     *   Admin recommendations page
