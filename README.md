@@ -187,10 +187,10 @@ The module UC Berkeley CAS (ucberkeley_cas) is a replacement for UCB CAS (ucb_ca
 Here's what to do:
 
 1. Disable UCB CAS by un-checking its entry at /admin/modules and clicking submit (or by using drush).
-2. Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module. By this we mean do not use the "Uninstall" tab which is available at the /admin/modules path when you are logged into your site as an administrator. Also do not use the drush pm-uninstall command to uninstall these modules.
+2. (Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module. By this we mean do not use the "Uninstall" tab which is available at the /admin/modules path when you are logged into your site as an administrator. Also do not use the drush pm-uninstall command to uninstall these modules.)
 3. Using your file manager simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).
-4. Check that you have added the other modules required by UC Berkeley CAS to your site. (These modules (cas, cas_attributes, ldap...) might already be in the ucberkeley_cas folder.)
-5. Enable UC Berkeley CAS.
+4. Check that you have added and enabled the other modules required by UC Berkeley CAS to your site. (These modules (cas, cas_attributes, ldap...) might already be in the ucberkeley_cas folder.)
+5. Enable UC Berkeley CAS. (At this point you may see a message about ucb_envconf. See the instructions below.)
 6. Run update.php
 
 At this point it's a good idea to:
@@ -206,12 +206,11 @@ The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC
 
 Here's what to do:
 
-1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit (or by using drush).
+1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit.
 2. Download <a href="http://drupal-apps.berkeley.edu/content/ucb-environment-configurations">the new version of UC Berkeley Environment Configurations</a>.
 3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles).
 4. Unpack the new version of UC Berkeley Environment Configurations and copy it into /sites/all/modules (or your preferred module directory.) 
-5. Clear the caches on your site at /admin/config/development/performance.  (Running update.php is not required.)
-6. Enable ucberkeley_envconf.
+5. Enable ucberkeley_envconf. (Running update.php is not necessary.)
 
 At this point your site will be using the latest version of UC Berkeley Environment Configurations.
 
@@ -504,7 +503,7 @@ Drupal profile (assuming they have permission to do so) and change the
 name or email address that we found for them in LDAP.  Their edits
 will not be over written by a new LDAP lookup on their next login.
 
-<a name = "#envconf">
+<a name = "envconf">
 # The UC Berkeley Environment Configurations module #
 </a>
 
