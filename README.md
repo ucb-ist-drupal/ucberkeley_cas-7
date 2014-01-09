@@ -9,7 +9,8 @@
 *   [Setup a CalNet-authenticated Administrator](#setup_a)
 *   [Administrator "back door"](#back_door)
 *   [Upgrading](#upgrading)
-    *   [Upgrading to a new version of ucberkeley_cas](#to_newver)
+    *   [Upgrading from ucb\_cas 1.x to ucberkeley\_cas 2.x](#1.x_2.x)
+    *   [Upgrading to a new version of ucberkeley_cas 2.x](#to_newver)
     *   [My site already users CAS, and I want to switch to ucberkeley_cas](#my_sitealready)
 *   [Uninstalling](#uninstalling)
     *   [Avoid uninstalling the cas module](#avoid_uninstall)
@@ -31,6 +32,7 @@
 *  [The UC Berkeley Environment Configurations module](#envconf)
     *  [Drush vget cas_server with UC Berkeley Environment Configurations](#envconf_drush)
 *  [FAQ](#faq)
+*  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
 
 
@@ -176,8 +178,45 @@ this form unless you really have to.
 # Upgrading #
 </a>
 
+<a name = "1.x_2.x">
+## Upgrading from ucb_cas 1.x to ucberkeley_cas 2.x ##
+</a>
+
+The module UC Berkeley CAS (ucberkeley_cas) is a replacement for UCB CAS (ucb_cas).  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.
+
+Here's what to do:
+
+1. Disable UCB CAS by un-checking its entry at /admin/modules and clicking submit (or by using drush).
+2. Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module. By this we mean do not use the "Uninstall" tab which is available at the /admin/modules path when you are logged into your site as an administrator. Also do not use the drush pm-uninstall command to uninstall these modules.
+3. Using your file manager simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).
+4. Check that you have added the other modules required by UC Berkeley CAS to your site. (These modules (cas, cas_attributes, ldap...) might already be in the ucberkeley_cas folder.)
+5. Enable UC Berkeley CAS.
+6. Run update.php
+
+At this point it's a good idea to:
+
+a. Visit admin/reports/updates and verify that you have the latest version of cas, cas_attributes and ldap.
+b. Visit admin/reports/status and verify that you have the latest version of the phpCAS library.  (Compare http://downloads.jasig.org/cas-clients/php/current/).
+
+### If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x ###
+
+(Using [ucberkeley_envconf](#envconf) is recommended if you host your site on Pantheon.)
+
+The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations. An older version of UC Berkeley Environment Configurations has been detect on this site.
+
+Here's what to do:
+
+1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit (or by using drush).
+2. Download <a href="http://drupal-apps.berkeley.edu/content/ucb-environment-configurations">the new version of UC Berkeley Environment Configurations</a>.
+3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles).
+4. Unpack the new version of UC Berkeley Environment Configurations and copy it into /sites/all/modules (or your preferred module directory.) 
+5. Clear the caches on your site at /admin/config/development/performance.  (Running update.php is not required.)
+6. Enable ucberkeley_envconf.
+
+At this point your site will be using the latest version of UC Berkeley Environment Configurations.
+
 <a name = "to_newver">
-## Upgrading to a new version of ucberkeley_cas ##
+## Upgrading to a new version of ucberkeley_cas 2.x ##
 </a>
 Follow this procedure to upgrade ucberkeley_cas:
 
@@ -531,12 +570,22 @@ account gets created, but if they try to edit it, they get a
 validation error on the email field since it is the email that is
 already in use by User 1. To fix this, change the User 1 email.
 
+<a name = "bugs">
+# Reporting Bugs #
+</a>
+
+If you think you've found a bug with UC Berkeley CAS please report it at https://github.com/ucb-ist-drupal/ucberkeley_cas-7/issues. Make sure your bug report includes:
+
+1. The exact steps we should take to recreate the problem.
+2. The version of ucberkeley_cas that you are using.
+3. The version of Drupal that you are using.
+
+
 <a name="authors">
-# AUTHORS #
+# Authors #
 </a>
 Brian Wood
-Caroline Boyden
-Kathleen Lu
+
 
 <!--  LocalWords:  newver sitealready drupal ploiting src sids
  -->
