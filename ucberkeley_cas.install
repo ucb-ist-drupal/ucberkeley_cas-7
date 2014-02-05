@@ -32,7 +32,7 @@ b. Visit admin/reports/status and verify that you have the latest version of the
 EOT;
 
   $update_ucb_envconf_message =<<<EOT
-<p>The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations. An older version of UC Berkeley Environment Configurations has been detect on this site.</p>
+<p>The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations. An older version of UC Berkeley Environment Configurations has been detected on this site.</p>
 
 <p>Here's what to do:</p>
 <p>
@@ -41,13 +41,17 @@ EOT;
 3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles).<br />
 4. Unpack the new version of ucberkeley_envconf and copy it into /sites/all/modules (or your preferred module directory.) <br />
 5. Enable ucberkeley_envconf. (Running update.php is not required.)
+</p>
 
 <p>At this point your site will be using the latest version of UC Berkeley Environment Configurations.</p>
+
+<p>(If you remove the ucb_envconf folder without first telling Drupal to <strong>disable</strong> UC Berkeley Environment Configurations, you will continue to see this message. If this happens replace the folder and follow the steps above.)</p>
 
 EOT;
 
 
   if ($phase == 'install') {
+    $modules = system_list('module_enabled');
     if (module_exists('ucb_envconf')) {
       /*
        * The 2.x version of ucb_envconf will be called ucberkeley_envconf. So once the old version is disabled
