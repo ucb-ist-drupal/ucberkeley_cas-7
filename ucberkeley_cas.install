@@ -9,8 +9,7 @@
 function ucberkeley_cas_requirements($phase) {
   $requirements = array();
   $t = get_t();
-  $sub_modules = array('cas_ldap', 'cas_attributes', 'cas', 'ldap_servers');
-  $update_message =<<<EOT
+  $update_message = <<<EOT
 <p>The module UC Berkeley CAS (ucberkeley_cas) is a replacement for UCB CAS (ucb_cas).  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.</p>
 
 <p>Here's what to do:</p>
@@ -31,7 +30,7 @@ b. Visit admin/reports/status and verify that you have the latest version of the
 </p>
 EOT;
 
-  $update_ucb_envconf_message =<<<EOT
+  $update_ucb_envconf_message = <<<EOT
 <p>The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations. An older version of UC Berkeley Environment Configurations has been detected on this site.</p>
 
 <p>Here's what to do:</p>
@@ -51,7 +50,7 @@ EOT;
 
 
   if ($phase == 'install') {
-    $modules = system_list('module_enabled');
+
     if (module_exists('ucb_envconf')) {
       /*
        * The 2.x version of ucb_envconf will be called ucberkeley_envconf. So once the old version is disabled
@@ -63,51 +62,92 @@ EOT;
         'severity' => REQUIREMENT_ERROR,
         'description' => $t($update_ucb_envconf_message),
       );
-      return $requirements;
     }
+
     if (module_exists('ucb_cas')) {
       $requirements['ucberkeley_cas'] = array(
         'title' => $t('UC Berkeley CAS'),
         'severity' => REQUIREMENT_ERROR,
         'description' => $t($update_message),
       );
-      return $requirements;
     }
+
+    // require a specific version of cas
+    $cas_req_version = '7.x-1.2';
+    $cas_path = drupal_get_path('module', 'cas');
+    if ($cas_path !== '') {
+      $cas_info = drupal_parse_info_file($cas_path . '/cas.info');
+      if ($cas_info['version'] != $cas_req_version) {
+        $requirements['ucberkeley_cas'] = array(
+          'title' => $t('UC Berkeley CAS'),
+          'severity' => REQUIREMENT_ERROR,
+          'description' => $t('UC Berkeley CAS requires the CAS module to be at version @version. (cas-@installed_version was found at the path: @path)', array('@version' => $cas_req_version, '@path' => $cas_path, '@installed_version' => $cas_info['version'])),
+        );
+      }
+    }
+
+    // require a specific version of ldap (ldap_servers)
+    $ldap_req_version = '7.x-1.0-beta12';
+    $ldap_path = drupal_get_path('module', 'ldap_servers');
+    if ($ldap_path !== '') {
+      $ldap_info = drupal_parse_info_file($ldap_path . '/ldap_servers.info');
+      if ($ldap_info['version'] != $ldap_req_version) {
+        $requirements['ucberkeley_cas'] = array(
+          'title' => $t('UC Berkeley CAS'),
+          'severity' => REQUIREMENT_ERROR,
+          'description' => $t('UC Berkeley CAS requires the LDAP module to be at version @version. (ldap_servers-@installed_version was found at the path: @path)', array('@version' => $ldap_req_version, '@path' => $ldap_path, '@installed_version' => $ldap_info['version'])),
+        );
+      }
+    }
+
+    // require a specific version of cas_attributes.
+    $cas_attributes_req_version = '7.x-1.0-beta2';
+    $cas_attributes_path = drupal_get_path('module', 'cas_attributes');
+    if ($cas_attributes_path !== '') {
+      $cas_attributes_info = drupal_parse_info_file($cas_attributes_path . '/cas_attributes.info');
+      if ($cas_attributes_info['version'] != $cas_attributes_req_version) {
+        $requirements['ucberkeley_cas'] = array(
+          'title' => $t('UC Berkeley CAS'),
+          'severity' => REQUIREMENT_ERROR,
+          'description' => $t('UC Berkeley CAS requires the CAS Attributes to be at version @version. (cas_attributes-@installed_version was found at the path: @path)', array('@version' => $cas_attributes_req_version, '@path' => $cas_attributes_path, '@installed_version' => $cas_attributes_info['version'])),
+        );
+      }
+    }
+
+    return $requirements;
   }
-  return $requirements;
 }
 
 
-/**
- * Implementation of hook_install
- */
-function ucberkeley_cas_install() {
-  //Create alias: enforce use of /caslogout
-  $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
-  path_save($alias);
+  /**
+   * Implementation of hook_install
+   */
+  function ucberkeley_cas_install() {
+    //Create alias: enforce use of /caslogout
+    $alias = array('source' => 'caslogout', 'alias' => 'user/logout');
+    path_save($alias);
 
-  //Some friendly messages
-  $login_path = "cas";
-  $admin_ucbcas_path = 'admin/config/people/ucberkeley_cas';
+    //Some friendly messages
+    $login_path = "cas";
+    $admin_ucbcas_path = 'admin/config/people/ucberkeley_cas';
 
-  if (variable_get("clean_url", 0) == 0) {
-    drupal_set_message("Clean URLs are disabled on this site.  Consider enabling them at /?q=admin/config/search/clean-urls.", "warning");
-    drupal_set_message(t("You can now login using cas at the path ?q=@login_path. Do this in a different browser or logout of your admin account first.", array("@login_path" => $login_path)));
-    drupal_set_message(t("View UCB CAS recommendations at the path ?q=@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)));
+    if (variable_get("clean_url", 0) == 0) {
+      drupal_set_message("Clean URLs are disabled on this site.  Consider enabling them at /?q=admin/config/search/clean-urls.", "warning");
+      drupal_set_message(t("You can now login using cas at the path ?q=@login_path. Do this in a different browser or logout of your admin account first.", array("@login_path" => $login_path)));
+      drupal_set_message(t("View UCB CAS recommendations at the path ?q=@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)));
+    }
+    else {
+      drupal_set_message(t("You can now login using cas at ") . l(t("/@login_path", array("@login_path" => $login_path)), 'cas') . '. (' . t(" Do this in a different browser or logout of your admin account first.") . ')');
+      drupal_set_message(t("View UCB CAS recommendations at ") . l(t("/@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)), $admin_ucbcas_path) . '.');
+    }
+
   }
-  else {
-    drupal_set_message(t("You can now login using cas at "). l(t("/@login_path", array("@login_path" => $login_path)), 'cas') . '. (' . t(" Do this in a different browser or logout of your admin account first.") . ')');
-    drupal_set_message(t("View UCB CAS recommendations at ") . l(t("/@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)), $admin_ucbcas_path) . '.');
+
+  /**
+   * Implementation of hook_uninstall
+   */
+  function ucberkeley_cas_uninstall() {
+    //delete alias: enforce use of /caslogout
+    $alias = array('source' => 'caslogout', 'alias' => 'user/logout');
+    path_delete($alias);
   }
-
-}
-
-/**
- * Implementation of hook_uninstall
- */
-function ucberkeley_cas_uninstall() {
-  //delete alias: enforce use of /caslogout
-  $alias = array('source'=>'caslogout', 'alias'=>'user/logout');
-  path_delete($alias);
-
-}
