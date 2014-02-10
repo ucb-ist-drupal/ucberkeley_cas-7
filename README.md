@@ -96,11 +96,13 @@ You need the following modules installed:
 * [CTools](http://drupal.org/project/ctools)
 * [Default Config](http://drupal.org/project/defaultconfig)
 
-The UC Berkeley CAS feature already contains these modules:
+The following modules are also required.  There is a stand-alone version of UC Berkeley CAS which contains these modules:
 
-* CAS
-* CAS Attributes
-* LDAP
+* [CAS](http://drupal.org/project/cas)
+* [CAS Attributes](http://drupal.org/project/cas_attributes)
+* [LDAP](http://drupal.org/project/ldap)
+
+Specific versions of the above modules are specified in ucberkeley_cas-7.x.make. If your site is using unsupported versions of these modules, you'll be notified of the problem when you attemp to enable UC Berkeley CAS.
 
 <a name="registration">
 ## CalNet Registration ##
@@ -127,8 +129,10 @@ server auth-test.berkeley.edu.
 
 1. Make sure your site meets the requirements above.
 2. Download ucberkeley_cas-7.x-x.x.tar.gz to the computer running your Drupal site.
+   1. ucberkeley_cas is part of the Open Berkeley distribution (profiles/openberkeley/modules/ucb/ucberkeley_cas), so you do not need to install it separately if you are using Open Berkeley
+   2. A standalone version of ucberkeley_cas is available [here]().
 3. Unarchive the module in sites/all/modules
-4. Enable the module at admin/modules.  
+4. Enable the module at admin/modules.
 5. Test your site:
 
 If your site runs at http://EXAMPLE.berkeley.edu, go to
@@ -150,15 +154,12 @@ login (via CalNet) with that account.  Here's how:
 
 1. Enable the ucberkeley_cas module
 2. Login to your site by visiting http://EXAMPLE.berkeley.edu/cas
-3. Drupal creates a user for you upon successful authentication. Visit
-http://EXAMPLE.berkeley.edu/admin/people, edit your user and assign it the
+3. Drupal creates a user for you upon successful authentication. 
+4. In another browser login as User 1 via the [administrator back door](#back_door) and visit
+http://EXAMPLE.berkeley.edu/admin/people. Edit the user that was created in the prior step and assign it the
 "administrator role.
 
 Now your CalNet user can do anything that User 1 can do.
-
-We strongly recommend that you avoid logging into your site as User 1
-since this user will use Drupal standard authentication which is
-insecure unless used in combination with SSL (https).
 
 <a name = "back_door">
 # The Administrator "Back Door" #
@@ -182,21 +183,16 @@ this form unless you really have to.
 ## Upgrading from ucb_cas 1.x to ucberkeley_cas 2.x ##
 </a>
 
-The module UC Berkeley CAS (ucberkeley_cas) is a replacement for UCB CAS (ucb_cas).  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.
+The module UC Berkeley CAS (ucberkeley\_cas) is a replacement for the older UCB CAS (ucb\_cas) module.  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.
 
 Here's what to do:
 
 1. Disable UCB CAS by un-checking its entry at /admin/modules and clicking submit (or by using drush).
-2. (Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module. By this we mean do not use the "Uninstall" tab which is available at the /admin/modules path when you are logged into your site as an administrator. Also do not use the drush pm-uninstall command to uninstall these modules.)
+2. (Do not tell Drupal to "uninstall" UCB CAS. Also do not "uninstall" the CAS module. By this we mean do not use the "Uninstall" tab which is available at the /admin/modules path when you are logged into your site as an administrator.)
 3. Using your file manager simply remove the ucb_cas folder from your site (look under /sites/all/modules or /profiles).
 4. Check that you have added and enabled the other modules required by UC Berkeley CAS to your site. (These modules (cas, cas_attributes, ldap...) might already be in the ucberkeley_cas folder.)
 5. Enable UC Berkeley CAS. (At this point you may see a message about ucb_envconf. See the instructions below.)
 6. Run update.php
-
-At this point it's a good idea to:
-
-a. Visit admin/reports/updates and verify that you have the latest version of cas, cas_attributes and ldap.
-b. Visit admin/reports/status and verify that you have the latest version of the phpCAS library.  (Compare http://downloads.jasig.org/cas-clients/php/current/).
 
 ### If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x ###
 
@@ -258,7 +254,7 @@ database) specified by ucberkeley_cas.features.defaultconfig.inc.
 <a name = "#uninstalling">
 # Uninstalling #
 </a>
-To remove UC Berkeley CAS from your site see the modules listed in the[Requirements](#requirements) section above.
+To remove UC Berkeley CAS from your site see the modules listed in the [Requirements](#requirements) section above.
 
 1. Disable these modules at admin/modules.
 2. Uninstall these modules at admin/modules/uninstall.
@@ -329,7 +325,7 @@ section below.
 
 With the ucberkeley_cas standard configuration, when a user logs in
 via CalNet for the first time Drupal will create an account for them
-and assign them to the "authenticated user" role. **We suggests that
+and assign them to the "authenticated user" role. **We suggest that
 you avoid assigning the "authenticated user" role any privileges
 beyond those assigned to the "anonymous user" role.** The best way to
 manage privileges for your CalNet users is to create a role like
@@ -529,23 +525,6 @@ Live environments. To manage this manually make these changes at:
 * admin/config/people/cas
 * admin/config/people/cas/attributes
 
-<a name = "#envconf_drush">
-## Drush vget cas_server with UC Berkeley Environment Configurations ##
-</a>
-
-This only applies to sites using the ucberkeley_envconf module:
-
-drush @somealias vget cas_server
-
-Because this module applies configuration on hook\_boot() and because
-hook\_boot doesn't run when you issue 'drush vget', you will encounter
-situations where 'drush vget' reports the wrong value.  If you visit
-the corresponding admin page, you should see the right value.
-
-Theoretically you could get the correct value with 
-
-drush @somealias php-eval "echo variable\_get('cas\_server', NULL);"
-
 <a name = "#faq">
 # FAQ #
 </a>
@@ -569,11 +548,27 @@ account gets created, but if they try to edit it, they get a
 validation error on the email field since it is the email that is
 already in use by User 1. To fix this, change the User 1 email.
 
+<a name = "#envconf_drush">
+Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information?
+</a>
+
+(This only applies to sites using the ucberkeley_envconf module.)
+
+Because the ucberkeley_envconf module applies configuration on
+hook\_boot() and because hook\_boot doesn't run when you issue 'drush
+vget', you will encounter situations where 'drush vget' reports the
+wrong value.  If you visit the corresponding admin page, you should
+see the right value.
+
+Theoretically you could get the correct value with 
+
+drush @somealias php-eval "echo variable\_get('cas\_server', NULL);"
+
 <a name = "bugs">
 # Reporting Bugs #
 </a>
 
-If you think you've found a bug with UC Berkeley CAS please report it at https://github.com/ucb-ist-drupal/ucberkeley_cas-7/issues. Make sure your bug report includes:
+If you think you've found a bug with UC Berkeley CAS please report it to ist-drupal@lists.berkeley.edu. Make sure your bug report includes:
 
 1. The exact steps we should take to recreate the problem.
 2. The version of ucberkeley_cas that you are using.
