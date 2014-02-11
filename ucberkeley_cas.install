@@ -21,13 +21,6 @@ function ucberkeley_cas_requirements($phase) {
 5. Enable UC Berkeley CAS.<br />
 6. Run update.php.<br />
 </p>
-
-<p>At this point it's a good idea to:</p>
-
-<p>
-a. Visit admin/reports/updates and verify that you have the latest version of cas, cas_attributes and ldap.<br />
-b. Visit admin/reports/status and verify that you have the latest version of the phpCAS library.  (Compare http://downloads.jasig.org/cas-clients/php/current/).<br />
-</p>
 EOT;
 
   $update_ucb_envconf_message = <<<EOT
