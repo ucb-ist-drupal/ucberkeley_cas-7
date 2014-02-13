@@ -21,6 +21,6 @@ projects[ldap] = 1.0-beta12
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucb_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openberkeley-105"
+projects[ucberkeley_cas][download][branch] = "master"
 
 
