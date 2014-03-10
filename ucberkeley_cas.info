@@ -13,6 +13,7 @@ dependencies[] = defaultconfig
 dependencies[] = ldap_servers
 dependencies[] = strongarm
 dependencies[] = token
+dependencies[] = features
 features[defaultconfig][] = default_ldap_servers:ucb_prod
 features[defaultconfig][] = default_ldap_servers:ucb_test
 features[defaultconfig][] = strongarm:cas_access
