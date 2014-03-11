@@ -41,8 +41,16 @@ EOT;
 
 EOT;
 
-
   if ($phase == 'install') {
+
+    // Overlay obscures our drupal_set_messages
+    if (module_exists('overlay')) {
+      $requirements['ucberkeley_cas'] = array(
+        'title' => $t('UC Berkeley CAS'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t("The Overlay module must be disabled when you install UC Berkeley CAS. This can be done by unchecking it at " . l("/admin/modules", "admin/modules") . " and submitting the form. Overlay is unnecessary on most sites, but you can enable it again later if you wish."),
+      );
+    }
 
     if (module_exists('ucb_envconf')) {
       /*
@@ -116,6 +124,7 @@ EOT;
    * Implementation of hook_install
    */
   function ucberkeley_cas_install() {
+
     //Create alias: enforce use of /caslogout
     $alias = array('source' => 'caslogout', 'alias' => 'user/logout');
     path_save($alias);
@@ -125,12 +134,16 @@ EOT;
     $admin_ucbcas_path = 'admin/config/people/ucberkeley_cas';
 
     if (variable_get("clean_url", 0) == 0) {
-      drupal_set_message("Clean URLs are disabled on this site.  Consider enabling them at /?q=admin/config/search/clean-urls.", "warning");
-      drupal_set_message(t("You can now login using cas at the path ?q=@login_path. Do this in a different browser or logout of your admin account first.", array("@login_path" => $login_path)));
+      drupal_set_message(t("Clean URLs are disabled on this site.  Consider enabling them at /?q=admin/config/search/clean-urls."), "warning");
+      //drush-friendly link
+      drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
+      drupal_set_message(t("Unauthenticated users can login via CAS at the path ?q=@login_path.", array("@login_path" => $login_path)));
       drupal_set_message(t("View UCB CAS recommendations at the path ?q=@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)));
     }
     else {
-      drupal_set_message(t("You can now login using cas at ") . l(t("/@login_path", array("@login_path" => $login_path)), 'cas') . '. (' . t(" Do this in a different browser or logout of your admin account first.") . ')');
+      //drush-friendly link
+      drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
+      drupal_set_message(t("Unauthenticated users can login via CAS at the path /@login_path.", array("@login_path" => $login_path)));
       drupal_set_message(t("View UCB CAS recommendations at ") . l(t("/@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)), $admin_ucbcas_path) . '.');
     }
 
