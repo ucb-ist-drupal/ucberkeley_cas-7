@@ -123,6 +123,10 @@ function ucberkeley_cas_admin_login($form) {
     '#size' => 15,
     '#required' => TRUE,
 	);
+  $form['request_password'] = array(
+    '#type' => 'item',
+    '#markup' => "<ul><li>" . l("Request new password", "user/password") . "</ul></li>",
+  );
 	$form['actions'] = array('#type' => 'actions');
 	$form['actions']['submit'] = array('#type' => 'submit',
     '#value' => t('Log in'),
