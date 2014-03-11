@@ -43,6 +43,15 @@ EOT;
 
   if ($phase == 'install') {
 
+    // Overlay obscures our drupal_set_messages
+    if (module_exists('overlay')) {
+      $requirements['ucberkeley_cas'] = array(
+        'title' => $t('UC Berkeley CAS'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t("The Overlay module must be disabled when you install UC Berkeley CAS. This can be done by unchecking it at " . l("/admin/modules", "admin/modules") . " and submitting the form. Overlay is unnecessary on most sites, but you can enable it again later if you wish."),
+      );
+    }
+
     if (module_exists('ucb_envconf')) {
       /*
        * The 2.x version of ucb_envconf will be called ucberkeley_envconf. So once the old version is disabled
@@ -115,6 +124,7 @@ EOT;
    * Implementation of hook_install
    */
   function ucberkeley_cas_install() {
+
     //Create alias: enforce use of /caslogout
     $alias = array('source' => 'caslogout', 'alias' => 'user/logout');
     path_save($alias);
@@ -133,7 +143,7 @@ EOT;
     else {
       //drush-friendly link
       drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
-      drupal_set_message(t("Unauthenticated users can login via CAS at ") . l(t("/@login_path", array("@login_path" => $login_path)), 'cas'));
+      drupal_set_message(t("Unauthenticated users can login via CAS at the path /@login_path.", array("@login_path" => $login_path)));
       drupal_set_message(t("View UCB CAS recommendations at ") . l(t("/@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)), $admin_ucbcas_path) . '.');
     }
 
