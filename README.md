@@ -451,6 +451,19 @@ Unchecking this is very likely to cause confusion.  Users
 should change their passwords via CalNet. See [Change password
 URL](#change_password) further down.
 
+*Note:* Even if "users cannot change password" is enabled, users
+ with the Administrator role (including User 1), or users with the
+ Drupal permission 'administer users,' _can_ change the passwords on
+ other accounts _in some cases_ at /admin/people.  It works like this:
+ If the user being edited is associated with a CAS uid, the
+ administrator will see disabled password boxes on the user form and a
+ note indicating that the password for this user can't be changed
+ since they are a CAS user.  If the user being edited is a regular
+ Drupal user (not associated with a CAS uid) then the administrator
+ will be allowed to change the user's password. Also a non-CAS user
+ will be able to edit her own password, but
+ [please see the section on mixing authentication modes](#mixed_mode).
+
 <a name="change_password">
 ### Change Password URL ###
 </a>
