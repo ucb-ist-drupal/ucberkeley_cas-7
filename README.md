@@ -198,14 +198,14 @@ Here's what to do:
 
 ### If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x ###
 
-(Using [ucberkeley_envconf](#envconf) is recommended if you host your site on Pantheon.)
+_For background on UC Berkeley Environments Configurations see [this section](#envconf)._
 
-The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations. An older version of UC Berkeley Environment Configurations has been detect on this site.
+The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations (ucberkeley\_envconf). You may be using an old version of UC Berkeley Environment Configurations. The 1.x version of UC Berkeley Environments Configurations was in a directory called ucb\_envconf. 
 
 Here's what to do:
 
 1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit.
-2. Download <a href="http://drupal-apps.berkeley.edu/content/ucb-environment-configurations">the new version of UC Berkeley Environment Configurations</a>.
+2. Download <a href="https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases">the latest version of UC Berkeley Environment Configurations</a>.
 3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles).
 4. Unpack the new version of UC Berkeley Environment Configurations and copy it into /sites/all/modules (or your preferred module directory.) 
 5. Enable ucberkeley_envconf. (Running update.php is not necessary.)
@@ -517,6 +517,8 @@ will not be over written by a new LDAP lookup on their next login.
 <a name = "envconf">
 # The UC Berkeley Environment Configurations module #
 </a>
+
+<a href="https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases">Download the latest version of UC Berkeley Environment Configurations</a>
 
 The module
 [UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucb_envconf-7)
