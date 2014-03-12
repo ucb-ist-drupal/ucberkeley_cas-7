@@ -147,19 +147,21 @@ address and full name that was retrieved from LDAP for your account.
 # Setup a CalNet-authenticated Administrator #
 </a>
 
-User 1 (the account is often named "admin) is the "superuser" on a Drupal
-site. Instead of using logging in as this user, you should grant your
-CalNet-authenticated user account the administrator role and always
-login (via CalNet) with that account.  Here's how:
+User 1 is the "superuser" on a Drupal site. (This account is often
+named "admin.") If you are installing UC Berkeley CAS, you are
+probably logged in as User 1. Once UC Berkeley CAS is enabled on
+your site, the best practice is to stop logging in as this user and to
+login using your CalNet credentials instead. Here's how to set that
+up:
 
-1. Enable the ucberkeley_cas module
-2. Login to your site by visiting http://EXAMPLE.berkeley.edu/cas
-3. Drupal creates a user for you upon successful authentication. 
-4. In another browser login as User 1 via the [administrator back door](#back_door) and visit
-http://EXAMPLE.berkeley.edu/admin/people. Edit the user that was created in the prior step and assign it the
-"administrator role.
+1. Log into your site as User 1 and enable the UC Berkeley CAS module.
+2. Using a different browser (e.g. Firefox, if you did step 1 using Chrome), visit your CAS url which will be something like http://EXAMPLE.berkeley.edu/cas. When you successfully authenticate using CAS a new Drupal user will be created that is associated with your CalNet credentials.
+3. Back in your first browser (e.g. Chrome if you did step 2 using Firefox) where you are still logged in as User 1, visit your people page.  The url for this page is something like http://EXAMPLE.berkeley.edu/admin/people. You should see a new user with a username matching your first and last names. Click the "edit" link to the right of this user and assign it the administrator role. 
+5. Now in your first browser you can logout of the User 1 account and visit the CAS url (above) to log back in via CalNet. At this point you should be able to do anything that User 1 could do.
 
-Now your CalNet user can do anything that User 1 can do.
+Should somehthing go wrong with CAS or the CAS module on your site, you can still login as User 1 using the [administrator back door](#back_door). (Please do not use the backdoor unless it is really necessary.)
+
+*To make your site even more secure, it's a good idea to change the password on your User 1 account to a long random string.  This will make it less likely that your site would be compromised by a brute force password attack. Before you make this change, make sure that you have access to the email address associated with User 1. When you need to login as User 1 you can use the [administrator back door](#back_door) which includes a link to reset your password.*
 
 <a name = "back_door">
 # The Administrator "Back Door" #
@@ -448,6 +450,19 @@ accounts. As an alternative, you can pre-create CAS users at
 Unchecking this is very likely to cause confusion.  Users
 should change their passwords via CalNet. See [Change password
 URL](#change_password) further down.
+
+*Note:* Even if "users cannot change password" is enabled, users
+ with the Administrator role (including User 1), or users with the
+ Drupal permission 'administer users,' _can_ change the passwords on
+ other accounts _in some cases_ at /admin/people.  It works like this:
+ If the user being edited is associated with a CAS uid, the
+ administrator will see disabled password boxes on the user form and a
+ note indicating that the password for this user can't be changed
+ since they are a CAS user.  If the user being edited is a regular
+ Drupal user (not associated with a CAS uid) then the administrator
+ will be allowed to change the user's password. Also a non-CAS user
+ will be able to edit her own password, but
+ [please see the section on mixing authentication modes](#mixed_mode).
 
 <a name="change_password">
 ### Change Password URL ###
