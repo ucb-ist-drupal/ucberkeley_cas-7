@@ -44,6 +44,9 @@ EOT;
   if ($phase == 'install') {
 
     // Overlay obscures our drupal_set_messages
+    // NOTE: Below should not be necessary if using drupal_goto('admin/modules') in ucberkeley_cas_install() below.
+
+    /*
     if (module_exists('overlay')) {
       $requirements['ucberkeley_cas'] = array(
         'title' => $t('UC Berkeley CAS'),
@@ -51,6 +54,7 @@ EOT;
         'description' => $t("The Overlay module must be disabled when you install UC Berkeley CAS. This can be done by unchecking it at " . l("/admin/modules", "admin/modules") . " and submitting the form. Overlay is unnecessary on most sites, but you can enable it again later if you wish."),
       );
     }
+    */
 
     if (module_exists('ucb_envconf')) {
       /*
@@ -140,6 +144,7 @@ EOT;
       drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#if-you-are-using-ucb_envconf-1x-upgrade-to-ucberkeley_envconf-2x", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#if-you-are-using-ucb_envconf-1x-upgrade-to-ucberkeley_envconf-2x")));
       drupal_set_message(t("Unauthenticated users can login via CAS at the path ?q=@login_path.", array("@login_path" => $login_path)));
       drupal_set_message(t("View UCB CAS recommendations at the path ?q=@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)));
+      drupal_goto('admin/modules');
     }
     else {
       //drush-friendly link
@@ -147,6 +152,7 @@ EOT;
       drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#if-you-are-using-ucb_envconf-1x-upgrade-to-ucberkeley_envconf-2x", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#if-you-are-using-ucb_envconf-1x-upgrade-to-ucberkeley_envconf-2x")));
       drupal_set_message(t("Unauthenticated users can login via CAS at the path /@login_path.", array("@login_path" => $login_path)));
       drupal_set_message(t("View UCB CAS recommendations at ") . l(t("/@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)), $admin_ucbcas_path) . '.');
+      drupal_goto('admin/modules');
     }
 
   }
