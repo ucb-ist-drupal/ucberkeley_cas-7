@@ -111,6 +111,9 @@ The following modules are also required.  There is a stand-alone version of UC B
 
 Specific versions of the above modules are specified in ucberkeley_cas-7.x.make. If your site is using unsupported versions of these modules, you'll be notified of the problem when you attemp to enable UC Berkeley CAS.
 
+The following modules must be disabled before you can install UC Berkeley CAS:
+* Overlay
+  * Overlay is a Drupal core module that is enabled by default on a plain Drupal 7 site.  It prevents the UC Berkeley CAS installer from displaying important messages at the end of installation.  UC Berkeley CAS will politely request that you disable this module if it is enabled at the time of installation.  It's fine if you want to re-enable Overlay after installing UC Berkeley CAS. (Overlay doesn't provide any important functionality.  It is disabled by default on Open Berkeley sites.)
 <a name="registration">
 ## CalNet Registration ##
 </a>
