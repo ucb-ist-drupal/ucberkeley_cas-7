@@ -31,7 +31,14 @@
         *  [Fetch CAS Attributes](#fetch_cas)
 *  [The UC Berkeley Environment Configurations module](#envconf)
     *  [Drush vget cas_server with UC Berkeley Environment Configurations](#envconf_drush)
-*  [FAQ](#faq)
+*  [FAQ/Troubleshooting](#faq)
+	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
+	*  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
+	*  [Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org.](#ldap_not_exist)
+	*  [Q. When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_](#ldap_servers_version)
+	*  [Q. When logging in I get the error "user warning: Duplicate entry](#user_dup_entry)
+	*  [Q. When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this?](#validation_email)
+	*  [Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information?](#envconf_drush)
 *  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
 
@@ -542,22 +549,43 @@ Live environments. To manage this manually make these changes at:
 * admin/config/people/cas
 * admin/config/people/cas/attributes
 
-<a name = "#faq">
-# FAQ #
+<a name = "faq">
+# FAQ/Troubleshooting #
 </a>
 
+<a name = "hosted_do">
+## Q. Why isn't ucberkeley\_cas hosted on http://drupal.org ##
+</a>
+A. Two reasons: 1. this module bundles phpCAS which cannot be served from drupal.org for licensing reasons. 2. this module is specific to using Druapl at UC Berkeley and is not useful to the wider Drupal community.
 
-Q. When logging in I get the error "user warning: Duplicate entry
+<a name = "drush_upc">
+## Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)? ##
+</a>
+A. For that to work the ucberkeley\_cas module would need to be hosted on http://drupal.org or another site that interfaces with this drupal update process.  
+
+<a name = "ldap_not_exist">
+## Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org. ##
+</a>
+A. ldap\_servers is bundled in the module called LDAP. Sometimes this causes drush commands to be confused about what module to download.  You may need to download the LDAP module manually. See the [Requirements](#requirements) section for the specific version of LDAP that ucberkeley\_cas requires.  All of the releases of LDAP can be found [here](https://drupal.org/node/806060/release).
+
+<a name = "ldap_servers_version">
+## Q. When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_ ##
+</a>
+A. Check to see if you have another version of LDAP installed under /sites/all/modules or /profiles.  If so, remove this folder.  If find LDAP under the folder ucb\_cas, you should read about [upgrading from ucb\_cas 1.0](#1.x\_2.x).
+
+<a name = "user_dup_entry">
+## Q. When logging in I get the error "user warning: Duplicate entry ##
+</a>
+user warning: Duplicate entry
 'Brian Wood' for key 'name' query: UPDATE users SET name = 'Brian
 Wood', mail = 'bwood@example.com', data = 'a:0:{}' WHERE uid = 7 in
 /Users/bwood/Sites/dev6/modules/user/user.module on line 248."
 
-A. See [Avoid uninstalling the CAS module](#avoid_uninstall)
+A. See [Avoid uninstalling the CAS module](#avoid\_uninstall)
 
-
-Q. When I try to edit a user created by the cas module, I get a
-validation error on the email address.  Why is this?
-
+<a name = "validation_email">
+## Q. When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this? ##
+</a>
 A. All accounts on a Drupal site must have unique email addresses.
 Often a site admin user their own address for User 1 and then they
 CalNet authenticate to create a new account for themselves.  The
@@ -565,13 +593,13 @@ account gets created, but if they try to edit it, they get a
 validation error on the email field since it is the email that is
 already in use by User 1. To fix this, change the User 1 email.
 
-<a name = "#envconf_drush">
-Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information?
+<a name = "envconf_drush">
+## Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information? ##
 </a>
 
-(This only applies to sites using the ucberkeley_envconf module.)
+(This only applies to sites using the ucberkeley\_envconf module.)
 
-Because the ucberkeley_envconf module applies configuration on
+Because the ucberkeley\_envconf module applies configuration on
 hook\_boot() and because hook\_boot doesn't run when you issue 'drush
 vget', you will encounter situations where 'drush vget' reports the
 wrong value.  If you visit the corresponding admin page, you should
