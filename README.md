@@ -1,5 +1,6 @@
 # UC Berkeley CAS 7.x #
 
+*   [Downloading the latest release]("#downloading")
 *   [Purpose]("#purpose")
     *   [Enhanced Security](#enhanced_security)
 *   [Quick Start](#quick_start)
@@ -42,6 +43,11 @@
 *  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
 
+<a name="downloading">
+# Downloading the latest release #
+</a>
+
+You can download the latest release on our [releases page](https://github.com/ucb-ist-druapl/ucberkeley_cas-7/releases).
 
 <a name="purpose">
 # Purpose #
@@ -82,13 +88,13 @@ addition to UC Berkeley CAS.)
 # Quick Start #
 </a>
 
-1. See: Requirements
-2. Install and enable ucberkeley_cas. (More info: Installing)
-3. Using a second browser visit the (unpublicized) login url
+1. See [Requirements](#requirements)
+2. Install and enable ucberkeley_cas. (More info: [Installing](#installation))
+3. Using a second browser, where you are not logged to the site as User 1, visit the (unpublicized) login url
 http://example.com/cas and login with your CalNet id.
-4. In your first browser, as User 1, edit the new user that got
+4. In your first browser, where you are logged in as User 1, edit the new user that got
 created in the last step and assign it the "administrator" role. (More info:
-Setup a CalNet-authenticated administrator)
+[Setup a CalNet-authenticated administrator](#setup_a))
 5. Visit the path /admin/config/people/ucbcas on your site for recommendations on further configuration.
 
 <a name="requirements">
@@ -210,13 +216,11 @@ Here's what to do:
 
 _For background on UC Berkeley Environments Configurations see [this section](#envconf)._
 
-The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations (ucberkeley\_envconf). You may be using an old version of UC Berkeley Environment Configurations. The 1.x version of UC Berkeley Environments Configurations was in a directory called ucb\_envconf. 
-
-Here's what to do:
+The module UCB Berkeley CAS (ucberkeley_cas) can optionally be used with the UC Berkeley Environment Configurations module. If you have upgraded from an old (1.x) version of UC Berkeley CAS, you may also have an old version of UC Berkeley Environments Configurations installed. If this is the case, the UC Berkeley CAS installer will detect the problem and warn you. Here's what to do if that happens::
 
 1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit.
 2. Download <a href="https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases">the latest version of UC Berkeley Environment Configurations</a>.
-3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles).
+3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles). (The 1.0 version was called ucb_envconf.  The 2.0 version is called ucberkeley\_envconf.)
 4. Unpack the new version of UC Berkeley Environment Configurations and copy it into /sites/all/modules (or your preferred module directory.) 
 5. Enable ucberkeley_envconf. (Running update.php is not necessary.)
 
@@ -533,9 +537,10 @@ will not be over written by a new LDAP lookup on their next login.
 The module
 [UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucb_envconf-7)
 ensures that your cas and ldap server settings are correct based on
-your development environment on [Pantheon](http://getpantheon.com). UC
-Berkeley Environment Configurations ensures that your Dev and Test
-sites on Pantheon use:
+your development environment on [Pantheon](http://getpantheon.com). (If
+you are not hosting your site on Pantheon, you don't need this
+module.) UC Berkeley Environment Configurations ensures that your Dev
+and Test sites on Pantheon use:
 
 * CAS Server: auth-test.berkeley.edu
 * LDAP Server: ldap-test.berkeley.edu
@@ -546,7 +551,7 @@ and your Live site uses:
 * LDAP Server: ldap.berkeley.edu
 
 If you are not using this module, you'll need to manually edit these
-server settings when you copy your database between the Dev, Test and
+server settings when you copy your database between Pantheon's Dev, Test and
 Live environments. To manage this manually make these changes at:
 
 * admin/config/people/cas
