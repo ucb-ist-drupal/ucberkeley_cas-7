@@ -11,6 +11,7 @@
 *   [Administrator "back door"](#back_door)
 *   [Upgrading](#upgrading)
     *   [Upgrading from ucb\_cas 1.x to ucberkeley\_cas 2.x](#1.x_2.x)
+			*   [If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x](#1.x_2.x_envconf)
     *   [Upgrading to a new version of ucberkeley_cas 2.x](#to_newver)
     *   [My site already users CAS, and I want to switch to ucberkeley_cas](#my_sitealready)
 *   [Uninstalling](#uninstalling)
@@ -31,7 +32,6 @@
     *  [Cas Attributes configuration](#cas_attributes)
         *  [Fetch CAS Attributes](#fetch_cas)
 *  [The UC Berkeley Environment Configurations module](#envconf)
-    *  [Drush vget cas_server with UC Berkeley Environment Configurations](#envconf_drush)
 *  [FAQ/Troubleshooting](#faq)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
 	*  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
@@ -212,7 +212,9 @@ Here's what to do:
 5. Enable UC Berkeley CAS. (At this point you may see a message about ucb_envconf. See the instructions below.)
 6. Run update.php
 
-### If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x ###
+<a name = "1.x_2.x_envconf">
+### If you are using ucb\_envconf 1.x, upgrade to ucberkeley\_envconf 2.x ###
+</a>
 
 _For background on UC Berkeley Environments Configurations see [this section](#envconf)._
 
@@ -533,6 +535,8 @@ will not be over written by a new LDAP lookup on their next login.
 </a>
 
 <a href="https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases">Download the latest version of UC Berkeley Environment Configurations</a>
+
+_[This section](#1.x_2.x_envconf) explains upgrading from UC Berkeley Environment Configurations version 1.0 to version 2.0 and above._
 
 The module
 [UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucb_envconf-7)
