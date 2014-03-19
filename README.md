@@ -1,6 +1,6 @@
 # UC Berkeley CAS 7.x #
 
-*   [Downloading the latest release]("#downloading")
+*   [Downloading the latest release](#downloading)
 *   [Purpose]("#purpose")
     *   [Enhanced Security](#enhanced_security)
 *   [Quick Start](#quick_start)
@@ -47,7 +47,7 @@
 # Downloading the latest release #
 </a>
 
-You can download the latest release on our [releases page](https://github.com/ucb-ist-druapl/ucberkeley_cas-7/releases).
+You can download the latest release on our [releases page](https://github.com/ucb-ist-drupal/ucberkeley_cas-7/releases).
 
 <a name="purpose">
 # Purpose #
