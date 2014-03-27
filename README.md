@@ -1,5 +1,6 @@
 # UC Berkeley CAS 7.x #
 
+*   [Downloading the latest release](#downloading)
 *   [Purpose]("#purpose")
     *   [Enhanced Security](#enhanced_security)
 *   [Quick Start](#quick_start)
@@ -10,6 +11,7 @@
 *   [Administrator "back door"](#back_door)
 *   [Upgrading](#upgrading)
     *   [Upgrading from ucb\_cas 1.x to ucberkeley\_cas 2.x](#1.x_2.x)
+			*   [If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x](#1.x_2.x_envconf)
     *   [Upgrading to a new version of ucberkeley_cas 2.x](#to_newver)
     *   [My site already users CAS, and I want to switch to ucberkeley_cas](#my_sitealready)
 *   [Uninstalling](#uninstalling)
@@ -30,11 +32,22 @@
     *  [Cas Attributes configuration](#cas_attributes)
         *  [Fetch CAS Attributes](#fetch_cas)
 *  [The UC Berkeley Environment Configurations module](#envconf)
-    *  [Drush vget cas_server with UC Berkeley Environment Configurations](#envconf_drush)
-*  [FAQ](#faq)
+*  [FAQ/Troubleshooting](#faq)
+	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
+	*  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
+	*  [Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org.](#ldap_not_exist)
+	*  [Q. When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_](#ldap_servers_version)
+	*  [Q. When logging in I get the error "user warning: Duplicate entry](#user_dup_entry)
+	*  [Q. When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this?](#validation_email)
+	*  [Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information?](#envconf_drush)
 *  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
 
+<a name="downloading">
+# Downloading the latest release #
+</a>
+
+You can download the latest release on our [releases page](https://github.com/ucb-ist-drupal/ucberkeley_cas-7/releases).
 
 <a name="purpose">
 # Purpose #
@@ -75,13 +88,13 @@ addition to UC Berkeley CAS.)
 # Quick Start #
 </a>
 
-1. See: Requirements
-2. Install and enable ucberkeley_cas. (More info: Installing)
-3. Using a second browser visit the (unpublicized) login url
+1. See [Requirements](#requirements)
+2. Install and enable ucberkeley_cas. (More info: [Installing](#installation))
+3. Using a second browser, where you are not logged to the site as User 1, visit the (unpublicized) login url
 http://example.com/cas and login with your CalNet id.
-4. In your first browser, as User 1, edit the new user that got
+4. In your first browser, where you are logged in as User 1, edit the new user that got
 created in the last step and assign it the "administrator" role. (More info:
-Setup a CalNet-authenticated administrator)
+[Setup a CalNet-authenticated administrator](#setup_a))
 5. Visit the path /admin/config/people/ucbcas on your site for recommendations on further configuration.
 
 <a name="requirements">
@@ -196,17 +209,17 @@ Here's what to do:
 5. Enable UC Berkeley CAS. (At this point you may see a message about ucb_envconf. See the instructions below.)
 6. Run update.php
 
-### If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x ###
+<a name = "1.x_2.x_envconf">
+### If you are using ucb\_envconf 1.x, upgrade to ucberkeley\_envconf 2.x ###
+</a>
 
-(Using [ucberkeley_envconf](#envconf) is recommended if you host your site on Pantheon.)
+_For background on UC Berkeley Environments Configurations see [this section](#envconf)._
 
-The module UCB Berkeley CAS (ucberkeley_cas) requires version 2.0 or later of UC Berkeley Environment Configurations. An older version of UC Berkeley Environment Configurations has been detect on this site.
-
-Here's what to do:
+The module UCB Berkeley CAS (ucberkeley_cas) can optionally be used with the UC Berkeley Environment Configurations module. If you have upgraded from an old (1.x) version of UC Berkeley CAS, you may also have an old version of UC Berkeley Environments Configurations installed. If this is the case, the UC Berkeley CAS installer will detect the problem and warn you. Here's what to do if that happens::
 
 1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit.
-2. Download <a href="http://drupal-apps.berkeley.edu/content/ucb-environment-configurations">the new version of UC Berkeley Environment Configurations</a>.
-3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles).
+2. Download <a href="https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases">the latest version of UC Berkeley Environment Configurations</a>.
+3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles). (The 1.0 version was called ucb_envconf.  The 2.0 version is called ucberkeley\_envconf.)
 4. Unpack the new version of UC Berkeley Environment Configurations and copy it into /sites/all/modules (or your preferred module directory.) 
 5. Enable ucberkeley_envconf. (Running update.php is not necessary.)
 
@@ -518,12 +531,17 @@ will not be over written by a new LDAP lookup on their next login.
 # The UC Berkeley Environment Configurations module #
 </a>
 
+<a href="https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases">Download the latest version of UC Berkeley Environment Configurations</a>
+
+_[This section](#1.x_2.x_envconf) explains upgrading from UC Berkeley Environment Configurations version 1.0 to version 2.0 and above._
+
 The module
 [UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucb_envconf-7)
 ensures that your cas and ldap server settings are correct based on
-your development environment on [Pantheon](http://getpantheon.com). UC
-Berkeley Environment Configurations ensures that your Dev and Test
-sites on Pantheon use:
+your development environment on [Pantheon](http://getpantheon.com). (If
+you are not hosting your site on Pantheon, you don't need this
+module.) UC Berkeley Environment Configurations ensures that your Dev
+and Test sites on Pantheon use:
 
 * CAS Server: auth-test.berkeley.edu
 * LDAP Server: ldap-test.berkeley.edu
@@ -534,28 +552,49 @@ and your Live site uses:
 * LDAP Server: ldap.berkeley.edu
 
 If you are not using this module, you'll need to manually edit these
-server settings when you copy your database between the Dev, Test and
+server settings when you copy your database between Pantheon's Dev, Test and
 Live environments. To manage this manually make these changes at:
 
 * admin/config/people/cas
 * admin/config/people/cas/attributes
 
-<a name = "#faq">
-# FAQ #
+<a name = "faq">
+# FAQ/Troubleshooting #
 </a>
 
+<a name = "hosted_do">
+## Q. Why isn't ucberkeley\_cas hosted on http://drupal.org ##
+</a>
+A. Two reasons: 1. this module bundles phpCAS which cannot be served from drupal.org for licensing reasons. 2. this module is specific to using Druapl at UC Berkeley and is not useful to the wider Drupal community.
 
-Q. When logging in I get the error "user warning: Duplicate entry
+<a name = "drush_upc">
+## Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)? ##
+</a>
+A. For that to work the ucberkeley\_cas module would need to be hosted on http://drupal.org or another site that interfaces with this drupal update process.  
+
+<a name = "ldap_not_exist">
+## Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org. ##
+</a>
+A. ldap\_servers is bundled in the module called LDAP. Sometimes this causes drush commands to be confused about what module to download.  You may need to download the LDAP module manually. See the [Requirements](#requirements) section for the specific version of LDAP that ucberkeley\_cas requires.  All of the releases of LDAP can be found [here](https://drupal.org/node/806060/release).
+
+<a name = "ldap_servers_version">
+## Q. When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_ ##
+</a>
+A. Check to see if you have another version of LDAP installed under /sites/all/modules or /profiles.  If so, remove this folder.  If find LDAP under the folder ucb\_cas, you should read about [upgrading from ucb\_cas 1.0](#1.x\_2.x).
+
+<a name = "user_dup_entry">
+## Q. When logging in I get the error "user warning: Duplicate entry ##
+</a>
+user warning: Duplicate entry
 'Brian Wood' for key 'name' query: UPDATE users SET name = 'Brian
 Wood', mail = 'bwood@example.com', data = 'a:0:{}' WHERE uid = 7 in
 /Users/bwood/Sites/dev6/modules/user/user.module on line 248."
 
-A. See [Avoid uninstalling the CAS module](#avoid_uninstall)
+A. See [Avoid uninstalling the CAS module](#avoid\_uninstall)
 
-
-Q. When I try to edit a user created by the cas module, I get a
-validation error on the email address.  Why is this?
-
+<a name = "validation_email">
+## Q. When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this? ##
+</a>
 A. All accounts on a Drupal site must have unique email addresses.
 Often a site admin user their own address for User 1 and then they
 CalNet authenticate to create a new account for themselves.  The
@@ -563,13 +602,13 @@ account gets created, but if they try to edit it, they get a
 validation error on the email field since it is the email that is
 already in use by User 1. To fix this, change the User 1 email.
 
-<a name = "#envconf_drush">
-Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information?
+<a name = "envconf_drush">
+## Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information? ##
 </a>
 
-(This only applies to sites using the ucberkeley_envconf module.)
+(This only applies to sites using the ucberkeley\_envconf module.)
 
-Because the ucberkeley_envconf module applies configuration on
+Because the ucberkeley\_envconf module applies configuration on
 hook\_boot() and because hook\_boot doesn't run when you issue 'drush
 vget', you will encounter situations where 'drush vget' reports the
 wrong value.  If you visit the corresponding admin page, you should
