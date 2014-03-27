@@ -1,5 +1,10 @@
-ucb_cas 7.x-2.0-alpha4
-======================
+ucberkeley_cas 7.x-2.0-alpha5
+=============================
+* OPENUCB-254
+** 5822ad8: Fix the overlay problem with drupal_set_message info created in hook_install.
+
+ucberkeley_cas 7.x-2.0-alpha4
+=============================
 * OPENUCB-105
 ** Rewrite this module using Features and Default Config
 ** Re-namespace from ucb_ to ucberkeley_. (Less likely to result in conflicts.)
