@@ -2,6 +2,32 @@
 define('CHANGE_TEXT', '<font color = "red">consider changing your settings.</font>');
 define('GOOD_TEXT', '<font color = "green">your settings are probably good.</font>');
 
+/**
+ * Implementation of hook_init()
+ * If overlay.module is enabled, make sure that our hook_install messages are displayed
+ */
+function ucberkeley_cas_init() {
+  if (!module_exists('overlay') || (!is_array($_SESSION))) {
+    return;
+  }
+  if ((array_key_exists('ucberkeley_cas_install_messages', $_SESSION)) && (!array_key_exists('messages', $_SESSION))) {
+    foreach ($_SESSION['ucberkeley_cas_install_messages']['status'] as $msg) {
+      drupal_set_message($msg);
+    }
+    unset($_SESSION['ucberkeley_cas_install_messages']);
+  }
+  elseif ((is_array($_SESSION['messages'])) && (array_key_exists('ucberkeley_cas_installed', $_SESSION))) {
+    $_SESSION['ucberkeley_cas_install_messages'] = $_SESSION['messages'];
+    unset($_SESSION['ucberkeley_cas_installed']);
+  }
+}
+
+/**
+ * Implementation of hook_form_alter()
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
 function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
   switch ($form_id) {
     case 'user_profile_form':
@@ -12,6 +38,7 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
           $form['account']['pass']['#description'] = '<strong>Since this is a CAS user, their password can\'t be changed.</strong> <a href="https://github.com/ucb-ist-drupal/ucberkeley_cas-7#users_cannot" target="_new">More info</a>.';
         }
       }
+      break;
   }
 }
 
