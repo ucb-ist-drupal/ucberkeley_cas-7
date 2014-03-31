@@ -21,7 +21,7 @@ projects[ldap] = 1.0-beta12
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
-projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucb_cas-7.git"
+projects[ucberkeley_cas][download][url] = "git@github.com:ucb-ist-drupal/ucberkeley_cas-7.git"
 projects[ucberkeley_cas][download][branch] = "master"
 
 
