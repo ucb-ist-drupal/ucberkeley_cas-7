@@ -11,9 +11,9 @@
 *   [Administrator "back door"](#back_door)
 *   [Upgrading](#upgrading)
     *   [Upgrading from ucb\_cas 1.x to ucberkeley\_cas 2.x](#1.x_2.x)
-			*   [If you are using ucb_envconf 1.x, upgrade to ucberkeley_envconf 2.x](#1.x_2.x_envconf)
-    *   [Upgrading to a new version of ucberkeley_cas 2.x](#to_newver)
-    *   [My site already users CAS, and I want to switch to ucberkeley_cas](#my_sitealready)
+	*   [If you are using ucb\_envconf 1.x, upgrade to ucberkeley\_envconf 2.x](#1.x_2.x_envconf)
+    *   [Upgrading to a new version of ucberkeley\_cas 2.x](#to_newver)
+    *   [My site already users CAS, and I want to switch to ucberkeley\_cas](#my_sitealready)
 *   [Uninstalling](#uninstalling)
     *   [Avoid uninstalling the cas module](#avoid_uninstall)
 *   [Standard Configuration](#standard_configuration) 
@@ -34,6 +34,7 @@
 *  [The UC Berkeley Environment Configurations module](#envconf)
 *  [FAQ/Troubleshooting](#faq)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
+	*  [Q. I get the error Access Denied when I try to visit user/admin\_login?](#admin_login_denied)
 	*  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
 	*  [Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org.](#ldap_not_exist)
 	*  [Q. When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_](#ldap_servers_version)
@@ -195,7 +196,7 @@ this form unless you really have to.
 </a>
 
 <a name = "1.x_2.x">
-## Upgrading from ucb_cas 1.x to ucberkeley_cas 2.x ##
+## Upgrading from ucb\_cas 1.x to ucberkeley\_cas 2.x ##
 </a>
 
 The module UC Berkeley CAS (ucberkeley\_cas) is a replacement for the older UCB CAS (ucb\_cas) module.  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.
@@ -566,6 +567,19 @@ Live environments. To manage this manually make these changes at:
 ## Q. Why isn't ucberkeley\_cas hosted on http://drupal.org ##
 </a>
 A. Two reasons: 1. this module bundles phpCAS which cannot be served from drupal.org for licensing reasons. 2. this module is specific to using Druapl at UC Berkeley and is not useful to the wider Drupal community.
+
+<a name = "admin_login_denied">
+## Q. I get the error Access denied when I try to login at user/amdin_login ##
+</a>
+
+This can happen if you managed to enable ucberkeley\_cas and you still have the older files for ucb\_cas in your site. To fix this:
+
+1. disable ucberkeley_cas
+2. uninstall ucberkeley_cas
+3. locate the folder ucb_cas (probably it's under sites/all/modules or profiles/openberkeley/modules/ucb) and remove it.
+4. enable ucberkeley_cas
+
+[See the section on upgrading](#1.x_2.x).
 
 <a name = "drush_upc">
 ## Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)? ##
