@@ -569,7 +569,7 @@ Live environments. To manage this manually make these changes at:
 A. Two reasons: 1. this module bundles phpCAS which cannot be served from drupal.org for licensing reasons. 2. this module is specific to using Druapl at UC Berkeley and is not useful to the wider Drupal community.
 
 <a name = "admin_login_denied">
-## Q. I get the error Access denied when I try to login at user/amdin_login ##
+## Q. I get the error Access denied when I try to login at user/admin_login ##
 </a>
 
 This can happen if you managed to enable ucberkeley\_cas and you still have the older files for ucb\_cas in your site. To fix this:
