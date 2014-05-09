@@ -16,7 +16,7 @@ function ucberkeley_cas_init() {
     }
     unset($_SESSION['ucberkeley_cas_install_messages']);
   }
-  elseif ((is_array($_SESSION['messages'])) && (array_key_exists('ucberkeley_cas_installed', $_SESSION))) {
+  elseif ((array_key_exists('messages', $_SESSION)) && (is_array($_SESSION['messages'])) && (array_key_exists('ucberkeley_cas_installed', $_SESSION))) {
     $_SESSION['ucberkeley_cas_install_messages'] = $_SESSION['messages'];
     unset($_SESSION['ucberkeley_cas_installed']);
   }
