@@ -2,6 +2,7 @@ ucberkeley_cas 7.x-2.0-alpha6
 =============================
 * OPENUCB-254
 ** Fix this php warning: Notice: Undefined index: messages in ucberkeley_cas_init() (line 19 of /Users/bwood/code/drupal/bwood/ucberkeley_cas-7/ucberkeley_cas.module).
+** Improve make/rebuild.sh and makefiles
 
 ucberkeley_cas 7.x-2.0-alpha5
 =============================
