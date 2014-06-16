@@ -25,7 +25,7 @@ ldap
 
 # OS generated files #
 ######################
-.DS_Store?
+.DS_Store
 ehthumbs.db
 Icon?
 Thumbs.db
@@ -43,3 +43,7 @@ dummy.php
 *~
 \#*#
 README.html
+
+# phpStorm #
+############
+.idea/*
