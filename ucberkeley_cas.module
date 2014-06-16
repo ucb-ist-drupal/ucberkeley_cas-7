@@ -7,7 +7,7 @@ define('GOOD_TEXT', '<font color = "green">your settings are probably good.</fon
  * If overlay.module is enabled, make sure that our hook_install messages are displayed
  */
 function ucberkeley_cas_init() {
-  if (!module_exists('overlay') || (!is_array($_SESSION))) {
+  if (!module_exists('overlay') || (!isset($_SESSION)) || (!is_array($_SESSION))) {
     return;
   }
   if ((array_key_exists('ucberkeley_cas_install_messages', $_SESSION)) && (!array_key_exists('messages', $_SESSION))) {
