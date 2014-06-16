@@ -34,6 +34,7 @@
 *  [The UC Berkeley Environment Configurations module](#envconf)
 *  [FAQ/Troubleshooting](#faq)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
+	*  [Q. I get a "Not Found" error when I try to visit user/admin\_login?](#admin_login_notfound)
 	*  [Q. I get the error Access Denied when I try to visit user/admin\_login?](#admin_login_denied)
 	*  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
 	*  [Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org.](#ldap_not_exist)
@@ -567,6 +568,12 @@ Live environments. To manage this manually make these changes at:
 ## Q. Why isn't ucberkeley\_cas hosted on http://drupal.org ##
 </a>
 A. Two reasons: 1. this module bundles phpCAS which cannot be served from drupal.org for licensing reasons. 2. this module is specific to using Druapl at UC Berkeley and is not useful to the wider Drupal community.
+
+<a name = "admin_login_notfound">
+## Q. I get a "Not Found" when I try to login at user/admin_login ##
+</a>
+
+This can happen if your site is not using clean urls.  Try accessing the administrator back door at http://example.com/?q=/user/admin_login. (Consider enabling clean urls at /?q=admin/config/search/clean-urls.)
 
 <a name = "admin_login_denied">
 ## Q. I get the error Access denied when I try to login at user/admin_login ##
