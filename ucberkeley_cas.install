@@ -64,19 +64,21 @@ EOT;
       );
     }
 
-    // require a specific version of cas
-    $cas_req_version = '7.x-1.2';
+    /*
+    // Warn users about newer versions of cas.
+    $cas_req_version = '1.2';
     $cas_path = drupal_get_path('module', 'cas');
     if ($cas_path !== '') {
       $cas_info = drupal_parse_info_file($cas_path . '/cas.info');
-      if ($cas_info['version'] != $cas_req_version) {
+      if ($cas_info['version'] > $cas_req_version) {
         $requirements['ucberkeley_cas'] = array(
           'title' => $t('UC Berkeley CAS'),
-          'severity' => REQUIREMENT_ERROR,
-          'description' => $t('UC Berkeley CAS requires the CAS module to be at version @version. (cas-@installed_version was found at the path: @path)', array('@version' => $cas_req_version, '@path' => $cas_path, '@installed_version' => $cas_info['version'])),
+          'severity' => REQUIREMENT_WARNING,
+          'description' => $t('UC Berkeley CAS has been tested with the CAS module version @version. You have installed cas-@installed_version. Please note that UC Berkeley cas has not been tested with this later version of CAS.module', array('@version' => $cas_req_version, '@path' => $cas_path, '@installed_version' => $cas_info['version'])),
         );
       }
     }
+    */
 
     // require a specific version of ldap (ldap_servers)
     $ldap_req_version = '7.x-1.0-beta12';
@@ -126,19 +128,18 @@ function ucberkeley_cas_install() {
 
   if (variable_get("clean_url", 0) == 0) {
     drupal_set_message(t("Clean URLs are disabled on this site.  Consider enabling them at /?q=admin/config/search/clean-urls."), "warning");
+    drupal_set_message(t("Your administrator backdoor is at /?q=user/admin_login."), "warning");
     //drush-friendly link
     drupal_set_message(t("<em>Unauthenticated</em> users can now login via CAS at the path ?q=@login_path.", array("@login_path" => $login_path)));
-    drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
-    drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf")));
     drupal_set_message(t("View UC Berkeley CAS recommendations at the path ?q=@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)));
   }
   else {
     //drush-friendly link
     drupal_set_message(t("<em>Unauthenticated</em> users can now login via CAS at the path /@login_path.", array("@login_path" => $login_path)));
-    drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
-    drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf")));
     drupal_set_message(t("View UCB Berkeley CAS recommendations at ") . l(t("/@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)), $admin_ucbcas_path) . '.');
   }
+  drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
+  drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf")));
 
   // Set a flag so that we know installation has just completed.  Process the flag in ucberkeley_cas_init()
   $_SESSION['ucberkeley_cas_installed'] = TRUE;
