@@ -7,7 +7,7 @@ libraries[phpcas][download][url] = "http://downloads.jasig.org/cas-clients/php/c
 
 ; CAS
 projects[cas][type] = module
-projects[cas][version] = 1.2
+projects[cas][version] = 1.3
 projects[cas][patch][1394666-cas_library_path-15.patch] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
 
 ; CAS Attributes
@@ -23,6 +23,7 @@ projects[ldap][version] = 1.0-beta12
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
-projects[ucberkeley_cas][download][url] = "git@github.com:ucb-ist-drupal/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "master"
-projects[ucberkeley_cas][download][tag] = "7.x-2.1-beta1"
+; bwood -> ucbistdrupal
+projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
+projects[ucberkeley_cas][download][branch] = "openucb-324-add-to-ob-make"
+;;;; projects[ucberkeley_cas][download][tag] = "7.x-2.1-beta1"
