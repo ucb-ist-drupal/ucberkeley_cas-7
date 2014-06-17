@@ -7,7 +7,7 @@ define('GOOD_TEXT', '<font color = "green">your settings are probably good.</fon
  * If overlay.module is enabled, make sure that our hook_install messages are displayed
  */
 function ucberkeley_cas_init() {
-  if (!module_exists('overlay') || (!is_array($_SESSION))) {
+  if (!module_exists('overlay') || (!isset($_SESSION)) || (!is_array($_SESSION))) {
     return;
   }
   if ((array_key_exists('ucberkeley_cas_install_messages', $_SESSION)) && (!array_key_exists('messages', $_SESSION))) {
@@ -64,7 +64,7 @@ function ucberkeley_cas_apps_app_info() {
 function ucberkeley_cas_apps_app_configure_form() {
   $form = array();
   $form['test'] = array(
-    '#markup' => t('See the ') . l(t('UCB CAS recommendations page'), 'admin/config/people/ucbcas') . '.',
+    '#markup' => t('See the ') . l(t('UC Berkeley CAS recommendations page'), 'admin/config/people/ucbcas') . '.',
   );
   return $form;
 }
@@ -116,8 +116,8 @@ function ucberkeley_cas_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['admin/config/people/ucberkeley_cas'] = array(
-    'title' => 'UCB CAS',
-    'description' => 'UCB CAS recommendations and review.',
+    'title' => 'UC Berkeley CAS',
+    'description' => 'UC Berkeley CAS recommendations and review.',
     'page callback' => 'ucberkeley_cas_admin',
     'access arguments' => array('administer cas'),
     'type' => MENU_NORMAL_ITEM,
@@ -184,7 +184,7 @@ function ucberkeley_cas_admin_login($form) {
  */
 function ucberkeley_cas_admin() {
 
-  $out = '<h2>' . t('UCB CAS Configuration Review') . '</h2>';
+  $out = '<h2>' . t('UC Berkeley CAS Configuration Review') . '</h2>';
   $use_case_text = <<<EOT
 These are the most common ways Drupal is being used at UC Berkeley.  
 Think about which case applies to your site, and then consider the configuration
@@ -206,7 +206,7 @@ EOT;
   $out .= ucberkeley_cas_fieldset("Login Blocks", ucberkeley_cas_login_blocks_recommendations());
 
   /* Logout caslogout */
-  $out .= ucberkeley_cas_fieldset("Logout Behavior", ucberkeley_cas_logout_recommendations());
+  $out .= ucberkeley_cas_fieldset("More on UC Berkeley CAS", ucberkeley_cas_more_help());
   return $out;
 }
 
@@ -347,29 +347,9 @@ function ucberkeley_cas_fieldset($title, $content, $collapsible = TRUE, $expande
 /**
  * Logout info
  */
-function ucberkeley_cas_logout_recommendations() {
+function ucberkeley_cas_more_help() {
   $out = <<<EOT
-There are two logout options:
-<ol>
-<li>The most secure logout configuration is to send the user to http://auth.berkeley.edu/logout when they logout of Drupal.  This destroys their
-CAS ticket.  It means that they will have to type their username/password into the Calnet login form again the next time they want to login 
-to the site.</li>
-
-<li>The alternative to this is simply to log the user out of Drupal but not to send them to http://auth.berkeley.edu/logout.  This means that their 
-CAS ticket will remain in their browser.  If they return to the site's login link they will be logged in immediately without needing to re-enter their 
-username/password. </li>
-</ol>
-<p>
-Scenario #2 is considered <b>less secure than #1</b>. The reason is that if Jane is at a public terminal at the library the next person to use that computer
-could click the back button and be logged in as Jane.  If Jane doesn't use a screen lock and leaves her computer unattended, the same 
-scenario could occur.
-</p>
-<p>
-However some websites want to use "single signon." If that is the case, they may want to use scenario #2 above.
-<p>
-<b>UCB CAS has configured your site to use the first option.</b> If you want to change that, <a href="/admin/config/search/path" target="_new">go to the url 
-aliases page</a>, filter on 'logout' and delete the alias.  (If you change your mind later, you can either 1) manually re-create the alias or 
-2) disable, uninstall, and re-enable the ucberkeley_cas module.)
+The <a href="https://github.com/ucb-ist-drupal/ucberkeley_cas-7/tree/master" target="_new">UC Berkeley CAS README</a> contains detailed information about using this module.
 EOT;
 
   return $out;

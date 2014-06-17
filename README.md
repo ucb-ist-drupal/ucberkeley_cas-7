@@ -34,6 +34,7 @@
 *  [The UC Berkeley Environment Configurations module](#envconf)
 *  [FAQ/Troubleshooting](#faq)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
+	*  [Q. I get a "Not Found" error when I try to visit user/admin\_login?](#admin_login_notfound)
 	*  [Q. I get the error Access Denied when I try to visit user/admin\_login?](#admin_login_denied)
 	*  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
 	*  [Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org.](#ldap_not_exist)
@@ -41,6 +42,7 @@
 	*  [Q. When logging in I get the error "user warning: Duplicate entry](#user_dup_entry)
 	*  [Q. When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this?](#validation_email)
 	*  [Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information?](#envconf_drush)
+	*  [Q. When trying to use Libraries API with ucberkeley_cas I got a blank white screen.](#libraries_wsod)
 *  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
 
@@ -126,9 +128,6 @@ CalNet. Make sure your registration is approved before you install UC Berkeley C
 on a production site.
 
 Pantheon customers can use [this email template with default Pantheon settings](https://wikihub.berkeley.edu/display/drupal/Launch+your+Pantheon+site?src=search#LaunchyourPantheonsite-RegisterforCalNetauthentication).  Non-Pantheon customers can use [this generic template](https://wikihub.berkeley.edu/display/calnet/CAS+Registration).
-
-Answering "Yes" to the "Requires Re-authentication" is considered the best
-practice for UC Berkeley Drupal sites. For more about this see [Logout Behavior](#Logout_Behavior).
 
 ### Localhost Sites Do Not Require Registration ###
 
@@ -408,38 +407,31 @@ configurations notes below.
 
 Site path: admin/config/people/cas:
 
-<a name="Logout_Behavior">
+<a name="logout_behavior">
 ### Logout Behavior ###
 </a>
-As mentioned in the CalNet Registration section, requesting that the
-UC Berkeley CAS server "require re-authentication" for your site is
-the most secure way of configuring your Drupal site. With this
-configuration in place, when a logged in user clicks the logout link
-on your site they will not be able to log back into your site until
-they enter their CalNet username and password again. Without this
-configuration in place if a user logs out of your site it is possible
-for them to login again (while their Drupal login session is still
-valid) by simply revisiting the /cas url which (in this situation)
-will not prompt them for their password again. This scenario is
-undesirable especially when the logged in user is at a public computer
-(e.g. in a library) or if they don't lock their screen when they leave
-their computer.
 
-By default UC Berkeley CAS creates a URL Alias that redirects the
-"/user/logout" to "/caslogout." This alias is present to mimic the
-the "require re-authentication" behavior for sites that *did not*
-specify "require re-authentication: yes" in their CAS registration
-form.  Relying on these aliases for security is acceptable, but this
-makes logging back into the site after logout a bit less convenient.
+By default UC Berkeley CAS creates a URL Alias (at
+admin/config/search/path) that redirects the "/user/logout" to
+"/caslogout." With this configuration in place, when a logged in user
+clicks the logout link on your site they will not be able to log back
+into your site until they enter their CalNet username and password
+again. Using this alias is considered a best practice for UC Berkeley
+Drupal sites.
 
-If your site is using "require re-authentication" the presence of the
-above alias will not negatively affect your site. However it will mean
-that users are redirected to a generic CAS Logout page when they
-follow your logout link.  If you have specified "require
-re-authentication" and you want your users to be redirected to, for
-example, your site's home page after logout, you can 1. delete the
-logout alias at /admin/config/search/path and then 2. specify the
-logout destination at /admin/config/people/cas Login/Logout Destinations.
+The above configuration is not compatible with "single sign-on"
+scenarios. Configuring a UC Berkeley Drupal site to participate in
+"single sign-on" is not recommended. However, removing the above alias
+will provide this behavior.
+
+Without this alias in place if a user logs out of your site it is
+possible for them to login again (while their Drupal login session is
+still valid) by simply revisiting the /cas url which will not prompt
+them for their password again. This configuration is considered less
+secure. It opens up the possibility of unauthorized access if users
+login from public computers (e.g. in a library) or if they don't lock
+their screen when they leave their computer.
+
 
 <a name="initial_login">
 ### Initial login destination and Logout destination ###
@@ -568,6 +560,12 @@ Live environments. To manage this manually make these changes at:
 </a>
 A. Two reasons: 1. this module bundles phpCAS which cannot be served from drupal.org for licensing reasons. 2. this module is specific to using Druapl at UC Berkeley and is not useful to the wider Drupal community.
 
+<a name = "admin_login_notfound">
+## Q. I get a "Not Found" when I try to login at user/admin_login ##
+</a>
+
+This can happen if your site is not using clean urls.  Try accessing the administrator back door at http://example.com/?q=/user/admin_login. (Consider enabling clean urls at /?q=admin/config/search/clean-urls.)
+
 <a name = "admin_login_denied">
 ## Q. I get the error Access denied when I try to login at user/admin_login ##
 </a>
@@ -631,6 +629,14 @@ see the right value.
 Theoretically you could get the correct value with 
 
 drush @somealias php-eval "echo variable\_get('cas\_server', NULL);"
+
+<a name="libraries_wsod">
+## Q. When trying to use Libraries API with ucberkeley_cas I got a blank white screen. ##
+</a>
+
+See https://drupal.org/node/1394666#comment-8886961
+
+("WSOD" = "White Screen of Death")
 
 <a name = "bugs">
 # Reporting Bugs #
