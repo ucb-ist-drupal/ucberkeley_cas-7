@@ -42,6 +42,7 @@
 	*  [Q. When logging in I get the error "user warning: Duplicate entry](#user_dup_entry)
 	*  [Q. When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this?](#validation_email)
 	*  [Q. Why does the command 'drush @somealias vget cas\_server' retrun the wrong information?](#envconf_drush)
+	*  [Q. When trying to use Libraries API with ucberkeley_cas I got a blank white screen.](#libraries_wsod)
 *  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
 
@@ -628,6 +629,14 @@ see the right value.
 Theoretically you could get the correct value with 
 
 drush @somealias php-eval "echo variable\_get('cas\_server', NULL);"
+
+<a name="libraries_wsod">
+## Q. When trying to use Libraries API with ucberkeley_cas I got a blank white screen. ##
+</a>
+
+See https://drupal.org/node/1394666#comment-8886961
+
+("WSOD" = "White Screen of Death")
 
 <a name = "bugs">
 # Reporting Bugs #
