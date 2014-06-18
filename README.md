@@ -34,9 +34,10 @@
 *  [The UC Berkeley Environment Configurations module](#envconf)
 *  [FAQ/Troubleshooting](#faq)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
-	*  [Q. I get a "Not Found" error when I try to visit user/admin\_login?](#admin_login_notfound)
+    *  [Q. I get a "Not Found" error when I try to visit user/admin\_login?](#admin_login_notfound)
 	*  [Q. I get the error Access Denied when I try to visit user/admin\_login?](#admin_login_denied)
-	*  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
+	*  [Q. Why do I sometimes get incorrectly bounced to the CalNet login page when I visit my site's homepage?](#incorrect_bounce)
+    *  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
 	*  [Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org.](#ldap_not_exist)
 	*  [Q. When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_](#ldap_servers_version)
 	*  [Q. When logging in I get the error "user warning: Duplicate entry](#user_dup_entry)
@@ -578,6 +579,22 @@ This can happen if you managed to enable ucberkeley\_cas and you still have the 
 4. enable ucberkeley_cas
 
 [See the section on upgrading](#1.x_2.x).
+
+<a name="incorrect_bounce">
+## Why do I sometimes get incorrectly bounced to the CalNet login page when I visit my site's homepage? ##
+</a>
+
+Steps like these repeat the problem:
+
+1. From Pantehon dashboard of site click "Visit onucb-324" and see the site homepage.
+2. Select all and copy the location bar (url)
+3. Reload the page and see the CAS login page (incorrect)
+4. Cmd-L, Cmd-A, Cmd-V (replace the location bar with the site url) and click enter. See the site homepage
+5. Reload the page and see the CAS login page (incorrect)
+
+The cause of this is a bad cookie in your browser. Here are the steps to fix this in Chrome. (Similar steps should fix other browsers.):
+
+In Chrome goto Settings > Show Advanced > Privacy > Clear Browsing Data and remove all cookies in last 4 weeks (or since beginning of time).
 
 <a name = "drush_upc">
 ## Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)? ##
