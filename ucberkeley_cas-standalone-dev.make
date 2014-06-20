@@ -26,4 +26,4 @@ projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 ;;; DEV version, use HEAD of the bwood fork ;;;
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = ""
+projects[ucberkeley_cas][download][branch] = "master"
