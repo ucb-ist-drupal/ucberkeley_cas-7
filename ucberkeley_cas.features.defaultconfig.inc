@@ -116,14 +116,16 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   );
   $export['cas_attributes'] = $strongarm;
 
-  // Ensure that we have the correct rid for authenticated user.  The rid could be something other than "2"
-  $rid_auth_user = array_search('authenticated user', user_roles());
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_auto_assigned_role';
   $strongarm->value = array(
-    $rid_auth_user => 1,
+    2 => TRUE,
+    4 => 0,
+    5 => 0,
+    6 => 0,
+    3 => 0,
   );
   $export['cas_auto_assigned_role'] = $strongarm;
 
@@ -145,7 +147,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_check_first';
-  $strongarm->value = 1;
+  $strongarm->value = 0;
   $export['cas_check_first'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -201,7 +203,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_library_use_libraries';
-  $strongarm->value = 0;
+  $strongarm->value = '0';
   $export['cas_library_use_libraries'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -245,6 +247,13 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->name = 'cas_logout_destination';
   $strongarm->value = '<front>';
   $export['cas_logout_destination'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'cas_pages';
+  $strongarm->value = '';
+  $export['cas_pages'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
