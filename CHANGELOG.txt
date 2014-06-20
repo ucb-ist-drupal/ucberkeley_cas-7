@@ -1,3 +1,8 @@
+ucberkeley_cas 7.x-2.1-beta2
+=============================
+* OPENUCB-273
+** Apply https://www.drupal.org/node/2057881 which prevents an Ajax error during the install_profile_modules task of openberkeley.profile
+** Refactor build script and makefiles.
 
 ucberkeley_cas 7.x-2.1-beta1
 =============================
