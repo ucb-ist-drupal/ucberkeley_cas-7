@@ -1,0 +1,36 @@
+From f9afeef79b2f5048d97ff2368601d53724566f9c Mon Sep 17 00:00:00 2001
+From: Brian Wood <bwood@berkeley.edu>
+Date: Fri, 20 Jun 2014 16:18:43 -0700
+Subject: [PATCH] Compute the rid of Authenticated User in defaultconfig
+
+---
+ ucberkeley_cas.features.defaultconfig.inc | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/ucberkeley_cas.features.defaultconfig.inc b/ucberkeley_cas.features.defaultconfig.inc
+index acc78bf..b2c1252 100644
+--- a/ucberkeley_cas.features.defaultconfig.inc
++++ b/ucberkeley_cas.features.defaultconfig.inc
+@@ -116,16 +116,14 @@ function ucberkeley_cas_defaultconfig_strongarm() {
+   );
+   $export['cas_attributes'] = $strongarm;
+ 
++  // Ensure that we have the correct rid for authenticated user.  The rid could be something other than "2"
++  $rid_auth_user = array_search('authenticated user', user_roles());
+   $strongarm = new stdClass();
+   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+   $strongarm->api_version = 1;
+   $strongarm->name = 'cas_auto_assigned_role';
+   $strongarm->value = array(
+-    2 => TRUE,
+-    4 => 0,
+-    5 => 0,
+-    6 => 0,
+-    3 => 0,
++    $rid_auth_user => 1,
+   );
+   $export['cas_auto_assigned_role'] = $strongarm;
+ 
+-- 
+1.8.3.4 (Apple Git-47)
+
