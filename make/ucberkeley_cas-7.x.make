@@ -8,7 +8,8 @@ libraries[phpcas][download][url] = "http://downloads.jasig.org/cas-clients/php/c
 ; CAS
 projects[cas][type] = module
 projects[cas][version] = 1.2
-projects[cas][patch][1394666-cas_library_path-15.patch] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
+projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
+projects[cas][patch][2057881] = "https://drupal.org/files/cas-profile_install-2057881-1.patch"
 
 ; CAS Attributes
 projects[cas_attributes][type] = module
