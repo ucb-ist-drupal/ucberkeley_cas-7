@@ -1,3 +1,13 @@
+ucberkeley_cas 7.x-2.1-beta2
+=============================
+* OPENUCB-273
+** Apply https://www.drupal.org/node/2057881 which prevents an Ajax error during the install_profile_modules task of openberkeley.profile
+* OPENUCB-328
+** Disable the "Gateway" option in CAS 1.3 (Redirection >  "Check with the CAS server to see if the user is already logged in?").
+   Using this in combination with "Automatically create Drupal accounts" can result in random user accounts being created when a user
+   with a valid CAS ticket visits a page on a site with Drupal's CAS module configured this way.
+** Do not require "access content" permission to visit the administrator backdoor. Some sites may deny that permission to anonymous.
+** Refactor build script and makefiles.
 
 ucberkeley_cas 7.x-2.1-beta1
 =============================

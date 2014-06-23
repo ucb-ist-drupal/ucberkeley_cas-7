@@ -112,7 +112,7 @@ function ucberkeley_cas_menu() {
   $items['user/admin_login'] = array(
     'title' => 'Admin Login',
     'page callback' => 'ucberkeley_cas_admin_login_page',
-    'access arguments' => array('access content'),
+    'access callback' => TRUE, // anonymous needs access to this path
     'type' => MENU_CALLBACK,
   );
   $items['admin/config/people/ucberkeley_cas'] = array(
