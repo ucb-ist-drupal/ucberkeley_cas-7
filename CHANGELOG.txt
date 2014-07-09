@@ -1,3 +1,8 @@
+ucberkeley_cas 7.x-2.1-beta3
+=============================
+* OPENUCB-355
+** Remove ucberkeley_cas.make to prevent openberkeley.make from building this project.
+
 ucberkeley_cas 7.x-2.1-beta2
 =============================
 * OPENUCB-273
