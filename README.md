@@ -32,6 +32,7 @@
         *  [Drupal Login Invitation](#drupal_login)
     *  [Cas Attributes configuration](#cas_attributes)
         *  [Fetch CAS Attributes](#fetch_cas)
+*  [Building this module with 'drush make'](#drushmake)
 *  [The UC Berkeley Environment Configurations module](#envconf)
 *  [FAQ/Troubleshooting](#faq)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
@@ -530,6 +531,15 @@ first login of a CAS user)."This means that a user can edit their
 Drupal profile (assuming they have permission to do so) and change the
 name or email address that we found for them in LDAP.  Their edits
 will not be over written by a new LDAP lookup on their next login.
+
+<a name = "drushmake">
+# Building this module with 'drush make'#
+</a>
+
+The fact that there is not a ucberkeley_cas.make file included here is
+intentional.  When we build the Open Berkeley distribution we do not want drush
+make to discover a makefile in here and build it. Instead we want to use the
+product of ucberkeley_cas-standalone.make.  See rebuild.sh.
 
 <a name = "envconf">
 # The UC Berkeley Environment Configurations module #

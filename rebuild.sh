@@ -7,17 +7,11 @@ MAKEFILE="ucberkeley_cas-standalone.make"
 
 echo "\nSelect your build mode.\n"
 echo "  [1] Build in stand-alone mode mode. (This is what Open Berkeley uses.)"
-echo "  [2] Build in distribution-friendly mode. (Allows for drush make recursion if called from parent makefile.)"
-echo "  [3] Build in development mode using ...standalone-dev.make.\n"
+echo "  [2] Build in development mode using ...standalone-dev.make.\n"
 echo "Selection (default: 1): \c"
 read SELECTION
 
 if [ "$SELECTION" == "2" ];
-then
-  MAKEFILE="ucberkeley_cas.make"
-fi
-
-if [ "$SELECTION" == "3" ];
 then
   MAKEFILE="ucberkeley_cas-standalone-dev.make"
 fi
