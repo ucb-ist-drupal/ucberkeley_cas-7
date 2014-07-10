@@ -39,6 +39,11 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
         }
       }
       break;
+    case 'cas_add_user_form':
+      $form['account']['cas_name_txt']['#markup'] = 'To find the CAS User ID for a UC Berkeley employee visit the ' . l("CalNet Directory", 'https://calnet.berkeley.edu/directory/index.pl', array('attributes' => array('target'=>'_blank'))) . " and search for the person.  In your search results click on the person's name. At the top of the page you should see <em>Details for Jane Smith (UID: 111111)</em>. Copy that UID number and paste it in to the CAS User ID box below.";
+      $form['account']['cas_name']['#title'] = "CAS User ID";
+      $form['account']['cas_name']['#description'] = "In order to create a new CalNet (CAS) authenticated user, just enter the person's CAS UID here. " . $form['account']['cas_name']['#description'];
+      break;
   }
 }
 

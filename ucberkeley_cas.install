@@ -128,19 +128,19 @@ function ucberkeley_cas_install() {
 
   if (variable_get("clean_url", 0) == 0) {
     drupal_set_message(t("Clean URLs are disabled on this site.  Consider enabling them at /?q=admin/config/search/clean-urls."), "warning");
-    drupal_set_message(t("Your administrator backdoor is at /?q=user/admin_login."), "warning");
     //drush-friendly link
     drupal_set_message(t("<em>Unauthenticated</em> users can now login via CAS at the path ?q=@login_path.", array("@login_path" => $login_path)));
+    drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
+    drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf")));
     drupal_set_message(t("View UC Berkeley CAS recommendations at the path ?q=@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)));
   }
   else {
     //drush-friendly link
     drupal_set_message(t("<em>Unauthenticated</em> users can now login via CAS at the path /@login_path.", array("@login_path" => $login_path)));
+    drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
+    drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf")));
     drupal_set_message(t("View UCB Berkeley CAS recommendations at ") . l(t("/@admin_ucbcas_path", array("@admin_ucbcas_path" => $admin_ucbcas_path)), $admin_ucbcas_path) . '.');
   }
-  drupal_set_message(t("Please follow the instructions to create a Calnet-enabled administrator: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#setup_a")));
-  drupal_set_message(t("If you will host this site on Pantheon, please see: " . l("https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf", "https://github.com/ucb-ist-drupal/ucberkeley_cas-7#envconf")));
-
   // Set a flag so that we know installation has just completed.  Process the flag in ucberkeley_cas_init()
   $_SESSION['ucberkeley_cas_installed'] = TRUE;
 }
