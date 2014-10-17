@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the UC Berkeley CAS feature.
+ */
+
+include_once 'ucberkeley_cas.features.inc';
 define('CHANGE_TEXT', '<font color = "red">consider changing your settings.</font>');
 define('GOOD_TEXT', '<font color = "green">your settings are probably good.</font>');
 
