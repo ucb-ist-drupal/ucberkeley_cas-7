@@ -3,7 +3,7 @@ core = 7.x
 
 ; phpCAS library
 libraries[phpcas][download][type] = "get"
-libraries[phpcas][download][url] = "http://downloads.jasig.org/cas-clients/php/current/CAS-1.3.2.tgz"
+libraries[phpcas][download][url] = "http://downloads.jasig.org/cas-clients/php/current/CAS-1.3.3.tgz"
 
 ; CAS
 projects[cas][type] = module
@@ -24,6 +24,6 @@ projects[ldap][version] = 1.0-beta12
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
-projects[ucberkeley_cas][download][url] = "git@github.com:ucb-ist-drupal/ucberkeley_cas-7.git"
+projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
 projects[ucberkeley_cas][download][branch] = "master"
-projects[ucberkeley_cas][download][tag] = "7.x-2.1-beta3"
+projects[ucberkeley_cas][download][tag] = "7.x-2.1-beta4"

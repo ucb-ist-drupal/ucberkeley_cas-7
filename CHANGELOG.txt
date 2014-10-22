@@ -1,3 +1,13 @@
+ucberkeley_cas 7.x-2.1-beta4
+=============================
+* OPENUCB-473
+** Upgrade to phpCAS 1.3.3. https://www.mail-archive.com/cas-user@lists.jasig.org/msg17338.html
+* OPENUCB-106
+** Prevent activation emails sent when accounts are unblocked
+* Improve rebuild.sh: Parse version from .info and create tarball
+* Makefiles changed to use github.com/bwood. (Will change back to ucb-ist-drupal after open source petition.)
+
+
 ucberkeley_cas 7.x-2.1-beta3
 =============================
 * OPENUCB-355

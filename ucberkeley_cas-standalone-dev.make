@@ -3,7 +3,7 @@ core = 7.x
 
 ; phpCAS library
 libraries[phpcas][download][type] = "get"
-libraries[phpcas][download][url] = "http://downloads.jasig.org/cas-clients/php/current/CAS-1.3.2.tgz"
+libraries[phpcas][download][url] = "http://downloads.jasig.org/cas-clients/php/current/CAS-1.3.3.tgz"
 
 ; CAS
 projects[cas][type] = module
@@ -29,4 +29,4 @@ projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
 
 ;;; Want to change this? ;;;
-projects[ucberkeley_cas][download][branch] = "master"
+projects[ucberkeley_cas][download][branch] = "openucb-106-2"
