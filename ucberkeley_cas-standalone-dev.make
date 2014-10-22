@@ -29,4 +29,4 @@ projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
 
 ;;; Want to change this? ;;;
-projects[ucberkeley_cas][download][branch] = "openucb-106-cas-email"
+projects[ucberkeley_cas][download][branch] = "openucb-106-2"
