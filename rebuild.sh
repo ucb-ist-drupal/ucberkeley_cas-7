@@ -4,6 +4,9 @@
 # sh rebuild.sh /some/directory
 
 MAKEFILE="ucberkeley_cas-standalone.make"
+AWK=${AWK:-awk}
+TAR=${TAR:-tar}
+LS=${LS:-ls}
 
 echo "\nSelect your build mode.\n"
 echo "  [1] Build in stand-alone mode mode. (This is what Open Berkeley uses.)"
@@ -38,12 +41,29 @@ then
   rm -rf $BUILD_DIR/ucberkeley_cas
 fi
 
-drush make -y --no-core --no-cache --contrib-destination=. $MAKEFILE $BUILD_DIR/build_ucberkeley_cas
+#drush make -y --no-core --no-cache --contrib-destination=. $MAKEFILE $BUILD_DIR/build_ucberkeley_cas
 mv $BUILD_DIR/build_ucberkeley_cas/modules/* $BUILD_DIR
 mv $BUILD_DIR/cas* $BUILD_DIR/ucberkeley_cas/
 mv $BUILD_DIR/ldap $BUILD_DIR/ucberkeley_cas/
 mv $BUILD_DIR/build_ucberkeley_cas/libraries/phpcas/CAS* $BUILD_DIR/ucberkeley_cas/cas/CAS
 rm -rf $BUILD_DIR/build_ucberkeley_cas
 rm $BUILD_DIR/ucberkeley_cas/.gitignore
+cd $BUILD_DIR
+VER=`$AWK -F = '/version =.*$/{gsub(/ /, "", $0); print $2}' ucberkeley_cas/ucberkeley_cas.info`
+echo ""
+while [[ ! "$CONFIRM" == "y" ]] && [[ ! "$CONFIRM" == "n" ]]; do
+  echo "Create this tarball: ucberkeley_cas-$VER.tar.gz? (y/n)"
+  read CONFIRM
+done
 
+if [ "$CONFIRM" == "y" ];then
+  $TAR zcf ucberkeley_cas-$VER.tar.gz ucberkeley_cas
+else
+  echo "Okay, no tarball."
+fi
+
+echo ""
+echo "$LS $BUILD_DIR/ucberkeley_cas* :"
+echo ""
+$LS $BUILD_DIR/ucberkeley_cas*
 

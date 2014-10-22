@@ -54,7 +54,7 @@
 # Downloading the latest release #
 </a>
 
-You can download the latest release on our [releases page](https://github.com/ucb-ist-drupal/ucberkeley_cas-7/releases).
+You can download the latest release on our [releases page](https://github.com/bwood/ucberkeley_cas-7/releases).
 
 <a name="purpose">
 # Purpose #
