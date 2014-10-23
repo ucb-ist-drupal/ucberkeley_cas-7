@@ -1,6 +1,7 @@
 # UC Berkeley CAS 7.x #
 
 *   [Downloading the latest release](#downloading)
+*   [Learning about releases](#releases)
 *   [Purpose]("#purpose")
     *   [Enhanced Security](#enhanced_security)
 *   [Quick Start](#quick_start)
@@ -55,6 +56,12 @@
 </a>
 
 You can download the latest release on our [releases page](https://github.com/bwood/ucberkeley_cas-7/releases).
+
+<a name="releases">
+# Learning about Releases #
+</a>
+
+For now there is an [announcement list](https://calmail.berkeley.edu/manage/list/listinfo/ucberkely-cas-drupal-users@lists.berkeley.edu).
 
 <a name="purpose">
 # Purpose #
