@@ -36,7 +36,7 @@
 *  [Building this module with 'drush make'](#drushmake)
 *  [The UC Berkeley Environment Configurations module](#envconf)
 *  [FAQ/Troubleshooting](#faq)
-	*  [Q. How can I be altered when there is an new release of UC Berkeley CAS?](#info_updates)
+	*  [Q. How can I be alerted when there is an new release of UC Berkeley CAS?](#info_updates)
 	*  [Q. I notice that there are upgrades available for some of these modules. Is it safe to upgrade them?](#upgrade_modules)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
   *  [Q. Lots of user accounts are being created on my site.](#autocreate_gateway)
@@ -586,7 +586,7 @@ Live environments. To manage this manually make these changes at:
 </a>
 
 <a name = "info_updates">
-## Q. How can I be altered when there is an new release of UC Berkeley CAS? ##
+## Q. How can I be alerted when there is an new release of UC Berkeley CAS? ##
 </a>
 Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu).
 
