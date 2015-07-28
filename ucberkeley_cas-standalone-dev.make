@@ -24,9 +24,5 @@ projects[ldap][version] = 1.0-beta12
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
-
-;;; DEV version, use HEAD of the bwood fork ;;;
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-
-;;; Want to change this? ;;;
-projects[ucberkeley_cas][download][branch] = "openucb-106-2"
+projects[ucberkeley_cas][download][branch] = "develop"
