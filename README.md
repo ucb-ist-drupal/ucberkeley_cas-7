@@ -36,9 +36,11 @@
 *  [Building this module with 'drush make'](#drushmake)
 *  [The UC Berkeley Environment Configurations module](#envconf)
 *  [FAQ/Troubleshooting](#faq)
+	*  [Q. How can I be alerted when there is an new release of UC Berkeley CAS?](#info_updates)
+	*  [Q. I notice that there are upgrades available for some of these modules. Is it safe to upgrade them?](#upgrade_modules)
 	*  [Q. Why isn't ucberkeley\_cas hosted on http://drupal.org](#hosted_do)
-    *  [Q. Lots of user accounts are being created on my site.](#autocreate_gateway)
-    *  [Q. I get a "Not Found" error when I try to visit user/admin\_login?](#admin_login_notfound)
+  *  [Q. Lots of user accounts are being created on my site.](#autocreate_gateway)
+  *  [Q. I get a "Not Found" error when I try to visit user/admin\_login?](#admin_login_notfound)
 	*  [Q. I get the error Access Denied when I try to visit user/admin\_login?](#admin_login_denied)
 	*  [Q. Why do I sometimes get incorrectly bounced to the CalNet login page when I visit my site's homepage?](#incorrect_bounce)
   *  [Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)?](#drush_upc)
@@ -582,6 +584,18 @@ Live environments. To manage this manually make these changes at:
 <a name = "faq">
 # FAQ/Troubleshooting #
 </a>
+
+<a name = "info_updates">
+## Q. How can I be alerted when there is an new release of UC Berkeley CAS? ##
+</a>
+Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu).
+
+
+<a name = "upgrade_modules">
+##Q. I notice that there are upgrades available for some of these modules. Is it safe to upgrade them? ##
+</a>
+
+There are 2 kinds of releases for modules: Feature release (yellow on your Available Updates page) and Security release (red on your Available Updates page).  We always upgrade ucberkeley_cas when there are  security releases.  We only update the ucberkeley_cas with feature releases when we need the new functionality that they provide. It’s safest to leave them at their present versions.  The ucberkeley_cas feature has not been tested with the later versions of these modules.  We can’t guarantee that it will work.
 
 <a name = "hosted_do">
 ## Q. Why isn't ucberkeley\_cas hosted on http://drupal.org ##
