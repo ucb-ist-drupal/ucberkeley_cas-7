@@ -1,3 +1,9 @@
+ucberkeley_cas 7.x-2.1
+======================
+* OPENUCB-768 remove ldap-test.berkeley.edu configuration.  Ldap-test is
+  sporadically unavailable.  CalNet team approves us using production LDAP
+  server in Dev and Test environments.
+
 ucberkeley_cas 7.x-2.1-beta4
 =============================
 * OPENUCB-473
