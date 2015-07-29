@@ -153,3 +153,16 @@ function ucberkeley_cas_uninstall() {
   $alias = array('source' => 'caslogout', 'alias' => 'user/logout');
   path_delete($alias);
 }
+
+/**
+ * Revert ucberkeley_cas.feature
+ */
+function ucberkeley_cas_update_7000(&$sandbox) {
+  $messages = array();
+
+  // cas_attributes was moved from defaultconfig to strongarm. A revert is
+  // needed to ensure that the value is set when updating a site.
+  features_revert(array('ucberkeley_cas' => array('variable')));
+
+  return implode('<br />', $messages);
+}
