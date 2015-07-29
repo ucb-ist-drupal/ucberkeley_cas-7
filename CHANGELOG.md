@@ -1,5 +1,11 @@
-ucberkeley_cas 7.x-2.x-dev
-======================
+ucberkeley_cas 7.x-2.2-rc1
+==========================
+* OPENUCB-768: Move cas_attributes from defaultconfig to strongarm.  Add update
+  hook to revert the feature.  This compliments the ucberkeley_envconf 2.2 which
+  no does no management of cas_attributes. This change resovles a bug in version
+  2.1 which yeilded blank cas_attributes for CAS administrators added during 
+  'drush site-install'.
+
 
 ucberkeley_cas 7.x-2.1
 ======================

@@ -69,22 +69,6 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->value = '0';
   $export['cas_access'] = $strongarm;
 
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'cas_attributes';
-  $strongarm->value = array(
-    'sync_every_login' => '0',
-    'relations' => array(
-      'name' => '[cas:ldap:displayname]',
-      'mail' => '[cas:ldap:mail]',
-    ),
-    'ldap' => array(
-      'server' => 'ucb_test',
-    ),
-  );
-  $export['cas_attributes'] = $strongarm;
-
   // Ensure that we have the correct rid for authenticated user.  The rid could be something other than "2"
   $rid_auth_user = array_search('authenticated user', user_roles());
   $strongarm = new stdClass();
