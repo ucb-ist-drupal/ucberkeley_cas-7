@@ -1,3 +1,6 @@
+ucberkeley_cas 7.x-2.x-dev
+==========================
+
 ucberkeley_cas 7.x-2.2
 ======================
 * OPENUCB-768: Move cas_attributes from defaultconfig to strongarm.  Add update
