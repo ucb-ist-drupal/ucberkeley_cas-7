@@ -5,8 +5,8 @@
  */
 
 include_once 'ucberkeley_cas.features.inc';
-define('CHANGE_TEXT', '<font color = "red">consider changing your settings.</font>');
-define('GOOD_TEXT', '<font color = "green">your settings are probably good.</font>');
+define('CHANGE_TEXT', '<span style="color:red">consider changing your settings.</span>');
+define('GOOD_TEXT', '<span style="color:green">your settings are probably good.</span>');
 
 /**
  * Implementation of hook_init()
