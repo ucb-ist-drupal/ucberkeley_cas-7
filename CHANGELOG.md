@@ -6,7 +6,7 @@ ucberkeley_cas 7.x-2.2
 * OPENUCB-768: Move cas_attributes from defaultconfig to strongarm.  Add update
   hook to revert the feature.  This compliments the ucberkeley_envconf 2.2 which
   no does no management of cas_attributes. This change resovles a bug in version
-  2.1 which yeilded blank cas_attributes for CAS administrators added during 
+  2.1 which yeilded blank cas_attributes for CAS administrators added during
   'drush site-install'.
 
 
@@ -76,7 +76,7 @@ ucberkeley_cas 7.x-2.0-alpha4
 ucb_cas 7.x-1.3-beta2
 ===================
 * DUPCODE-47: clean up auto_assigned roles.  If you created a new role after installing ucb_cas
-newly added users were automatically assigned the new role in some situations. Take a look at 
+newly added users were automatically assigned the new role in some situations. Take a look at
 /admin/config/people/cas > User Accounts and ensure that the correct roles are selected there.
 
 ucb_cas 7.x-1.3-beta1

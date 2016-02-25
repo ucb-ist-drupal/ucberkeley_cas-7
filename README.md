@@ -7,7 +7,7 @@
 *   [Quick Start](#quick_start)
 *   [Requirements](#requirements)
     *   [UC Berkeley CalNet Registration](#registration)
-*   [Installation](#installation) 
+*   [Installation](#installation)
 *   [Setup a CalNet-authenticated Administrator](#setup_a)
 *   [Administrator "back door"](#back_door)
 *   [Upgrading](#upgrading)
@@ -17,8 +17,8 @@
     *   [My site already users CAS, and I want to switch to ucberkeley\_cas](#my_sitealready)
 *   [Uninstalling](#uninstalling)
     *   [Avoid uninstalling the cas module](#avoid_uninstall)
-*   [Standard Configuration](#standard_configuration) 
-    *   [The Authenticated User Role](#authenticated_user) 
+*   [Standard Configuration](#standard_configuration)
+    *   [The Authenticated User Role](#authenticated_user)
     *   [Combining Drupal Standard Authentication with CAS](#mixed_mode)
     *   [Use Case Recommendations](#use_case)
 *  [Configuration Details](#configuration_details)
@@ -136,8 +136,8 @@ Specific versions of the above modules are specified in ucberkeley_cas-7.x.make.
 <a name="registration">
 ## CalNet Registration ##
 </a>
-In order to use CalNet authentication, your website must be registered with 
-CalNet. Make sure your registration is approved before you install UC Berkeley CAS 
+In order to use CalNet authentication, your website must be registered with
+CalNet. Make sure your registration is approved before you install UC Berkeley CAS
 on a production site.
 
 Pantheon customers can use [this email template with default Pantheon settings](https://wikihub.berkeley.edu/display/drupal/Launch+your+Pantheon+site?src=search#LaunchyourPantheonsite-RegisterforCalNetauthentication).  Non-Pantheon customers can use [this generic template](https://wikihub.berkeley.edu/display/calnet/CAS+Registration).
@@ -164,7 +164,7 @@ server auth-test.berkeley.edu.
 If your site runs at http://EXAMPLE.berkeley.edu, go to
 http://EXAMPLE.berkeley.edu/cas.  You should see the CAS login
 page.  When you authenticate successfully you should be returned to
-your Drupal site and you should see "Logged in as \[your name\]." 
+your Drupal site and you should see "Logged in as \[your name\]."
 
 Go to http://EXAMPLE.berkeley.edu/user.  You should see the email
 address and full name that was retrieved from LDAP for your account.
@@ -182,7 +182,7 @@ up:
 
 1. Log into your site as User 1 and enable the UC Berkeley CAS module.
 2. Using a different browser (e.g. Firefox, if you did step 1 using Chrome), visit your CAS url which will be something like http://EXAMPLE.berkeley.edu/cas. When you successfully authenticate using CAS a new Drupal user will be created that is associated with your CalNet credentials.
-3. Back in your first browser (e.g. Chrome if you did step 2 using Firefox) where you are still logged in as User 1, visit your people page.  The url for this page is something like http://EXAMPLE.berkeley.edu/admin/people. You should see a new user with a username matching your first and last names. Click the "edit" link to the right of this user and assign it the administrator role. 
+3. Back in your first browser (e.g. Chrome if you did step 2 using Firefox) where you are still logged in as User 1, visit your people page.  The url for this page is something like http://EXAMPLE.berkeley.edu/admin/people. You should see a new user with a username matching your first and last names. Click the "edit" link to the right of this user and assign it the administrator role.
 5. Now in your first browser you can logout of the User 1 account and visit the CAS url (above) to log back in via CalNet. At this point you should be able to do anything that User 1 could do.
 
 Should something go wrong with CAS or the CAS module on your site, you can still login as User 1 using the [administrator back door](#back_door). (Please do not use the backdoor unless it is really necessary.)
@@ -233,7 +233,7 @@ The module UCB Berkeley CAS (ucberkeley_cas) can optionally be used with the UC 
 1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit.
 2. Download <a href="https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases">the latest version of UC Berkeley Environment Configurations</a>.
 3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles). (The 1.0 version was called ucb_envconf.  The 2.0 version is called ucberkeley\_envconf.)
-4. Unpack the new version of UC Berkeley Environment Configurations and copy it into /sites/all/modules (or your preferred module directory.) 
+4. Unpack the new version of UC Berkeley Environment Configurations and copy it into /sites/all/modules (or your preferred module directory.)
 5. Enable ucberkeley_envconf. (Running update.php is not necessary.)
 
 At this point your site will be using the latest version of UC Berkeley Environment Configurations.
@@ -316,7 +316,7 @@ data like:
   (3, 19, '212372');
 
 2. Uncheck the UC Berkeley CAS module on the Modules administration page and
-submit the form. 
+submit the form.
 
 3. Click the Uninstall tab at the top of the page and uninstall UCB
 CAS.
@@ -326,7 +326,7 @@ administration page and submitting the form.
 
 5. In phpMyAdmin select your database and choose the SQL tab. Replace
 the contents of the sql query text area with the insert statements
-from step 1. Submit the form. 
+from step 1. Submit the form.
 
 Now your existing CalNet-authenticated accounts should be able to
 login via CAS.
@@ -455,7 +455,7 @@ login/logout.
 
 <a name="automatically_create">
 ### Automatically create Drupal accounts ###
-</a>  
+</a>
 If you do not want Drupal to create accounts for every CalNet user who
 attempts to log in to your site, go to admin/config/people/cas, open
 the User Accounts section, and uncheck Automatically create Drupal
@@ -569,7 +569,7 @@ and Test sites on Pantheon use:
 * CAS Server: auth-test.berkeley.edu
 * LDAP Server: ldap-test.berkeley.edu
 
-and your Live site uses: 
+and your Live site uses:
 
 * CAS Server: auth.berkeley.edu
 * LDAP Server: ldap.berkeley.edu
@@ -645,7 +645,7 @@ In Chrome goto Settings > Show Advanced > Privacy > Clear Browsing Data and remo
 <a name = "drush_upc">
 ## Q. Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)? ##
 </a>
-A. For that to work the ucberkeley\_cas module would need to be hosted on http://drupal.org or another site that interfaces with this drupal update process.  
+A. For that to work the ucberkeley\_cas module would need to be hosted on http://drupal.org or another site that interfaces with this drupal update process.
 
 <a name = "ldap_not_exist">
 ## Q. This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org. ##
@@ -689,7 +689,7 @@ vget', you will encounter situations where 'drush vget' reports the
 wrong value.  If you visit the corresponding admin page, you should
 see the right value.
 
-Theoretically you could get the correct value with 
+Theoretically you could get the correct value with
 
 drush @somealias php-eval "echo variable\_get('cas\_server', NULL);"
 
