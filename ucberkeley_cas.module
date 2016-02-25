@@ -197,7 +197,7 @@ function ucberkeley_cas_admin() {
 
   $out = '<h2>' . t('UC Berkeley CAS Configuration Review') . '</h2>';
   $use_case_text = <<<EOT
-These are the most common ways Drupal is being used at UC Berkeley.  
+These are the most common ways Drupal is being used at UC Berkeley.
 Think about which case applies to your site, and then consider the configuration
 recommentations below.
 EOT;
@@ -255,9 +255,9 @@ EOT;
 <li>Additonally requiring a CAS login for certain nodes may be a good idea:</li>
   <ul>
   <li>For example if you have a webform at <b>node/1234</b> that requires the user to be logged in, you can add <b>node/1234</b>
-  to Redirection > Specific Pages, and select "Require CAS loogin for specific pages" on the <a href="/admin/config/people/cas" 
+  to Redirection > Specific Pages, and select "Require CAS loogin for specific pages" on the <a href="/admin/config/people/cas"
   target = "_new">CAS settings page</a>.
-  </li> 
+  </li>
   </ul>
 </ul>
 EOT;
@@ -274,7 +274,7 @@ EOT;
   $login_blocks_on_advice_off_2 = <<<EOT
 <b>If this site follows use case #2</b>,&nbsp;$change_text<br/>
 <ul>
-<li>Since users need to authenticate to your site, you should consider <a href="/admin/structure/block" target = "_new">enabling a login block</a>. 
+<li>Since users need to authenticate to your site, you should consider <a href="/admin/structure/block" target = "_new">enabling a login block</a>.
 (Make sure you have enabled the Core Block module.) Find the User Login block and set a region for it. (Then reload this page.)</li>
 <li>Alternatively, add a login link via your theme.</li>
 EOT;
