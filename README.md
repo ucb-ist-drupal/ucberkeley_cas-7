@@ -595,7 +595,9 @@ Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.be
 ##Q. I notice that there are upgrades available for some of these modules. Is it safe to upgrade them? ##
 </a>
 
-There are 2 kinds of releases for modules: Feature release (yellow on your Available Updates page) and Security release (red on your Available Updates page).  We always upgrade ucberkeley_cas when there are  security releases.  We only update the ucberkeley_cas with feature releases when we need the new functionality that they provide. It’s safest to leave them at their present versions.  The ucberkeley_cas feature has not been tested with the later versions of these modules.  We can’t guarantee that it will work.
+There are 2 kinds of releases for modules: Feature release (yellow on your Available Updates page) and Security release (red on your Available Updates page).  We usually upgrade ucberkeley_cas when there are  security releases.  We only update the ucberkeley_cas with feature releases when we need the new functionality that they provide. It’s safest to leave them at their present versions.  The ucberkeley_cas feature has not been tested with the later versions of these modules.  We can’t guarantee that it will work.
+
+In some situations we may defer upgrading these modules even when there is a security release available. One example would be if the security issue applys to the CAS server module which is typically disabled in our Open Berkeley product. 
 
 <a name = "hosted_do">
 ## Q. Why isn't ucberkeley\_cas hosted on http://drupal.org ##
