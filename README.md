@@ -586,9 +586,11 @@ Live environments. To manage this manually make these changes at:
 </a>
 
 <a name = "info_updates">
-## Q. How can I be alerted when there is an new release of UC Berkeley CAS? ##
+## Q. How can I be alerted when there is an new release of UC Berkeley CAS and how can I keep up with new developements? ##
 </a>
 Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu).
+
+You can also monitor this repository using Sibbell.com. Just as you might want to know immediately when a new release is issued for ucberkeley\_cas and ucberkeley\_envconf, the Open Berkeley team also needs to be alerted about releases for a number of GitHub-hosted projects. We’ve recently began monitoring GitHub releases using Sibbell.com (free) and we have been pleased with their service thus far. [More info on Sibbell here](http://www.davegaeddert.com/2014/10/11/sibbell-emails-for-new-releases-on-github/).
 
 
 <a name = "upgrade_modules">
