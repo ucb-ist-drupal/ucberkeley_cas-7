@@ -365,3 +365,26 @@ EOT;
 
   return $out;
 }
+
+/**
+ * Implements hook_user_update().
+ *
+ * Remove illegal characters from account names when updated.
+ */
+function ucberkeley_cas_user_update(&$edit, $account, $category) {
+  $username = $account->name;
+  // Trim leading and trailing whitespace. Convert multiple consecutive spaces
+  // into a single space.
+  $username = trim($username);
+  $username = preg_replace('/\s+/', ' ', $username);
+  // Strip characters according to the main pattern in user_validate_name().
+  $username = preg_replace('/[^\x{80}-\x{F7} a-z0-9@_.\'-]/i', '', $username);
+  // Other invalid characters are not likely to be present in usernames coming
+  // from CAS.
+
+  // The user only needs to be saved if there have been changes to the username.
+  if ($username != $account->name) {
+    $account->name = $username;
+    user_save($account);
+  }
+}
