@@ -1,5 +1,7 @@
 ucberkeley_cas 7.x-2.x-dev
 ==========================
+* OPENUCB-154: Strip illegal characters from CAS usernames.
+* Update README.
 
 ucberkeley_cas 7.x-2.2
 ======================
