@@ -63,7 +63,7 @@ You can download the latest release on our [releases page](https://github.com/bw
 # Learning about Releases #
 </a>
 
-For now there is an [announcement list](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu).
+For now there is an [mailing list](https://groups.google.com/a/lists.berkeley.edu/forum/#!forum/ucberkeley-cas-drupal-users) for announcements.
 
 <a name="purpose">
 # Purpose #
