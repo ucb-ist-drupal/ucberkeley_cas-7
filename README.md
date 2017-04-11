@@ -32,7 +32,7 @@
         *  [Users cannot change password](#users_cannot)
         *  [Change Password URL](#change_password)
         *  [Drupal Login Invitation](#drupal_login)
-    *  [Cas Attributes configuration](#cas_attributes)
+    *  [CAS Attributes configuration](#cas_attributes)
         *  [Fetch CAS Attributes](#fetch_cas)
 *  [Building this module with 'drush make'](#drushmake)
 *  [The UC Berkeley Environment Configurations module](#envconf)
@@ -192,7 +192,7 @@ up:
 3. Back in your first browser (e.g. Chrome if you did step 2 using Firefox) where you are still logged in as User 1, visit your people page.  The url for this page is something like http://EXAMPLE.berkeley.edu/admin/people. You should see a new user with a username matching your first and last names. Click the "edit" link to the right of this user and assign it the administrator role. 
 5. Now in your first browser you can logout of the User 1 account and visit the CAS url (above) to log back in via CalNet. At this point you should be able to do anything that User 1 could do.
 
-Should somehthing go wrong with CAS or the CAS module on your site, you can still login as User 1 using the [administrator back door](#back_door). (Please do not use the backdoor unless it is really necessary.)
+Should something go wrong with CAS or the CAS module on your site, you can still login as User 1 using the [administrator back door](#back_door). (Please do not use the backdoor unless it is really necessary.)
 
 *To make your site even more secure, it's a good idea to change the password on your User 1 account to a long random string.  This will make it less likely that your site would be compromised by a brute force password attack. Before you make this change, make sure that you have access to the email address associated with User 1. When you need to login as User 1 you can use the [administrator back door](#back_door) which includes a link to reset your password.*
 
@@ -475,7 +475,7 @@ accounts. As an alternative, you can pre-create CAS users at
 
 *Be careful with this setting.*
 
-UC Berkeley CAS disables this feature by default. Enabling it in conjunction with "Automatically create Drupal accounts" will result in the dreaded "Drive-By User Creation" scenario. I.E. if you are logged into site A and you visit site B (B being this site with both of these settings enabled) you will be instantly logged in and an account will be created for you. This can result in lots of acounts being created on a site for people unfamiliar to the site administrators.  By default new users are assigned [the "Authenticated User" role](#authenticated_user) which does not have any more permissions than Anonymous User.
+UC Berkeley CAS disables this feature by default. Enabling it in conjunction with "Automatically create Drupal accounts" will result in the dreaded "Drive-By User Creation" scenario. I.E. if you are logged into site A and you visit site B (B being this site with both of these settings enabled) you will be instantly logged in and an account will be created for you. This can result in lots of accounts being created on a site for people unfamiliar to the site administrators.  By default new users are assigned [the "Authenticated User" role](#authenticated_user) which does not have any more permissions than Anonymous User.
 
 <a name="users_cannot">
 ### Users cannot change password ###
@@ -533,7 +533,7 @@ logging into your site from a public wireless network can easily have
 their password stolen.
 
 <a name="cas_attributes">
-## Cas Attributes configuration ##
+## CAS Attributes configuration ##
 </a>
 
 Site path: admin/config/people/cas/attributes

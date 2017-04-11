@@ -5,8 +5,8 @@
  */
 
 include_once 'ucberkeley_cas.features.inc';
-define('CHANGE_TEXT', '<font color = "red">consider changing your settings.</font>');
-define('GOOD_TEXT', '<font color = "green">your settings are probably good.</font>');
+define('CHANGE_TEXT', '<span style="color:red">consider changing your settings.</span>');
+define('GOOD_TEXT', '<span style="color:green">your settings are probably good.</span>');
 
 /**
  * Implementation of hook_init()
@@ -46,9 +46,9 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
       }
       break;
     case 'cas_add_user_form':
-      $form['account']['cas_name_txt']['#markup'] = 'To find the CAS User ID for a UC Berkeley employee visit the ' . l("CalNet Directory", 'https://calnet.berkeley.edu/directory/index.pl', array('attributes' => array('target'=>'_blank'))) . " and search for the person.  In your search results click on the person's name. At the top of the page you should see <em>Details for Jane Smith (UID: 111111)</em>. Copy that UID number and paste it into the CAS User ID box.";
-      $form['account']['cas_name']['#title'] = "CAS User ID";
-      $form['account']['cas_name']['#description'] = "In order to create a new CalNet (CAS) authenticated user, just enter the person's CAS UID here. " . $form['account']['cas_name']['#description'];
+      $form['account']['cas_name_txt']['#markup'] = 'To find the CAS User ID for a UC Berkeley employee visit the ' . l('CalNet Directory', 'https://calnet.berkeley.edu/directory/index.pl', array('attributes' => array('target'=>'_blank'))) . ' and search for the person.  In your search results click on the person's name. At the top of the page you should see <em>Details for Jane Smith (UID: 111111)</em>. Copy that UID number and paste it into the CAS User ID box.';
+      $form['account']['cas_name']['#title'] = 'CAS User ID';
+      $form['account']['cas_name']['#description'] = 'In order to create a new CalNet (CAS) authenticated user, just enter the person's CAS UID here. ' . $form['account']['cas_name']['#description'];
       break;
   }
 }
@@ -86,22 +86,22 @@ function ucberkeley_cas_apps_app_configure_form() {
 function ucberkeley_cas_app_status() {
   $items = array();
 
-  //TODO; check for conflicts as in .install?
+  // TODO; check for conflicts as in .install?
   /*
   if (module_exists('blog')) {
-  $items[] = array(
-  'severity' => REQUIREMENT_ERROR,
-  'title' => 'Core Blog Module',
-  'description' => t("You have enabled the Core Blog module in addition to the Enterprise Blog App. This can cause confusion and unintended consequences."),
-  'action' => array(l("Disable Core Blog", "admin/modules")),
-  );
+    $items[] = array(
+      'severity' => REQUIREMENT_ERROR,
+      'title' => 'Core Blog Module',
+      'description' => t('You have enabled the Core Blog module in addition to the Enterprise Blog App. This can cause confusion and unintended consequences.'),
+      'action' => array(l('Disable Core Blog', 'admin/modules')),
+    );
   }
   else {
-  $items[] = array(
-  'severity' => REQUIREMENT_OK, //REQUIREMENT_OK REQUIREMENT_INFO, REQUIREMENT_ERROR
-  'title' => 'Core Blog Module',
-  'description' => t("The Core Blog module is disabled."),
-  );
+    $items[] = array(
+      'severity' => REQUIREMENT_OK, // REQUIREMENT_OK, REQUIREMENT_INFO, REQUIREMENT_ERROR
+      'title' => 'Core Blog Module',
+      'description' => t('The Core Blog module is disabled.'),
+    );
   }
   */
   return array(
@@ -159,7 +159,7 @@ function ucberkeley_cas_admin_login($form) {
   include_once(drupal_get_path('module', 'user') . '/user.module');
 
   drupal_set_message('Admins should login via Calnet whenever possible.  Unless this site is running https, this form is not secure. See README.md included with the ucberkeley_cas module for more information.', 'warning', FALSE);
-  //see user.module user_login_block()
+  // see user.module user_login_block()
   $form['#action'] = url($_GET['q'], array('query' => drupal_get_destination()));
   $form['#id'] = 'ucb-cas-admin-login-form';
   $form['#validate'] = user_login_default_validators();
@@ -180,7 +180,7 @@ function ucberkeley_cas_admin_login($form) {
   );
   $form['request_password'] = array(
     '#type' => 'item',
-    '#markup' => "<ul><li>" . l("Request new password", "user/password") . " (This will only work for users who do not login via CAS.)</ul></li>",
+    '#markup' => '<ul><li>' . l('Request new password', 'user/password') . ' (This will only work for users who do not login via CAS.)</ul></li>',
   );
   $form['actions'] = array('#type' => 'actions');
   $form['actions']['submit'] = array(
@@ -204,20 +204,20 @@ EOT;
   $out .= '<h3>' . t('Common Drupal Site Use Cases') . '</h3>';
   $out .= t($use_case_text);
   $out .= '<ol>';
-  $out .= '<li>' . t("Visitors to the site do not need to login. Site content is maintained by team of content editors.") . '</li>';
-  $out .= '<li>' . t("Visitors to the site need to login to post comments, write reviews, submit webforms, etc.") . '</li>';
+  $out .= '<li>' . t('Visitors to the site do not need to login. Site content is maintained by team of content editors.') . '</li>';
+  $out .= '<li>' . t('Visitors to the site need to login to post comments, write reviews, submit webforms, etc.') . '</li>';
   $out .= '</ol>';
 
 
-  /* Login blocks */
-  //TODO make collapsible
-  //FIXME: Declare css and js in info file
+  // Login blocks
+  // TODO make collapsible
+  // FIXME: Declare css and js in info file
   drupal_add_js('misc/collapse.js');
   drupal_add_js('misc/form.js');
-  $out .= ucberkeley_cas_fieldset("Login Blocks", ucberkeley_cas_login_blocks_recommendations());
+  $out .= ucberkeley_cas_fieldset('Login Blocks', ucberkeley_cas_login_blocks_recommendations());
 
-  /* Logout caslogout */
-  $out .= ucberkeley_cas_fieldset("More on UC Berkeley CAS", ucberkeley_cas_more_help());
+  // Logout caslogout
+  $out .= ucberkeley_cas_fieldset('More on UC Berkeley CAS', ucberkeley_cas_more_help());
   return $out;
 }
 
@@ -286,9 +286,9 @@ EOT;
     $out .= '<tr><th>Block Name</th><th>Region</th><th>Module Providing Block</th></tr>';
     while (list($k, $v) = each($login_blocks)) {
       $out .= '<tr>';
-      $out .= "<td>" . $v[0] . "</td>";
-      $out .= "<td>" . $v[1] . "</td>";
-      $out .= "<td>" . $k . "</td>";
+      $out .= '<td>' . $v[0] . '</td>';
+      $out .= '<td>' . $v[1] . '</td>';
+      $out .= '<td>' . $k . '</td>';
       $out .= '</tr>';
     }
 
@@ -312,8 +312,8 @@ EOT;
  */
 function ucberkeley_cas_login_blocks_check() {
   $login_blocks = array();
-  //D7: block.module could be disabled.
-  if (!module_exists("block")) {
+  // D7: block.module could be disabled.
+  if (!module_exists('block')) {
     return $login_blocks;
   }
   $theme = variable_get('theme_default', '');
@@ -338,14 +338,14 @@ function ucberkeley_cas_fieldset($title, $content, $collapsible = TRUE, $expande
       '#children' => NULL,
       '#collapsible' => $collapsible,
       /*
-       * resorted to drupal_add_js() above. improve?
-       '#attached' => array(
-       'js' => array(
-       'misc/form.js',
-       'misc/collapse.js',
-       ),
-       ),
-       */
+      // resorted to drupal_add_js() above. improve?
+      '#attached' => array(
+        'js' => array(
+          'misc/form.js',
+          'misc/collapse.js',
+        ),
+      ),
+      */
       '#attributes' => array(
         'class' => array('collapsible', $expanded),
       ),

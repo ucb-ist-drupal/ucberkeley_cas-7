@@ -2,7 +2,7 @@ name = UC Berkeley CAS
 description = Configuration for UC Berkeley Central Authentication (CAS)
 core = 7.x
 package = UC Berkeley
-version = 7.x-2.2
+version = 7.x-2.3.0
 project = ucberkeley_cas
 dependencies[] = cas
 dependencies[] = cas_attributes
@@ -47,4 +47,4 @@ features[defaultconfig][] = strongarm:cas_version
 features[features_api][] = api:2
 features[variable][] = cas_attributes
 features[variable][] = user_mail_status_activated_notify
-project status url = http://drupal-apps.berkeley.edu/fserver
+
