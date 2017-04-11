@@ -1,5 +1,6 @@
 # UC Berkeley CAS 7.x #
 
+*   [No Warranty](#nowarranty)
 *   [Downloading the latest release](#downloading)
 *   [Learning about releases](#releases)
 *   [Purpose]("#purpose")
@@ -53,6 +54,12 @@
 *  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
 
+<a name="nowarranty">
+# No Warranty
+</a>
+
+This software is provided "as is." Anyone using this code does so at their own risk and would do well to monitor releases to the Drupal modules, phpCAS and other 3rd-party libraries themselves. That said, [see this information about upgrading parts of this feature](#upgrade_modules).
+
 <a name="downloading">
 # Downloading the latest release #
 </a>
@@ -63,7 +70,7 @@ You can download the latest release on our [releases page](https://github.com/bw
 # Learning about Releases #
 </a>
 
-For now there is an [announcement list](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu).
+For now there is an [mailing list](https://groups.google.com/a/lists.berkeley.edu/forum/#!forum/ucberkeley-cas-drupal-users) for announcements.
 
 <a name="purpose">
 # Purpose #
@@ -586,16 +593,20 @@ Live environments. To manage this manually make these changes at:
 </a>
 
 <a name = "info_updates">
-## Q. How can I be alerted when there is an new release of UC Berkeley CAS? ##
+## Q. How can I be alerted when there is an new release of UC Berkeley CAS and how can I keep up with new developements? ##
 </a>
 Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu).
+
+You can also monitor this repository using Sibbell.com. Just as you might want to know immediately when a new release is issued for ucberkeley\_cas and ucberkeley\_envconf, the Open Berkeley team also needs to be alerted about releases for a number of GitHub-hosted projects. We’ve recently began monitoring GitHub releases using Sibbell.com (free) and we have been pleased with their service thus far. [More info on Sibbell here](http://www.davegaeddert.com/2014/10/11/sibbell-emails-for-new-releases-on-github/).
 
 
 <a name = "upgrade_modules">
 ##Q. I notice that there are upgrades available for some of these modules. Is it safe to upgrade them? ##
 </a>
 
-There are 2 kinds of releases for modules: Feature release (yellow on your Available Updates page) and Security release (red on your Available Updates page).  We always upgrade ucberkeley_cas when there are  security releases.  We only update the ucberkeley_cas with feature releases when we need the new functionality that they provide. It’s safest to leave them at their present versions.  The ucberkeley_cas feature has not been tested with the later versions of these modules.  We can’t guarantee that it will work.
+There are 2 kinds of releases for modules: Feature release (yellow on your Available Updates page) and Security release (red on your Available Updates page).  We usually upgrade ucberkeley_cas when there are  security releases.  We only update the ucberkeley_cas with feature releases when we need the new functionality that they provide. It’s safest to leave them at their present versions.  The ucberkeley_cas feature has not been tested with the later versions of these modules.  We can’t guarantee that it will work.
+
+In some situations we may defer upgrading these modules even when there is a security release available. One example would be if the security issue applies to a submodule (e.g. cas\_server or ldap\_authentication) which is typically disabled in our Open Berkeley product. 
 
 <a name = "hosted_do">
 ## Q. Why isn't ucberkeley\_cas hosted on http://drupal.org ##
