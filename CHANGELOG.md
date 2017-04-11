@@ -1,5 +1,7 @@
-ucberkeley_cas 7.x-2.x-dev
-==========================
+ucberkeley_cas 7.x-2.3.0
+========================
+* OPENUCB-1542: Update phpCAS to version 1.3.5. This is a security release for phpCAS, but the vulnerability is mitigated on UC Berkeley CAS servers.
+* Begin using semantic version numbers.
 
 ucberkeley_cas 7.x-2.2
 ======================
