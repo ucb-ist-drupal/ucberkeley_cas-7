@@ -1,5 +1,6 @@
 # UC Berkeley CAS 7.x #
 
+*   [No Warranty](#nowarranty)
 *   [Downloading the latest release](#downloading)
 *   [Learning about releases](#releases)
 *   [Purpose]("#purpose")
@@ -52,6 +53,12 @@
 	*  [Q. When trying to use Libraries API with ucberkeley_cas I got a blank white screen.](#libraries_wsod)
 *  [Reporting Bugs](#bugs)
 *  [Authors](#authors)
+
+<a name="nowarranty">
+# No Warranty
+</a>
+
+This software is provided "as is." Anyone using this code does so at their own risk and would do well to monitor releases to the Drupal modules, phpCAS and other 3rd-party libraries themselves. That said, [see this information about upgrading parts of this feature](#upgrade_modules).
 
 <a name="downloading">
 # Downloading the latest release #
