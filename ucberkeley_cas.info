@@ -47,4 +47,4 @@ features[defaultconfig][] = strongarm:cas_version
 features[features_api][] = api:2
 features[variable][] = cas_attributes
 features[variable][] = user_mail_status_activated_notify
-project status url = http://drupal-apps.berkeley.edu/fserver
+
