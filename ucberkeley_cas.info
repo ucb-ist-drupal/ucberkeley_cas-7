@@ -2,7 +2,7 @@ name = UC Berkeley CAS
 description = Configuration for UC Berkeley Central Authentication (CAS)
 core = 7.x
 package = UC Berkeley
-version = 7.x-3.0.0-dev
+version = 7.x-3.0-dev
 project = ucberkeley_cas
 dependencies[] = cas
 dependencies[] = cas_attributes
@@ -45,6 +45,6 @@ features[defaultconfig][] = strongarm:cas_uri
 features[defaultconfig][] = strongarm:cas_user_register
 features[defaultconfig][] = strongarm:cas_version
 features[features_api][] = api:2
-features[variable][] = cas_attributes
 features[variable][] = user_mail_status_activated_notify
+features[variable][] = cas_attributes
 

@@ -31,8 +31,9 @@ function ucberkeley_cas_defaultconfig_default_ldap_servers() {
   $ldap_servers_conf->ldap_type = 'default';
   $ldap_servers_conf->address = 'ldap.berkeley.edu';
   $ldap_servers_conf->port = 389;
-  $ldap_servers_conf->tls = FALSE;
-  $ldap_servers_conf->bind_method = TRUE;
+  $ldap_servers_conf->tls = TRUE;
+  $ldap_servers_conf->followrefs = FALSE;
+  $ldap_servers_conf->bind_method = 3;
   $ldap_servers_conf->binddn = '';
   $ldap_servers_conf->bindpw = '';
   $ldap_servers_conf->basedn = array(
@@ -42,12 +43,24 @@ function ucberkeley_cas_defaultconfig_default_ldap_servers() {
   $ldap_servers_conf->account_name_attr = '';
   $ldap_servers_conf->mail_attr = 'mail';
   $ldap_servers_conf->mail_template = '';
-  $ldap_servers_conf->allow_conflicting_drupal_accts = FALSE;
+  $ldap_servers_conf->picture_attr = '';
   $ldap_servers_conf->unique_persistent_attr = '';
+  $ldap_servers_conf->unique_persistent_attr_binary = FALSE;
   $ldap_servers_conf->user_dn_expression = '';
   $ldap_servers_conf->ldap_to_drupal_user = '';
   $ldap_servers_conf->testing_drupal_username = '213108';
-  $ldap_servers_conf->group_object_category = '';
+  $ldap_servers_conf->testing_drupal_user_dn = '';
+  $ldap_servers_conf->grp_unused = FALSE;
+  $ldap_servers_conf->grp_object_cat = '';
+  $ldap_servers_conf->grp_nested = FALSE;
+  $ldap_servers_conf->grp_user_memb_attr_exists = FALSE;
+  $ldap_servers_conf->grp_user_memb_attr = '';
+  $ldap_servers_conf->grp_memb_attr = '';
+  $ldap_servers_conf->grp_memb_attr_match_user_attr = '';
+  $ldap_servers_conf->grp_derive_from_dn = FALSE;
+  $ldap_servers_conf->grp_derive_from_dn_attr = '';
+  $ldap_servers_conf->grp_test_grp_dn = '';
+  $ldap_servers_conf->grp_test_grp_dn_writeable = '';
   $ldap_servers_conf->search_pagination = FALSE;
   $ldap_servers_conf->search_page_size = 1000;
   $ldap_servers_conf->weight = 0;
@@ -69,14 +82,13 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->value = '0';
   $export['cas_access'] = $strongarm;
 
-  // Ensure that we have the correct rid for authenticated user.  The rid could be something other than "2"
-  $rid_auth_user = array_search('authenticated user', user_roles());
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_auto_assigned_role';
+  $rid_auth_user = array_search('authenticated user', user_roles());
   $strongarm->value = array(
-    $rid_auth_user => 1,
+    $rid_auth_user => TRUE,
   );
   $export['cas_auto_assigned_role'] = $strongarm;
 
@@ -203,7 +215,8 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_pages';
-  $strongarm->value = '';
+  $strongarm->value = 'node/add/*
+node/*/edit/*';
   $export['cas_pages'] = $strongarm;
 
   $strongarm = new stdClass();
