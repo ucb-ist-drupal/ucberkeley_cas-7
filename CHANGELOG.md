@@ -13,9 +13,15 @@ ucberkeley_cas 7.x-3.0.0
       * Config: admin/config/people/cas: Use "CAS Server 3.0 or higher."
       * Config: admin/config/people/cas: Redirect unauthorized user to CAS if they attempt to visit "node edit" or "node add" paths. 
   * cas_attributes updated 7.x-1.0-beta2 --> 7.x-1.0-rc3
+    * Fixes issues listed at https://www.drupal.org/project/cas_attributes/releases/7.x-1.0-rc1
+      * Note: https://www.drupal.org/node/1399304 only applies to `cas:attributes` tokens.  We are currently using `cas:ldap` tokens, and none of the tokens that we need are multivalued.
+    * Fixes issues listed at https://www.drupal.org/project/cas_attributes/releases/7.x-1.0-rc2
+    * Fixes issues listed at https://www.drupal.org/project/cas_attributes/releases/7.x-1.0-rc3
   * ldap updated 7.x-1.0-beta12 -> 7.x-2.0
-    * New Features
-      * Start TLS is enabled on the LDAP connection.
+    * Fixes issues listed at https://www.drupal.org/project/ldap/releases/7.x-2.0
+  
+ New Features in the ucberkeley_cas configuration
+   * Start TLS is enabled on the LDAP connection.
       
 ucberkeley_cas 7.x-2.3.0
 ========================
