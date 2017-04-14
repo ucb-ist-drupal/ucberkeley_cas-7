@@ -1,3 +1,22 @@
+ucberkeley_cas 7.x-3.0.0
+========================
+* OPENUCB-1540: Update included modules
+  * cas updated 7.x-1.3 --> 7.x-1.5
+    * Bugfixes
+      * Fixes issues listed at https://www.drupal.org/project/cas/releases/7.x-1.4
+      * Fixes issues listed at https://www.drupal.org/project/cas/releases/7.x-1.5
+        * Makes it possible to login at /cas or /CAS or /cAs etc.
+        * Fixes error 'Call to undefined function _drush_user_print_info()' when using `drush cas-user-create`
+    * New features
+      * Ability to add multiple CAS users at /admin/people/cas/create. Must specify CAS UIDs. 
+      * Ability to add role to multiple users via `drush cas-user-add-role builder 212373,212374`. (Specify comma separated CAS UIDs.)
+      * Config: admin/config/people/cas: Use "CAS Server 3.0 or higher."
+      * Config: admin/config/people/cas: Redirect unauthorized user to CAS if they attempt to visit "node edit" or "node add" paths. 
+  * cas_attributes updated 7.x-1.0-beta2 --> 7.x-1.0-rc3
+  * ldap updated 7.x-1.0-beta12 -> 7.x-2.0
+    * New Features
+      * Start TLS is enabled on the LDAP connection.
+      
 ucberkeley_cas 7.x-2.3.0
 ========================
 * OPENUCB-1542: Update phpCAS to version 1.3.5. This is a security release for phpCAS, but the vulnerability is mitigated on UC Berkeley CAS servers.
