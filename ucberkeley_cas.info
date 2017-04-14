@@ -19,7 +19,6 @@ features[defaultconfig][] = strongarm:cas_access
 features[defaultconfig][] = strongarm:cas_auto_assigned_role
 features[defaultconfig][] = strongarm:cas_cert
 features[defaultconfig][] = strongarm:cas_changePasswordURL
-features[defaultconfig][] = strongarm:cas_check_first
 features[defaultconfig][] = strongarm:cas_debugfile
 features[defaultconfig][] = strongarm:cas_domain
 features[defaultconfig][] = strongarm:cas_exclude

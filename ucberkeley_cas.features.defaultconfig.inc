@@ -109,13 +109,6 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'cas_check_first';
-  $strongarm->value = 0;
-  $export['cas_check_first'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'cas_debugfile';
   $strongarm->value = '';
   $export['cas_debugfile'] = $strongarm;
