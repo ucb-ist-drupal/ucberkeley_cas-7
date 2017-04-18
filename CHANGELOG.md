@@ -19,10 +19,15 @@ ucberkeley_cas 7.x-3.0.0
     * Fixes issues listed at https://www.drupal.org/project/cas_attributes/releases/7.x-1.0-rc3
   * ldap updated 7.x-1.0-beta12 -> 7.x-2.0
     * Fixes issues listed at https://www.drupal.org/project/ldap/releases/7.x-2.0
+    * Applied patch [fixing watchdog bug](https://www.drupal.org/node/2870792).
+    * Applied patch [fixing update warning](https://www.drupal.org/node/2870798).
   
  New Features in the ucberkeley_cas configuration
    * Start TLS is enabled on the LDAP connection.
       
+ Removed functionality:
+   * Removed [Apps](https://www.drupal.org/project/apps) integration.
+   
 ucberkeley_cas 7.x-2.3.0
 ========================
 * OPENUCB-1542: Update phpCAS to version 1.3.5. This is a security release for phpCAS, but the vulnerability is mitigated on UC Berkeley CAS servers.
