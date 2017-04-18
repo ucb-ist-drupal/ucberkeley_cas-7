@@ -54,66 +54,6 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- *
- * Implementation of hook_apps_app_info
- *
- * TODO: move to ucberkeley_cas.app.inc
- */
-function ucberkeley_cas_apps_app_info() {
-  return array(
-    'configure form' => 'ucberkeley_cas_apps_app_configure_form',
-    //'status callback' => 'ucberkeley_cas_app_status',
-  );
-}
-
-/**
- *
- * Implementation of hook_apps_app_configure_form
- *
- * TODO: move to ucberkeley_cas.app.inc
- */
-function ucberkeley_cas_apps_app_configure_form() {
-  $form = array();
-  $form['test'] = array(
-    '#markup' => t('See the ') . l(t('UC Berkeley CAS recommendations page'), 'admin/config/people/ucbcas') . '.',
-  );
-  return $form;
-}
-
-/**
- * Apps status
- */
-function ucberkeley_cas_app_status() {
-  $items = array();
-
-  // TODO; check for conflicts as in .install?
-  /*
-  if (module_exists('blog')) {
-    $items[] = array(
-      'severity' => REQUIREMENT_ERROR,
-      'title' => 'Core Blog Module',
-      'description' => t('You have enabled the Core Blog module in addition to the Enterprise Blog App. This can cause confusion and unintended consequences.'),
-      'action' => array(l('Disable Core Blog', 'admin/modules')),
-    );
-  }
-  else {
-    $items[] = array(
-      'severity' => REQUIREMENT_OK, // REQUIREMENT_OK, REQUIREMENT_INFO, REQUIREMENT_ERROR
-      'title' => 'Core Blog Module',
-      'description' => t('The Core Blog module is disabled.'),
-    );
-  }
-  */
-  return array(
-    'title' => 'Status',
-    'items' => $items,
-    // headers are optional but these are the default
-    'headers' => array('severity', 'title', 'description', 'action')
-  );
-
-}
-
-/**
  * Implements hook_menu().
  *
  * Create a back door to prevent admin lockouts
