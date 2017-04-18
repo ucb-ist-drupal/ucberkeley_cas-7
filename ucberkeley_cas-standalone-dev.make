@@ -18,6 +18,8 @@ projects[cas_attributes][version] = 1.0-rc3
 projects[ldap][type] = module
 projects[ldap][version] = 2.0
 projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/CellarDoorMedia/Lockr-Patches/drupal7/ldap/ldap-7.x-2.0-beta8-key-integration.patch"
+projects[ldap][patch][2870792] = "https://www.drupal.org/files/issues/ldap_servers-fix-wdog-updb_2870792.patch"
+projects[ldap][patch][2870798] = "https://www.drupal.org/files/issues/ldap_servers-fix-ldap_authentication-sids-2870798.patch"
 
 ; UC Berkeley CAS Feature
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
