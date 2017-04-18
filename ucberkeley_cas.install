@@ -9,6 +9,11 @@
 function ucberkeley_cas_requirements($phase) {
   $requirements = array();
   $t = get_t();
+
+  $cas_req_version = '1.5';
+  $ldap_req_version = '7.x-2.0';
+  $cas_attributes_req_version = '7.x-1.0-rc3';
+
   $update_message = <<<EOT
 <p>The module UC Berkeley CAS (ucberkeley_cas) is a replacement for UCB CAS (ucb_cas).  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.</p>
 
@@ -64,9 +69,7 @@ EOT;
       );
     }
 
-    /*
     // Warn users about newer versions of cas.
-    $cas_req_version = '1.2';
     $cas_path = drupal_get_path('module', 'cas');
     if ($cas_path !== '') {
       $cas_info = drupal_parse_info_file($cas_path . '/cas.info');
@@ -78,10 +81,8 @@ EOT;
         );
       }
     }
-    */
 
     // require a specific version of ldap (ldap_servers)
-    $ldap_req_version = '7.x-1.0-beta12';
     $ldap_path = drupal_get_path('module', 'ldap_servers');
     if ($ldap_path !== '') {
       $ldap_info = drupal_parse_info_file($ldap_path . '/ldap_servers.info');
@@ -95,7 +96,6 @@ EOT;
     }
 
     // require a specific version of cas_attributes.
-    $cas_attributes_req_version = '7.x-1.0-beta2';
     $cas_attributes_path = drupal_get_path('module', 'cas_attributes');
     if ($cas_attributes_path !== '') {
       $cas_attributes_info = drupal_parse_info_file($cas_attributes_path . '/cas_attributes.info');
