@@ -166,3 +166,30 @@ function ucberkeley_cas_update_7000(&$sandbox) {
 
   return implode('<br />', $messages);
 }
+
+
+/**
+ * Revert ucberkeley_cas.feature. Config has moved from defaultconfig to strongarm.
+ */
+//TODO: cas update runs after this one so cas_cert is not set?
+function ucberkeley_cas_update_7001() {
+  $messages = array();
+
+  // variables moved from defaultconfig to strongarm
+  // - cas_cert
+  // - cas_port
+  // - cas_version
+  features_revert(array('ucberkeley_cas' => array('variable')));
+
+  return implode('<br />', $messages);
+}
+
+/**
+ * Set ldap_servers connection to TLS.
+ */
+function ucberkeley_cas_update_7002() {
+  db_update('ldap_servers')
+    ->fields(array(
+      'tls' => 1
+    ))->condition('sid', 'ucb_prod', '=')->execute();
+}
