@@ -77,7 +77,11 @@ EOT;
         $requirements['ucberkeley_cas'] = array(
           'title' => $t('UC Berkeley CAS'),
           'severity' => REQUIREMENT_WARNING,
-          'description' => $t('UC Berkeley CAS has been tested with the CAS module version @version. You have installed cas-@installed_version. Please note that UC Berkeley CAS has not been tested with this later version of CAS.module', array('@version' => $cas_req_version, '@path' => $cas_path, '@installed_version' => $cas_info['version'])),
+          'description' => $t('UC Berkeley CAS has been tested with the CAS module version @version. You have installed cas-@installed_version. Please note that UC Berkeley CAS has not been tested with this later version of CAS.module', array(
+            '@version' => $cas_req_version,
+            '@path' => $cas_path,
+            '@installed_version' => $cas_info['version']
+          )),
         );
       }
     }
@@ -90,7 +94,11 @@ EOT;
         $requirements['ucberkeley_cas'] = array(
           'title' => $t('UC Berkeley CAS'),
           'severity' => REQUIREMENT_ERROR,
-          'description' => $t('UC Berkeley CAS requires the LDAP module to be at version @version. (ldap_servers-@installed_version was found at the path: @path)', array('@version' => $ldap_req_version, '@path' => $ldap_path, '@installed_version' => $ldap_info['version'])),
+          'description' => $t('UC Berkeley CAS requires the LDAP module to be at version @version. (ldap_servers-@installed_version was found at the path: @path)', array(
+            '@version' => $ldap_req_version,
+            '@path' => $ldap_path,
+            '@installed_version' => $ldap_info['version']
+          )),
         );
       }
     }
@@ -103,7 +111,11 @@ EOT;
         $requirements['ucberkeley_cas'] = array(
           'title' => $t('UC Berkeley CAS'),
           'severity' => REQUIREMENT_ERROR,
-          'description' => $t('UC Berkeley CAS requires the CAS Attributes to be at version @version. (cas_attributes-@installed_version was found at the path: @path)', array('@version' => $cas_attributes_req_version, '@path' => $cas_attributes_path, '@installed_version' => $cas_attributes_info['version'])),
+          'description' => $t('UC Berkeley CAS requires the CAS Attributes to be at version @version. (cas_attributes-@installed_version was found at the path: @path)', array(
+            '@version' => $cas_attributes_req_version,
+            '@path' => $cas_attributes_path,
+            '@installed_version' => $cas_attributes_info['version']
+          )),
         );
       }
     }
@@ -154,6 +166,17 @@ function ucberkeley_cas_uninstall() {
   path_delete($alias);
 }
 
+function ucberkeley_cas_hook_update_dependencies() {
+  // Make our feature revert (7302) run after all of the update hooks in the
+  // submodules. The main issue are the cas_attributes updates, which may be affecting the cas_attributes variable.
+  $dependencies['ucberkeley_cas'][7303] = array(
+    'cas_attributes' => 7101,
+    'cas' => 7102,
+    'ldap_servers' => 7207,
+  );
+  return $dependencies;
+}
+
 /**
  * Revert ucberkeley_cas.feature
  */
@@ -169,27 +192,62 @@ function ucberkeley_cas_update_7000(&$sandbox) {
 
 
 /**
- * Revert ucberkeley_cas.feature. Config has moved from defaultconfig to strongarm.
- */
-//TODO: cas update runs after this one so cas_cert is not set?
-function ucberkeley_cas_update_7001() {
-  $messages = array();
-
-  // variables moved from defaultconfig to strongarm
-  // - cas_cert
-  // - cas_port
-  // - cas_version
-  features_revert(array('ucberkeley_cas' => array('variable')));
-
-  return implode('<br />', $messages);
-}
-
-/**
  * Set ldap_servers connection to TLS.
  */
-function ucberkeley_cas_update_7002() {
+function ucberkeley_cas_update_7301() {
   db_update('ldap_servers')
     ->fields(array(
       'tls' => 1
     ))->condition('sid', 'ucb_prod', '=')->execute();
 }
+
+/**
+ * If Pantheon hosting is detected set the cas_cert variable, otherwise warn the user.
+ */
+function ucberkeley_cas_update_7302() {
+
+  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
+    // Pantheon's certificate authority bundle will be at this path in all environments.
+    variable_set('cas_cert', '/etc/ssl/certs/ca-bundle.crt');
+  }
+  else {
+    $cas_cert_warning = "Security best practice: Visit /admin/config/people/cas and set 'Certificate Authority PEM Certificate' to the path of the certificate authority bundle on your server.";
+    watchdog('ucberkeley_cas', $cas_cert_warning, array(), WATCHDOG_WARNING);
+  }
+}
+
+/**
+ * Revert ucberkeley_cas.feature. Config has moved from defaultconfig to strongarm.
+ */
+function ucberkeley_cas_update_7303() {
+  $messages = array();
+
+  // variables moved from defaultconfig to strongarm
+  // - cas_attributes_relations
+  // - cas_attributes_ldap_server
+  // - cas_attributes_sync_every_login
+  // - cas_version
+  features_revert(array(
+    'ucberkeley_cas' => array(
+      'defaultconfig',
+      'variable'
+    )
+  ));
+
+  // Create old cas_attributes variable which is needed by cas_attributes_update_7101 and then deleted by that same update hook.
+  // Implementing hook_update_dependencies is a better solution, but it fails to make this update run after cas_attributes_update_7101.
+  $cas_attributes = array(
+    'sync_every_login' => '0',
+    'relations' => array(
+      'name' => '[cas:ldap:displayname]',
+      'mail' => '[cas:ldap:mail]'
+    ),
+    'ldap' => array(
+      'server' => 'ucb_prod'
+    )
+  );
+  variable_set('cas_attributes', $cas_attributes);
+}
+
+
+

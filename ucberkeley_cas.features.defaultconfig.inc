@@ -78,6 +78,20 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'cas_cert';
+  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
+    // Pantheon's certificate authority bundle will be at this path in all environments.
+    $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
+  }
+  else {
+    // If Pantheon is not the host, hopefully the user will set the value manually.
+    $strongarm->value = '';
+  }
+  $export['cas_cert'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'cas_access';
   $strongarm->value = '0';
   $export['cas_access'] = $strongarm;
@@ -253,6 +267,20 @@ node/*/edit/*';
   $strongarm->name = 'cas_user_register';
   $strongarm->value = 1;
   $export['cas_user_register'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'cas_attributes_sync_every_login';
+  $strongarm->value = 0;
+  $export['cas_attributes_sync_every_login'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'user_mail_status_activated_notify';
+  $strongarm->value = 0;
+  $export['user_mail_status_activated_notify'] = $strongarm;
 
   return $export;
 }
