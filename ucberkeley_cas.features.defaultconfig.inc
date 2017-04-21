@@ -111,7 +111,6 @@ function ucberkeley_cas_defaultconfig_strongarm() {
     // If Pantheon is not the host, hopefully the user will set the value manually.
     $strongarm->value = '';
   }
-  $strongarm->value = '/usr/local/share/certs/cacert.pem';
   $export['cas_cert'] = $strongarm;
 
   $strongarm = new stdClass();
