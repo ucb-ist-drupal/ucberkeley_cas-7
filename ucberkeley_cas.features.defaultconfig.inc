@@ -78,23 +78,16 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'cas_cert';
-  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
-    // Pantheon's certificate authority bundle will be at this path in all environments.
-    $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
-  }
-  else {
-    // If Pantheon is not the host, hopefully the user will set the value manually.
-    $strongarm->value = '';
-  }
-  $export['cas_cert'] = $strongarm;
+  $strongarm->name = 'cas_access';
+  $strongarm->value = '0';
+  $export['cas_access'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'cas_access';
+  $strongarm->name = 'cas_attributes_sync_every_login';
   $strongarm->value = '0';
-  $export['cas_access'] = $strongarm;
+  $export['cas_attributes_sync_every_login'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -105,6 +98,21 @@ function ucberkeley_cas_defaultconfig_strongarm() {
     $rid_auth_user => TRUE,
   );
   $export['cas_auto_assigned_role'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'cas_cert';
+  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
+    // Pantheon's certificate authority bundle will be at this path in all environments.
+    $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
+  }
+  else {
+    // If Pantheon is not the host, hopefully the user will set the value manually.
+    $strongarm->value = '';
+  }
+  $strongarm->value = '/usr/local/share/certs/cacert.pem';
+  $export['cas_cert'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -216,7 +224,12 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_pages';
   $strongarm->value = 'node/add/*
-node/*/edit/*';
+node/*/edit/*
+web-hosting/launch-your-pantheon-site
+web-hosting/get-open-berkeley
+web-hosting/my-sites
+web-hosting-pantheon/upgrade-paid-plan
+web-hosting-pantheon/update-plan-or-stop-billing';
   $export['cas_pages'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -267,13 +280,6 @@ node/*/edit/*';
   $strongarm->name = 'cas_user_register';
   $strongarm->value = 1;
   $export['cas_user_register'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'cas_attributes_sync_every_login';
-  $strongarm->value = 0;
-  $export['cas_attributes_sync_every_login'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
