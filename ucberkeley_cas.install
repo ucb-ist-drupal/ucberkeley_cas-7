@@ -195,10 +195,14 @@ function ucberkeley_cas_update_7000(&$sandbox) {
  * Set ldap_servers connection to TLS.
  */
 function ucberkeley_cas_update_7301() {
-  db_update('ldap_servers')
+  $rows = db_update('ldap_servers')
     ->fields(array(
       'tls' => 1
-    ))->condition('sid', 'ucb_prod', '=')->execute();
+    ))->condition('name', 'ldap.berkeley.edu', '=')->execute();
+
+  if ($rows == 0) {
+    watchdog('ucberkeley_cas', t("TLS value for LDAP server ldap.berkeley.edu was not updated."), array(), WATCHDOG_WARNING);
+  }
 }
 
 /**
