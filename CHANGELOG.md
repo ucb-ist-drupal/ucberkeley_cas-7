@@ -1,4 +1,4 @@
-ucberkeley_cas 7.x-3.0.0
+ucberkeley_cas 7.x-3.0.0-rc.1
 ========================
 * OPENUCB-1540: Update included modules
   * cas updated 7.x-1.3 --> 7.x-1.5
