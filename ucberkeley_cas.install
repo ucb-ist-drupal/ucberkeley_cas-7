@@ -11,8 +11,8 @@ function ucberkeley_cas_requirements($phase) {
   $t = get_t();
 
   $cas_req_version = '1.5';
-  $ldap_req_version = '7.x-2.0';
-  $cas_attributes_req_version = '7.x-1.0-rc3';
+  $ldap_req_version = '2.0';
+  $cas_attributes_req_version = '1.0-rc3';
 
   $update_message = <<<EOT
 <p>The module UC Berkeley CAS (ucberkeley_cas) is a replacement for UCB CAS (ucb_cas).  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.</p>
@@ -73,14 +73,15 @@ EOT;
     $cas_path = drupal_get_path('module', 'cas');
     if ($cas_path !== '') {
       $cas_info = drupal_parse_info_file($cas_path . '/cas.info');
-      if ($cas_info['version'] > $cas_req_version) {
+      $cas_version = ucberkeley_cas_extract_version($cas_info['version']);
+      if (version_compare($cas_version, $cas_req_version, '!=')) {
         $requirements['ucberkeley_cas'] = array(
           'title' => $t('UC Berkeley CAS'),
           'severity' => REQUIREMENT_WARNING,
           'description' => $t('UC Berkeley CAS has been tested with the CAS module version @version. You have installed cas-@installed_version. Please note that UC Berkeley CAS has not been tested with this later version of CAS.module', array(
             '@version' => $cas_req_version,
             '@path' => $cas_path,
-            '@installed_version' => $cas_info['version']
+            '@installed_version' => $cas_version
           )),
         );
       }
@@ -90,14 +91,15 @@ EOT;
     $ldap_path = drupal_get_path('module', 'ldap_servers');
     if ($ldap_path !== '') {
       $ldap_info = drupal_parse_info_file($ldap_path . '/ldap_servers.info');
-      if ($ldap_info['version'] != $ldap_req_version) {
+      $ldap_version = ucberkeley_cas_extract_version($ldap_info['version']);
+      if (version_compare($ldap_version, $ldap_req_version, '!=')) {
         $requirements['ucberkeley_cas'] = array(
           'title' => $t('UC Berkeley CAS'),
           'severity' => REQUIREMENT_ERROR,
           'description' => $t('UC Berkeley CAS requires the LDAP module to be at version @version. (ldap_servers-@installed_version was found at the path: @path)', array(
             '@version' => $ldap_req_version,
             '@path' => $ldap_path,
-            '@installed_version' => $ldap_info['version']
+            '@installed_version' => $ldap_version
           )),
         );
       }
@@ -107,7 +109,8 @@ EOT;
     $cas_attributes_path = drupal_get_path('module', 'cas_attributes');
     if ($cas_attributes_path !== '') {
       $cas_attributes_info = drupal_parse_info_file($cas_attributes_path . '/cas_attributes.info');
-      if ($cas_attributes_info['version'] != $cas_attributes_req_version) {
+      $cas_attributes_version = ucberkeley_cas_extract_version($cas_attributes_info['version']);
+      if (version_compare($cas_attributes_version, $cas_attributes_req_version, '!=')) {
         $requirements['ucberkeley_cas'] = array(
           'title' => $t('UC Berkeley CAS'),
           'severity' => REQUIREMENT_ERROR,
@@ -124,6 +127,13 @@ EOT;
   }
 }
 
+function ucberkeley_cas_extract_version($drupal_version) {
+  preg_match("/(\d+\.\d+[\.\d]{0,3}[-alphbetrc\.\d]{0,6})/", $drupal_version, $matches);
+  if (count($matches) > 1) {
+    return $matches[1];
+  }
+  return NULL;
+}
 
 /**
  * Implementation of hook_install
