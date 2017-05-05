@@ -24,6 +24,8 @@ ucberkeley_cas 7.x-3.0.0-rc.1
   
  New Features in the ucberkeley_cas configuration
    * Start TLS is enabled on the LDAP connection.
+   * If the site is hosted on Pantheon set "Certificate Authority PEM Certificate" to `/etc/ssl/certs/ca-bundle.crt` to enable certificate verification.
+
       
  Removed functionality:
    * Removed [Apps](https://www.drupal.org/project/apps) integration.
