@@ -443,6 +443,28 @@ Drupal profile (assuming they have permission to do so) and change the
 name or email address that we found for them in LDAP.  Their edits
 will not be over written by a new LDAP lookup on their next login.
 
+# Drush Commands
+
+Here are some examples of CAS [drush](http://www.drush.org/en/master/) commands using the above test accounts:
+
+Create a user.  (You need to know their UID.)
+```
+bwood@mbp modules$ drush cas-user-create 212372
+ uid        :  5
+ name       :  AFF-NORMAL TEST, Jr., ThD
+ mail       :  test-212372-2@berkeley.edu
+ status     :  1
+ cas_name   :  212372
+```
+
+Add a role to a user. (You need to know their UID.)
+```
+$ drush cas-user-add-role administrator 277777
+Added the administrator role to uid 2                                                                                       [success]
+```
+
+You can find a user's UID at using the [UC Berkeley Directory](http://www.berkeley.edu/directory).
+
 # Building this module with 'drush make'
 
 The fact that there is not a ucberkeley_cas.make file included here is
@@ -480,28 +502,6 @@ Live environments. To manage this manually make these changes at:
 # User accounts for testing
 
 [These test accounts](https://calnetweb.berkeley.edu/calnet-technologists/ldap-directory-service/resources-developers/universal-test-ids) can be useful for testing your website.
-
-# Drush Commands
-
-Here are some examples of CAS [drush](http://www.drush.org/en/master/) commands using the above test accounts:
-
-Create a user.  (You need to know their UID.)
-```
-bwood@mbp modules$ drush cas-user-create 212372
- uid        :  5
- name       :  AFF-NORMAL TEST, Jr., ThD
- mail       :  test-212372-2@berkeley.edu
- status     :  1
- cas_name   :  212372
-```
-
-Add a role to a user. (You need to know their UID.)
-```
-$ drush cas-user-add-role administrator 277777
-Added the administrator role to uid 2                                                                                       [success]
-```
-
-You can find a user's UID at using the [UC Berkeley Directory](http://www.berkeley.edu/directory).
 
 # Reporting Bugs 
 
