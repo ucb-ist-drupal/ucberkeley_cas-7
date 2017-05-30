@@ -1,6 +1,4 @@
-# UC Berkeley CAS 7.x 
-
-## Purpose 
+# Purpose of UC Berkeley CAS 7.x
 
 UC Berkeley CAS is a Drupal
 "[feature](https://www.drupal.org/docs/7/modules/features/bundling-site-settings-using-features)" (a collection of
@@ -13,7 +11,7 @@ installs. This configuration assumes that everyone, including the site
 administrators, will login to the site using CalNet.  See [Standard
 Configuration](#standard-configuration).
 
-### Security Considerations 
+## Security Considerations 
 
 By default ucberkeley_cas is configured so that anyone logging into
 your site **must** use UCB CalNet authentication. If you visit
@@ -37,13 +35,13 @@ site builders to visit the path `/cas` when they want to login.  When a login li
 appears on site pages, it will be discovered by nefarious bots attempting brute force 
 login attacks. It also invites users to attempt to login when they really don't need to authenticate.
 
-## No Warranty
+# No Warranty
 This software is provided "as is." Anyone using this code does so at their own risk and would do well to monitor 
 releases to the Drupal modules, phpCAS and other 3rd-party libraries themselves. That said, 
 [see this information about upgrading parts of this feature](faq/#q-i-notice-that-there-are-upgrades-available-for-some-of-these-modules-is-it-safe-to-upgrade-them).
 
 
-## Quick Start 
+# Quick Start 
 
 1. See [Requirements](#requirements)
 2. Install and enable [the most recent release of ucberkeley_cas](https://github.com/bwood/ucberkeley_cas-7/releases). (More info: [Installing](#installation))
@@ -54,7 +52,7 @@ created in the last step and assign it the "administrator" role (or whichever ro
 [Setup a CalNet-authenticated administrator](#setup-a-calnet-authenticated-administrator))
 5. Visit the path /admin/config/people/ucbcas on your site for recommendations on further configuration.
 
-## Requirements 
+# Requirements 
 
 You need the following modules installed:
 
@@ -72,14 +70,14 @@ UC Berkeley CAS will install these modules:
 
 Specific versions of the above modules are specified in ucberkeley_cas-7.x.make. If your site is using unsupported versions of these modules, you'll be notified of the problem when you attemp to enable UC Berkeley CAS.
 
-### CAS Registration 
+## CAS Registration 
 
 In order to use CalNet (CAS) authentication, your website must be registered with 
 CalNet. [Register your site here](https://calnetweb.berkeley.edu/calnet-technologists/cas/casifying-your-web-application-or-web-server/cas-registration).
   Make sure your registration is approved before you install UC Berkeley CAS 
 on a production site.
 
-#### Localhost Sites Do Not Require Registration 
+### Localhost Sites Do Not Require Registration 
 
 Developers working local webserver should use one of these domains:
 
@@ -92,7 +90,7 @@ require CAS registration. Other common development URLs (e.g. http://*.dev, and
 Acquia Dev Desktop's `http://example.dd`) will not work the the auth-test CAS 
 server.
 
-## Installation 
+# Installation 
 
 1. Make sure your site meets the requirements above.
 2. Download the tarball included with [the latest release of UC Berkeley CAS](https://github.com/bwood/ucberkeley_cas-7/releases),
@@ -111,7 +109,7 @@ your Drupal site and you should see "Logged in as \[your name\]."
 Go to http://EXAMPLE.berkeley.edu/user.  You should see the email
 address and full name that was retrieved from LDAP for your account.
 
-## Setup a CalNet-authenticated Administrator 
+# Setup a CalNet-authenticated Administrator 
 
 
 User 1 is the "superuser" on a Drupal site. (This account is often
@@ -132,7 +130,7 @@ Should something go wrong with CAS or the CAS module on your site, you can still
 *It's a good idea to change the password on your User 1 account to a long random string.  This will make it less likely that your site would be compromised by a brute force password attack. If you forget the password for User 1 [it can be reset](https://www.drupal.org/node/44164). When you need to login as User 1 you can use the [administrator back door](#back_door) which includes a link to reset your password.*
 
 
-## The Administrator "Back Door" 
+# The Administrator "Back Door" 
 
 Above, we mentioned that the path /user/login will not provide the traditional Drupal login form.
 
@@ -144,8 +142,8 @@ http://example.com/user/admin_login.
 standard authentication vulnerabilities described above. Do not distribute this 
 URL to your users and do not make a practice of logging in via this URL.
 
-## Upgrading 
-### Upgrading to a new version of ucberkeley_cas (version 2.x or 3.x) 
+# Upgrading 
+## Upgrading to a new version of ucberkeley_cas (version 2.x or 3.x) 
 
 Follow this procedure to upgrade ucberkeley_cas:
 
@@ -166,7 +164,7 @@ folder.** (By "uninstall" we mean "run the Drupal uninstall process
 at /admin/modules/uninstall.)  Doing this can cause problems with
 your existing CAS users. 
 
-### Upgrading from legacy ucb\_cas 1.x to ucberkeley\_cas 2.x 
+## Upgrading from legacy ucb\_cas 1.x to ucberkeley\_cas 2.x 
 
 The module UC Berkeley CAS (ucberkeley\_cas) is a replacement for the older UCB CAS (ucb\_cas) module.  UCB CAS must be removed from your system before UC Berkeley CAS can be installed.
 
@@ -179,7 +177,7 @@ Here's what to do:
 5. Enable UC Berkeley CAS. (At this point you may see a message about ucb_envconf. See the instructions below.)
 6. Run update.php
 
-#### If you are using ucb\_envconf 1.x, upgrade to ucberkeley\_envconf 2.x 
+### If you are using ucb\_envconf 1.x, upgrade to ucberkeley\_envconf 2.x 
 
 _For background on UC Berkeley Environments Configurations see [this UC Berkeley Environments Configuration section](#the-uc-berkeley-environment-configurations-module)._
 
@@ -198,7 +196,7 @@ if that happens:
 
 At this point your site will be using the latest version of UC Berkeley Environment Configurations.
 
-### My site already uses CAS, but I want to switch to ucberkeley_cas 
+## My site already uses CAS, but I want to switch to ucberkeley_cas 
 
 1. Remove the directories for cas, cas_attributes and ldap from
 `site/all/modules` (or wherever they reside).
@@ -215,14 +213,14 @@ If you are using UC Berkeley CAS with UCB Environments Configurations,
 it's important that your LDAP server uses the same "sid" (see the `ldap_servers` table
 in the database) that is specified in `ucberkeley_cas.features.defaultconfig.inc`.
 
-## Uninstalling 
+# Uninstalling 
 
 To remove UC Berkeley CAS from your site see the modules listed in the [Requirements](#requirements) section above.
 
 1. Disable these modules at admin/modules.
 2. Uninstall these modules at admin/modules/uninstall. *Uninstalling will disable any CAS-authenticated users on your site. Re-enabling those users is not straightforward.*
 
-### Avoid Uninstalling the CAS Module 
+## Avoid Uninstalling the CAS Module 
 
 If you have accounts on your site that were created while the UC Berkeley CAS
 module was enabled, avoid uninstalling the cas module found in the 
@@ -245,11 +243,11 @@ cas_user table then click on the Export link at the bottom of the
 page.  Choose "Dump all rows" at the next screen and submit the
 form. This will download a file called cas_user.sql which will contain
 data like:
-
+```
   INSERT INTO `cas_user` (`aid`, `uid`, `cas_name`) VALUES
   (1, 15, '212373'),
   (3, 19, '212372');
-
+```
 2. Uncheck the UC Berkeley CAS module on the Modules administration page and
 submit the form. 
 
@@ -266,7 +264,7 @@ from step 1. Submit the form.
 Now your existing CalNet-authenticated accounts should be able to
 login via CAS.
 
-#### Alternate procedure
+### Alternate procedure
 
 You could also simply delete all of your existing CalNet users and
 then recreate them by having the users log in again after you
@@ -274,13 +272,13 @@ reinstall the ucberkeley_cas module.  *If you do this, the recreated users
 will no longer be the owners of any content that they created.* The sql
 solution above will preserve the users association to their content.
 
-## Standard Configuration 
+# Standard Configuration 
 
 The ucberkeley_cas module has made some configuration decisions for you.
 These decisions can be overridden by you. See the Configuration Details
 section below.
 
-### The Authenticated User role 
+## The Authenticated User role 
 
 With the ucberkeley_cas standard configuration, when a user logs in
 via CalNet for the first time Drupal will create an account for them
@@ -294,7 +292,7 @@ not to assign them your "editor" role.  (Drupal's Rules module can be used
 to send you automatic emails each time a new user account is created
 on your site.)
 
-### Combining Drupal Standard Authentication with CAS 
+## Combining Drupal Standard Authentication with CAS 
 
 "Mixed mode authentication" describes then scenario where a site is
 configured to allow some users to authenticate using CalNet and others
@@ -314,14 +312,14 @@ allow mixed mode authentication, please remember that you should be
 running your UCB site using https if you are using Drupal
 standard authentication.
 
-### Use Case Recommendations Page 
+## Use Case Recommendations Page 
 
 After installation see `/admin/config/people/ucberkely_cas` for recommendations
 on fine tuning your CAS configuration according to common UCB Drupal
 site use cases.
 
-## Configuration Details 
-### Is it okay to modify the default configuration?
+# Configuration Details 
+## Is it okay to modify the default configuration?
 Yes.
 
 If you are familiar with Drupal features, you may worry that
@@ -334,12 +332,12 @@ Berkeley CAS feature into the "overridden" state.
 Before you change the configuration, we recommend that you review the
 configurations notes below.
 
-### CAS Configuration 
+## CAS Configuration 
 
 Site path: `admin/config/people/cas`.
 
 
-#### Logout Behavior 
+### Logout Behavior 
 
 By default UC Berkeley CAS creates a URL Alias (at
 `admin/config/search/path`) that redirects `/user/logout` to
@@ -362,13 +360,13 @@ secure. It opens up the possibility of unauthorized access if users
 login from public computers (e.g. in a library) or if they don't lock
 their screen when they leave their computer.
 
-#### Initial login destination and Logout destination 
+### Initial login destination and Logout destination 
 
 
 You can configure the landing pages for the user after successful
 login/logout.
 
-#### Automatically create Drupal accounts 
+### Automatically create Drupal accounts 
 
 If you do not want Drupal to create accounts for every CalNet user who
 attempts to log in to your site, go to `admin/config/people/cas`, open
@@ -376,7 +374,7 @@ the User Accounts section, and uncheck Automatically create Drupal
 accounts. As an alternative, you can pre-create CAS users at
 `/admin/people/cas/create`.
 
-### Check with the CAS server to see if the user is already logged in? 
+## Check with the CAS server to see if the user is already logged in? 
 
 *Be careful with this setting.*
 
@@ -390,7 +388,7 @@ administrators.  By default new users are assigned
 [the "Authenticated User" role](#the-authenticated-user-role) which does not 
 have any more permissions than the Anonymous User role.
 
-#### Users cannot change password 
+### Users cannot change password 
 
 Unchecking this is likely to cause confusion.  Users
 should change their passwords via CalNet. See [Change password
@@ -409,7 +407,7 @@ URL](#change-password-url) further down.
  will be able to edit her own password, but
  [please see the section on mixing authentication modes](#mixed_mode).
 
-#### Change Password URL 
+### Change Password URL 
 
 This setting is blank because it can cause confusion.
 
@@ -422,7 +420,7 @@ password changing for **all** CalNet authenticated applications.  A
 user presented with a "change password" url might not understand the
 ramifications here.
 
-#### Drupal Login Invitation 
+### Drupal Login Invitation 
 
 This setting is blank because it can cause confusion.
 
@@ -433,11 +431,11 @@ option of using Drupal's authentication.  If you need to allow people
 who don't have a CalNet ID to login to your site, you can add a value
 like "Non-UCB people login here" to this text box.
 
-### CAS Attributes configuration 
+## CAS Attributes configuration 
 
 Site path: admin/config/people/cas/attributes
 
-#### Fetch CAS Attributes 
+### Fetch CAS Attributes 
 
 The default setting is "only when a CAS account is created (i.e., the
 first login of a CAS user)."This means that a user can edit their
@@ -445,14 +443,14 @@ Drupal profile (assuming they have permission to do so) and change the
 name or email address that we found for them in LDAP.  Their edits
 will not be over written by a new LDAP lookup on their next login.
 
-## Building this module with 'drush make'
+# Building this module with 'drush make'
 
 The fact that there is not a ucberkeley_cas.make file included here is
 intentional.  When we build the Open Berkeley distribution we do not want the  `drush
 make` command to discover a makefile in here and build it. Instead we want to use the
 product of ucberkeley_cas-standalone.make.  See rebuild.sh.
 
-## The UC Berkeley Environment Configurations module 
+# The UC Berkeley Environment Configurations module 
 
 [Download the latest version of UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases)
 
@@ -479,11 +477,11 @@ Live environments. To manage this manually make these changes at:
 * admin/config/people/cas
 * admin/config/people/cas/attributes
 
-## User accounts for testing
+# User accounts for testing
 
 [These test accounts](https://calnetweb.berkeley.edu/calnet-technologists/ldap-directory-service/resources-developers/universal-test-ids) can be useful for testing your website.
 
-## Drush Commands
+# Drush Commands
 
 Here are some examples of CAS [drush](http://www.drush.org/en/master/) commands using the above test accounts:
 
@@ -505,7 +503,7 @@ Added the administrator role to uid 2                                           
 
 You can find a user's UID at using the [UC Berkeley Directory](http://www.berkeley.edu/directory).
 
-## Reporting Bugs 
+# Reporting Bugs 
 
 If you think you've found a bug with UC Berkeley CAS please report it to 
 ist-drupal@lists.berkeley.edu. Make sure your bug report includes:
