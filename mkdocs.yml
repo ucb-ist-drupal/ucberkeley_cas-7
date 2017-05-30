@@ -1,6 +1,6 @@
 site_name: UC Berkeley CAS Documentation
 theme: readthedocs
 repo_url: https://github.com/bwood/ucberkeley_cas-7
-include_search: true
 pages:
   - [index.md, 'Home']
+  - [faq.md, 'FAQ']
