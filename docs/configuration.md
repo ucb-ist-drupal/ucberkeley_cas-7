@@ -83,7 +83,7 @@ URL](#change-password-url) further down.
  Drupal user (not associated with a CAS uid) then the administrator
  will be allowed to change the user's password. Also a non-CAS user
  will be able to edit her own password, but
- [please see the section on mixing authentication modes](#mixed_mode).
+ [please see the section on mixing authentication modes](index.html#combining-drupal-standard-authentication-with-cas).
 
 ## Change Password URL 
 

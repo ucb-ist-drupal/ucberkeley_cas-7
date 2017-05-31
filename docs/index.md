@@ -15,7 +15,7 @@ Configuration](#standard-configuration).
 
     **No Warranty**: This software is provided "as is." UC Berkeley IST does not provide support for this code when it is used outside of the [Open Berkeley](https://open.berkeley.edu) product. Anyone using this code does so at their own risk and would do well to monitor 
     releases to the Drupal modules, phpCAS and other 3rd-party libraries themselves. (That said, 
-    [see this information about upgrading parts of this feature](faq/#q-i-notice-that-there-are-upgrades-available-for-some-of-these-modules-is-it-safe-to-upgrade-them).)
+    [see this information about upgrading parts of this feature](faq/#i-notice-that-there-are-upgrades-available-for-some-of-these-modules-is-it-safe-to-upgrade-them).)
 
 
 ## Security Considerations 

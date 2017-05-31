@@ -80,7 +80,7 @@ Two reasons:
 
 
 # Lots of user accounts are being created on my site and I don't know why. 
-[See this section](index.html#check-with-the-cas-server-to-see-if-the-user-is-already-logged-in).
+[See this section](configuration/#check-with-the-cas-server-to-see-if-the-user-is-already-logged-in).
 
 # Why do I sometimes get incorrectly bounced to the CalNet login page when I visit my site's homepage? 
 
