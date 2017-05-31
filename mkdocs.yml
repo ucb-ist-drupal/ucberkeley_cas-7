@@ -1,6 +1,8 @@
 site_name: UC Berkeley CAS Documentation
 theme: readthedocs
 repo_url: https://github.com/bwood/ucberkeley_cas-7
+extra_javascript:
+  - extra.js
 pages:
   - Home: index.md
   - Configuration Details: configuration.md
@@ -10,3 +12,4 @@ pages:
   - FAQ: faq.md
 markdown_extensions:
     - admonition:
+
