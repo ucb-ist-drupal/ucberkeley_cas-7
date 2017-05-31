@@ -20,6 +20,7 @@ example it may belong to the Guests OU. If your webapplication will need to
 lookup data for users in a non-public OU, you will need to [request
 a "privileged bind" from the CalNet team](https://calnetweb.berkeley.edu/calnet-technologists/ldap-directory-service/resources-developers/applying-directory-access).
 Then you will need to configure your bind information at `/admin/config/ldap`.
+For more information see the [LDAP Access section](ldap_access.html).
 
 # When logging in I see the error "user warning: Duplicate entry" 
 
