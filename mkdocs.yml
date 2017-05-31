@@ -3,6 +3,9 @@ theme: readthedocs
 repo_url: https://github.com/bwood/ucberkeley_cas-7
 pages:
   - Home: index.md
+  - Configuration Details: configuration.md
+  - Drush Commands: drush.md
+  - Environments Configurations Module: envconf.md
   - LDAP Access: ldap_access.md
   - FAQ: faq.md
 markdown_extensions:
