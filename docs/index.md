@@ -29,7 +29,7 @@ authentication is insecure -- unless used in conjunction with the https protocol
 username/password interception (especially if a wireless network is in
 use) and (2) session hijacking.) A second reason for requiring CalNet authentication is to prevent the complexity that results from allowing multiple authentication channels (i.e. CalNet _and_ Drupal standard authentication.)
 
-!!! info
+!!! note
 
     CalNet/CAS authentication is not immune to attack on a site using
     the http protocol. A CAS ticket could theoretically be hijacked, however

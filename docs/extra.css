@@ -1,0 +1,26 @@
+.wy-menu-vertical li.current a {
+    color: #000;
+}
+.wy-menu-vertical li.current a:hover,
+.wy-menu-vertical li.current a:focus {
+    background: #d6d6d6;
+}
+.skip {
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    height: 1px;
+    width: 1px;
+    text-align: left;
+    overflow: hidden;
+}
+
+a.skip:active,
+a.skip:focus,
+a.skip:hover {
+    left: 0;
+    top: 0;
+    width: auto;
+    height: auto;
+    overflow: visible;
+}
