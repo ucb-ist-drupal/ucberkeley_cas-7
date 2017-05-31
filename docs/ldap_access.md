@@ -27,9 +27,9 @@ dump will reveal this password.)
 
 !!! note
 
-    Lockr is one possible solution to this problem.  This does not constitute and endorsement of Lockr's services by UC Berkeley IST.
+    Lockr is one possible solution to this problem.  This section does not constitute and endorsement of Lockr's services by UC Berkeley IST.
     
-The service [Lockr](https://lockr.io) integrates well with Pantheon. To use locker:
+The service [Lockr](https://lockr.io) integrates well with Pantheon. To use Lockr:
 
 1. Register for an account at [Lockr.io](https://lockr.io).
 2. Install and enable the [Lockr](https://www.drupal.org/project/lockr) module.
