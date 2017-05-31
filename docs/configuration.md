@@ -1,12 +1,11 @@
- Is it okay to modify the default configuration?
-Yes.
+# Is it okay to modify the default configuration?
+If the value does not exist in `ucberkeley_cas.strongarm.inc`, yes.  Most of 
+the configuration is in `ucberkeley_cas.features.defaultconfig.inc` -- these
+values can be overridden with no consequences.  
 
-If you are familiar with Drupal features, you may worry that
-overriding this configuration will result in you having to "revert"
-the feature when it is time to upgrade the code.  This is not the case
-with UC Berkeley CAS.  Since the configuration was set using the
-Default Config module, changing these values will not put the UC
-Berkeley CAS feature into the "overridden" state.
+If you enter a new value in the administrative interface for a value that is 
+configured in the strongarm file, your change will work, but Drupal's "features" 
+module will report that the feature is in the "overridden state."
 
 Before you change the configuration, we recommend that you review the
 configurations notes below.
