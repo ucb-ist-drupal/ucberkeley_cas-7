@@ -54,6 +54,7 @@ http://example.com/cas and login with your CalNet id.
 created in the last step and assign it the "administrator" role (or whichever role is appropriate). (More info:
 [Setup a CalNet-authenticated administrator](#setup-a-calnet-authenticated-administrator))
 5. Visit the path /admin/config/people/ucbcas on your site for recommendations on further configuration.
+6. Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu) for information on releases and security advisories.
 
 # Requirements 
 
