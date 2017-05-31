@@ -1,3 +1,10 @@
+ucberkeley_cas 7.x-3.1.0-dev
+========================
+* OPENUCB-1575: Upgrade to ldap-7.x-2.2 per [LDAP - Critical - Data Injection -SA-CONTRIB-2017-052](https://www.drupal.org/node/2882805)
+  * ldap updated 7.x-1.0-beta12 -> 7.x-2.2
+    * Fixes issues listed at https://www.drupal.org/project/ldap/releases/7.x-2.2
+    * Fixes issues listed at https://www.drupal.org/project/ldap/releases/7.x-2.1
+
 ucberkeley_cas 7.x-3.0.0-rc.1
 ========================
 * OPENUCB-1540: Update included modules
