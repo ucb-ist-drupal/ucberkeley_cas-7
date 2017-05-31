@@ -1,0 +1,7 @@
+.wy-menu-vertical li.current a {
+    color: #000;
+}
+.wy-menu-vertical li.current a:hover,
+.wy-menu-vertical li.current a:focus {
+    background: #d6d6d6;
+}
