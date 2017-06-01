@@ -40,7 +40,7 @@ drush @mysite.dev lockr-register my-email-registered-with-lockr@berkeley.edu --p
 !!! note
 
     If your site is hosted on Pantheon and you have not yet signed up for Lockr, you can skip
-    step 1 and leave the password off in step 3.  You will be sent a confirmation email with a 
+    step 1 and leave off `--password=my-lockr-password` in step 3.  You will be sent a confirmation email with a 
     link to retrieve your password.
 
 4) Install and enable the [Key](https://www.drupal.org/project/key) module on your site.
