@@ -4,6 +4,7 @@
     $(document).ready(function () {
         skipNav();
         fixSearch();
+        labelForm();
     });
 
     /**
@@ -64,5 +65,12 @@
     function skipNav() {
         $(".wy-side-nav-search" ).prepend('<a class="skip" href="#main_content">Skip navigation</a>');
         $("div[role='main']").attr('id', 'main_content')
+    }
+
+    /**
+     * Lable form elements
+     */
+    function labelForm() {
+        $("form input").first().attr('aria-labelledby', 'Search this documentation');
     }
 })(jQuery);
