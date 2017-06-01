@@ -1,6 +1,11 @@
 /* Add link underline on hover */
+
+/* Increase contrast for link colors */
+a {
+    color: #236d9e;
+}
 a:hover {
-    color: #3091d1;
+    color: #236d9e;
     text-decoration: underline;
 }
 
