@@ -3,8 +3,8 @@
 
     $(document).ready(function () {
         skipNav();
-        fixSearch();
         labelForm();
+        fixSearch();
     });
 
     /**
