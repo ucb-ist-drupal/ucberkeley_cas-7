@@ -3,7 +3,6 @@
 
     $(document).ready(function () {
         skipNav();
-//        labelForm();
         fixSearch();
     });
 
@@ -37,8 +36,9 @@
                     name: "q",
                     placeholder: "Search this documentation!"
                 });
+                // Add a form label for accessibility
                 searchBox.attr('id', 'search-input');
-                form.prepend('<label for="search-input">Search</label>');
+                form.prepend('<label for="search-input" class="skip">Search</label>');
                 searchBox.appendTo(form);
             });
 
@@ -72,12 +72,4 @@
         $("div[role='main']").attr('id', 'main_content')
     }
 
-    /**
-     * Lable form elements
-     */
-    function labelForm() {
-        $("#rtd-search-form input").first().attr('id', 'search-input');
-        $("#rtd-search-form input").first().attr('placeholder', 'Search this documentation!');
-        $("#rtd-search-form").prepend('<label for="search-input">Search Docs</label>')
-    }
 })(jQuery);

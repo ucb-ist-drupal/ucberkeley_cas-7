@@ -33,7 +33,7 @@ a:hover {
     background: #FFFFFF;
 }
 
-/* Skip Navigation styling*/
+/*  Hide skip nav and form label. */
 .skip {
     position: absolute;
     top: -1000px;
