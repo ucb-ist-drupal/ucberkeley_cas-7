@@ -1,10 +1,29 @@
+/* Add link underline on hover */
+a:hover {
+    color: #3091d1;
+    text-decoration: underline;
+}
+
+/* left menu increase contrast for active page links */
 .wy-menu-vertical li.current a {
-    color: #000;
+    color: #000000;
 }
 .wy-menu-vertical li.current a:hover,
 .wy-menu-vertical li.current a:focus {
-    background: #d6d6d6;
+    background: #FFFFFF;
 }
+
+/* left menu increase contrast for non-active page links */
+.wy-menu-vertical a {
+    color: #FFFFFF;
+}
+.wy-menu-vertical a:hover,
+.wy-menu-vertical a:focus {
+    background: #b3b3b3;
+    color: #000000;
+}
+
+/* Skip Navigation styling*/
 .skip {
     position: absolute;
     top: -1000px;
@@ -14,7 +33,6 @@
     text-align: left;
     overflow: hidden;
 }
-
 a.skip:active,
 a.skip:focus,
 a.skip:hover {
@@ -25,10 +43,17 @@ a.skip:hover {
     overflow: visible;
 }
 
+/* mkdocs admonition extention. Make title contrast accessible. */
 .wy-alert-title, .rst-content .admonition-title {
     color: #000000;
 }
 
-.wy-menu-vertical a {
-    color: #FFFFFF;
-}
+
+
+
+
+
+
+
+
+
