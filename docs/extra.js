@@ -71,8 +71,8 @@
      * Lable form elements
      */
     function labelForm() {
-        //$("form input").first().attr('aria-labelledby', 'Search this documentation');
-        //$("#rtd-search-form input").first().attr('aria-labelledby', 'Search this documentation');
-        $("#rtd-search-form").prepend('<label for="rtd-search-form" class="skip">Search Docs:</label>')
+        $("#rtd-search-form input").first().attr('id', 'search-input');
+        $("#rtd-search-form input").first().attr('placeholder', 'Search this documentation!');
+        $("#rtd-search-form").prepend('<label for="search-input">Search Docs</label>')
     }
 })(jQuery);
