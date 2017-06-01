@@ -1,5 +1,5 @@
 # UC Berkeley CAS 7.x
-### Introduction
+## Introduction
 
 UC Berkeley CAS is a Drupal
 "[feature](https://www.drupal.org/docs/7/modules/features/bundling-site-settings-using-features)" (a collection of
@@ -79,14 +79,14 @@ UC Berkeley CAS will install these modules:
 
 Specific versions of the above modules are specified in ucberkeley_cas-7.x.make. If your site is using unsupported versions of these modules, you'll be notified of the problem when you attemp to enable UC Berkeley CAS.
 
-### CAS Registration 
+## CAS Registration 
 
 In order to use CalNet (CAS) authentication, your website must be registered with 
 CalNet. [Register your site here](https://calnetweb.berkeley.edu/calnet-technologists/cas/casifying-your-web-application-or-web-server/cas-registration).
   Make sure your registration is approved before you install UC Berkeley CAS 
 on a production site.
 
-#### Localhost Sites Do Not Require Registration 
+### Localhost Sites Do Not Require Registration 
 
 Developers working local webserver should use one of these domains:
 
@@ -287,7 +287,7 @@ solution above will preserve the users association to their content.
 ## Standard Configuration 
 
 The ucberkeley_cas module has made some configuration decisions for you.
-These decisions can be overridden by you. See the Configuration Details
+These decisions can be overridden by you. See the [Configuration Details](configuration)
 section below.
 
 ### The Authenticated User role 
