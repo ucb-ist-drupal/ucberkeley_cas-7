@@ -1,6 +1,6 @@
-# The UC Berkeley Environment Configurations module 
+# The UC Berkeley Environment Configurations Module 
 
-[Download the latest version of UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases)
+[Download the latest version of UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucberkeley_envconf-7/releases).
 
 The module
 [UC Berkeley Environment Configurations](https://github.com/ucb-ist-drupal/ucb_envconf-7)

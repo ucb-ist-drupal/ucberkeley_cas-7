@@ -1,5 +1,5 @@
 # Drush Commands
-
+## CAS Drush Command Examples
 Here are some examples of CAS [drush](http://www.drush.org/en/master/) commands using the aforementioned [test accounts](index.html#user-accounts-for-testing):
 
 Create a user.  (You need to know their UID.)
@@ -20,7 +20,7 @@ Added the administrator role to uid 2                                           
 
 You can find a user's UID at using the [UC Berkeley Directory](http://www.berkeley.edu/directory).
 
-# Building this module with 'drush make'
+## Building this module with 'drush make'
 
 The fact that there is not a ucberkeley_cas.make file included here is
 intentional.  When we build the Open Berkeley distribution we do not want the  `drush
