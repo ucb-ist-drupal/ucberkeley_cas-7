@@ -24,3 +24,11 @@ a.skip:hover {
     height: auto;
     overflow: visible;
 }
+
+.wy-alert-title, .rst-content .admonition-title {
+    color: #000000;
+}
+
+.wy-menu-vertical a {
+    color: #FFFFFF;
+}
