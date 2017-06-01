@@ -3,7 +3,7 @@
 
     $(document).ready(function () {
         skipNav();
-        labelForm();
+//        labelForm();
         fixSearch();
     });
 
@@ -16,7 +16,8 @@
      */
     function fixSearch() {
         // don't run this outside RTD hosting
-        if (window.location.origin.indexOf('readthedocs') > -1) {
+         if (window.location.origin.indexOf('readthedocs') > -1) {
+
             var target = document.getElementById('rtd-search-form');
             var config = {attributes: true, childList: true};
 
@@ -30,11 +31,15 @@
                     window.location.hostname + '/en/' + determineSelectedBranch() +
                     '/search.html'
                 );
-                $('<input>').attr({
+
+                var searchBox = $('<input>').attr({
                     type: "text",
                     name: "q",
-                    placeholder: "Search docs"
-                }).appendTo(form);
+                    placeholder: "Search this documentation!"
+                });
+                searchBox.attr('id', 'search-input');
+                form.prepend('<label for="search-input">Search</label>');
+                searchBox.appendTo(form);
             });
 
             observer.observe(target, config);
