@@ -1,4 +1,5 @@
-# Is it okay to modify the default configuration?
+# Configuration Details
+## Is it okay to modify the default configuration?
 If the value does not exist in `ucberkeley_cas.strongarm.inc`, yes.  Most of 
 the configuration is in `ucberkeley_cas.features.defaultconfig.inc` -- these
 values can be overridden with no consequences.  
@@ -10,12 +11,12 @@ module will report that the feature is in the "overridden state."
 Before you change the configuration, we recommend that you review the
 configurations notes below.
 
-# CAS Configuration 
+## CAS Configuration 
 
 Site path: `admin/config/people/cas`.
 
 
-## Logout Behavior 
+### Logout Behavior 
 
 By default UC Berkeley CAS creates a URL Alias (at
 `admin/config/search/path`) that redirects `/user/logout` to
@@ -38,13 +39,13 @@ secure. It opens up the possibility of unauthorized access if users
 login from public computers (e.g. in a library) or if they don't lock
 their screen when they leave their computer.
 
-## Initial login destination and Logout destination 
+### Initial login destination and Logout destination 
 
 
 You can configure the landing pages for the user after successful
 login/logout.
 
-## Automatically create Drupal accounts 
+### Automatically create Drupal accounts 
 
 If you do not want Drupal to create accounts for every CalNet user who
 attempts to log in to your site, go to `admin/config/people/cas`, open
@@ -52,7 +53,7 @@ the User Accounts section, and uncheck Automatically create Drupal
 accounts. As an alternative, you can pre-create CAS users at
 `/admin/people/cas/create`.
 
-# Check with the CAS server to see if the user is already logged in? 
+### Check with the CAS server to see if the user is already logged in? 
 
 *Be careful with this setting.*
 
@@ -66,7 +67,7 @@ administrators.  By default new users are assigned
 [the "Authenticated User" role](#the-authenticated-user-role) which does not 
 have any more permissions than the Anonymous User role.
 
-## Users cannot change password 
+### Users cannot change password 
 
 Unchecking this is likely to cause confusion.  Users
 should change their passwords via CalNet. See [Change password
@@ -85,7 +86,7 @@ URL](#change-password-url) further down.
  will be able to edit her own password, but
  [please see the section on mixing authentication modes](index.html#combining-drupal-standard-authentication-with-cas).
 
-## Change Password URL 
+### Change Password URL 
 
 This setting is blank because it can cause confusion.
 
@@ -98,7 +99,7 @@ password changing for **all** CalNet authenticated applications.  A
 user presented with a "change password" url might not understand the
 ramifications here.
 
-## Drupal Login Invitation 
+### Drupal Login Invitation 
 
 This setting is blank because it can cause confusion.
 
@@ -109,11 +110,11 @@ option of using Drupal's authentication.  If you need to allow people
 who don't have a CalNet ID to login to your site, you can add a value
 like "Non-UCB people login here" to this text box.
 
-# CAS Attributes configuration 
+## CAS Attributes configuration 
 
 Site path: admin/config/people/cas/attributes
 
-## Fetch CAS Attributes 
+### Fetch CAS Attributes 
 
 The default setting is "only when a CAS account is created (i.e., the
 first login of a CAS user)."This means that a user can edit their

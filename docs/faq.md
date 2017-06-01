@@ -1,4 +1,14 @@
-# How can I be alerted when there is an new release of UC Berkeley CAS and how can I keep up with new developments? 
+# Frequently Asked Questions
+## When will there be a Drupal 8 version of UC Berkeley CAS?
+UC Berkeley CAS was developed for the Open Berkeley Drupal distribution.  UC 
+Berkeley CAS 8.x will be created when Open Berkeley is upgraded to Drupal 8.x. 
+Open Berkeley depends on > 100 Drupal modules many of which have not yet be upgraded 
+to Drupal 8. It may be a while.
+
+If you are interested in developing a 8.x version of this feature to be shared with 
+the campus Drupal community, let us know at <web-platform@berkeley.edu> and we will do what we can to support this 
+effort.
+## How can I be alerted when there is an new release of UC Berkeley CAS and how can I keep up with new developments? 
 
 Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu).
 
@@ -9,7 +19,7 @@ releases for a number of GitHub-hosted projects. We’ve recently began
 monitoring GitHub releases using Sibbell.com (free) and we have been pleased 
 with their service thus far. [More info on Sibbell here](http://www.davegaeddert.com/2014/10/11/sibbell-emails-for-new-releases-on-github/).
 
-# When I login to my site I don't see my user's real name. I see "Logged in as 999999"
+## When I login to my site I don't see my user's real name. I see "Logged in as 999999"
 
 By default UC Berkeley CAS is configured to make an "anonymous bind" (an 
 authenticated LDAP connection) to the UC Berkeley LDAP server. The anonymous 
@@ -22,7 +32,7 @@ a "privileged bind" from the CalNet team](https://calnetweb.berkeley.edu/calnet-
 Then you will need to configure your bind information at `/admin/config/ldap`.
 For more information see the [LDAP Access section](ldap_access.html).
 
-# When logging in I see the error "user warning: Duplicate entry" 
+## When logging in I see the error "user warning: Duplicate entry" 
 
 This results in errors like these:
 ```
@@ -52,12 +62,12 @@ be able to login.
 This can also happen if you allowed Drupal to uninstall the CAS module. See 
 [Avoid uninstalling the CAS module](index.html#avoid-uninstalling-the-cas-module).
 
-# I get a "Not Found" when I try to login at user/admin_login 
+## I get a "Not Found" when I try to login at user/admin_login 
 
 This can happen if your site is not using clean urls.  Try accessing the administrator back door at http://example.com/?q=/user/admin_login. (Consider enabling clean urls at /?q=admin/config/search/clean-urls.)
 
 
-# I notice that there are upgrades available for some of these modules. Is it safe to upgrade them? 
+## I notice that there are upgrades available for some of these modules. Is it safe to upgrade them? 
 
 There are 2 kinds of releases for modules: Feature release (yellow on your 
 Available Updates page) and Security release (red on your Available Updates 
@@ -72,17 +82,17 @@ It’s safest to leave the modules at the versions we deliver in a release.  The
 ucberkeley_cas feature has not been tested with the later versions of these 
 modules.  We can’t guarantee that everything will work.
 
-# Why isn't ucberkeley\_cas hosted on http://drupal.org?
+## Why isn't ucberkeley\_cas hosted on http://drupal.org?
 
 Two reasons: 
 1. This module is specific to using Druapl at UC Berkeley and is not useful to the wider Drupal community.
 2. This module bundles phpCAS which cannot be served from drupal.org for licensing reasons. 
 
 
-# Lots of user accounts are being created on my site and I don't know why. 
+## Lots of user accounts are being created on my site and I don't know why. 
 [See this section](configuration/#check-with-the-cas-server-to-see-if-the-user-is-already-logged-in).
 
-# Why do I sometimes get incorrectly bounced to the CalNet login page when I visit my site's homepage? 
+## Why do I sometimes get incorrectly bounced to the CalNet login page when I visit my site's homepage? 
 
 Steps like these repeat the problem:
 
@@ -96,20 +106,20 @@ The cause of this is a bad cookie in your browser. Here are the steps to fix thi
 
 In Chrome goto Settings > Show Advanced > Privacy > Clear Browsing Data and remove all cookies in last 4 weeks (or since beginning of time).
 
-# Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)? 
+## Why can't I upgrade ucberkeley\_cas using a command like 'drush pm-updatecode' (upc)? 
 
 A. For that to work the ucberkeley\_cas module would need to be hosted on http://drupal.org or another site that interfaces with this drupal update process.  
 
 
-# This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org. 
+## This module require ldap\_servers, but that doesn't seem to be a module that exists on http://drupal.org. 
 
 A. ldap\_servers is bundled in the module called LDAP. Sometimes this causes drush commands to be confused about what module to download.  You may need to download the LDAP module manually. See the [Requirements](#requirements) section for the specific version of LDAP that ucberkeley\_cas requires.  All of the releases of LDAP can be found [here](https://drupal.org/node/806060/release).
 
-# When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_ 
+## When I installed ucberkely\_cas I got the message: _Module ucberkeley\_cas cannot be enabled because it depends on ldap\_servers (7.x-1.0-beta12) but 1.0-beta11 is available_ 
 
 A. Check to see if you have another version of LDAP installed under /sites/all/modules or /profiles.  If so, remove this folder.  If find LDAP under the folder ucb\_cas, you should read about [upgrading from ucb\_cas 1.0](#1.x\_2.x).
 
-# When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this? 
+## When I try to edit a user created by the cas module, I get a validation error on the email address. Why is this? 
 
 A. All accounts on a Drupal site must have unique email addresses.
 Often a site admin user their own address for User 1 and then they
@@ -118,7 +128,7 @@ account gets created, but if they try to edit it, they get a
 validation error on the email field since it is the email that is
 already in use by User 1. To fix this, change the User 1 email.
 
-# Why does the command 'drush @somealias vget cas\_server' retrun the wrong information? 
+## Why does the command 'drush @somealias vget cas\_server' retrun the wrong information? 
 
 (This only applies to sites using the ucberkeley\_envconf module.)
 
@@ -132,13 +142,13 @@ Theoretically you could get the correct value with
 
 drush @somealias php-eval "echo variable\_get('cas\_server', NULL);"
 
-# When trying to use Libraries API with ucberkeley_cas I got a blank white screen. 
+## When trying to use Libraries API with ucberkeley_cas I got a blank white screen. 
 
 See https://drupal.org/node/1394666#comment-8886961
 
 ("WSOD" = "White Screen of Death")
 
-# When trying to use UC Berkeley CAS from my local development environment (e.g. my laptop) I see "Authentication failure: Ticket not validated Reason: no response from the CAS server"
+## When trying to use UC Berkeley CAS from my local development environment (e.g. my laptop) I see "Authentication failure: Ticket not validated Reason: no response from the CAS server"
 
 Full error:
 ```
