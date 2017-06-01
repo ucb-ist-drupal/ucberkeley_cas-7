@@ -18,7 +18,7 @@ projects[cas_attributes][version] = 1.0-rc3
 projects[ldap][type] = module
 projects[ldap][version] = 2.2
 ; If https://github.com/CellarDoorMedia/Lockr-Patches/pull/2 is accepted, update the URI to point to Cellar Door's file.
-projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/bwood/Lockr-Patches/ad678dbca82a8d4df49a4db91dfdb6737e69c245/drupal7/ldap/ldap-7.x-2.2-key-integration.patch"
+projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/bwood/Lockr-Patches/8a4f85a981f7b012da5e4b7786c759d4c9429280/drupal7/ldap/ldap-7.x-2.2-key-integration.patch"
 
 ; UC Berkeley CAS Feature
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
