@@ -23,6 +23,11 @@ a:hover {
     color: #000000;
 }
 
+/* Title hover color */
+.wy-side-nav-search>a:hover, .wy-side-nav-search .wy-dropdown>a:hover {
+    background: #FFFFFF;
+}
+
 /* Skip Navigation styling*/
 .skip {
     position: absolute;
