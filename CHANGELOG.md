@@ -1,3 +1,7 @@
+ucberkeley_cas 7.x-3.1.1
+========================
+* Update the ldap module version in the installation requirements.
+ 
 ucberkeley_cas 7.x-3.1.0
 ========================
 * OPENUCB-1575: Upgrade to ldap-7.x-2.2 per [LDAP - Critical - Data Injection -SA-CONTRIB-2017-052](https://www.drupal.org/node/2882805)
