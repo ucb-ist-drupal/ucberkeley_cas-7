@@ -153,6 +153,37 @@ http://example.com/user/admin_login.
     standard authentication vulnerabilities described above. Do not distribute this 
     URL to your users and do not make a practice of logging in via this URL.
 
+## What if auth.berkeley.edu goes down?
+
+This would affect all campus services depending on CAS.  The 
+responsibility for fixing the problem would be on the CalNet team.
+
+Sites using UC Berkeley CAS can be toggled to use an offsite CAS cluster should 
+this scenario arise.
+
+Toggle your site to use the offsite CAS cluster:
+```
+$ drush vset ucberkeley_envconf_cas_backup_server_enabled 1
+```
+Confirm that cas_server was updated to the backup server:
+```
+$ drush vget cas_server
+cas_server: cas-p4.calnet.berkeley.edu
+```
+Try authenticating to your site.
+
+When the auth.berkeley.edu is back online, toggle your site to use this server
+again:
+```
+$ drush vset ucberkeley_envconf_cas_backup_server_enabled 0
+ucberkeley_envconf_cas_backup_server_enabled was set to "0".                                               [success]
+```
+Confirm the change:
+```
+$ drush vget cas_server
+cas_server: auth-test.berkeley.edu
+```
+
 ## Upgrading 
 ### Upgrading to a new version of ucberkeley_cas (version 2.x or 3.x) 
 
