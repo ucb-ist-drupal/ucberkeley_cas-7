@@ -25,4 +25,4 @@ projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/bwood/Lo
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-1575"
+projects[ucberkeley_cas][download][branch] = "openucb-1540-ldap-ver"
