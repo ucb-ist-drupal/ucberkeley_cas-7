@@ -6,6 +6,7 @@
 cas
 cas_attributes
 ldap
+realname
 
 # Packages #
 ############
