@@ -1,3 +1,7 @@
+ucberkeley_cas 7.x-4.x-dev
+==========================
+* OPENUCB-1546: Use cas.uid for users.name value and implement real_name.module.
+
 ucberkeley_cas 7.x-3.1.1
 ========================
 * Update the ldap module version in the installation requirements.
