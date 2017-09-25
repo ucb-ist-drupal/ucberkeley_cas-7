@@ -11,6 +11,7 @@ function ucberkeley_cas_defaultconfig_features() {
   return array(
     'ucberkeley_cas' => array(
       'default_ldap_servers' => 'default_ldap_servers',
+      'field_default_fields' => 'field_default_fields',
       'strongarm' => 'strongarm',
     ),
   );
@@ -67,6 +68,93 @@ function ucberkeley_cas_defaultconfig_default_ldap_servers() {
   $export['ucb_prod'] = $ldap_servers_conf;
 
   return $export;
+}
+
+/**
+ * Implements hook_defaultconfig_field_default_fields().
+ */
+function ucberkeley_cas_defaultconfig_field_default_fields() {
+  $fields = array();
+
+  // Exported field: 'user-user-field_display_name'.
+  $fields['user-user-field_display_name'] = array(
+    'field_config' => array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'field_display_name',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => 0,
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => 255,
+      ),
+      'translatable' => 0,
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => 0,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 3,
+        ),
+        'featured' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_display_name',
+      'label' => 'Display name',
+      'required' => 0,
+      'settings' => array(
+        'linkit' => array(
+          'button_text' => 'Search',
+          'enable' => 0,
+          'profile' => '',
+        ),
+        'text_processing' => 0,
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => 60,
+        ),
+        'type' => 'text_textfield',
+        'weight' => 0,
+      ),
+    ),
+  );
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Display name');
+
+  return $fields;
 }
 
 /**
