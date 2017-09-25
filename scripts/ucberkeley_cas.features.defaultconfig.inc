@@ -34,12 +34,12 @@ function ucberkeley_cas_defaultconfig_default_ldap_servers() {
   $ldap_servers_conf->port = 389;
   $ldap_servers_conf->tls = TRUE;
   $ldap_servers_conf->followrefs = FALSE;
-  $ldap_servers_conf->bind_method = 3;
-  $ldap_servers_conf->binddn = '';
-  $ldap_servers_conf->bindpw = '';
+  $ldap_servers_conf->bind_method = 1;
+  $ldap_servers_conf->binddn = 'uid=webplatform,ou=applications,dc=berkeley,dc=edu';
+  $ldap_servers_conf->bindpw = '7HH9kPCC2Fy4Q*of';
   $ldap_servers_conf->basedn = array(
     0 => 'ou=people,dc=berkeley,dc=edu',
-    
+    1 => 'ou=guests,dc=berkeley,dc=edu',
   );
   $ldap_servers_conf->user_attr = 'uid';
   $ldap_servers_conf->account_name_attr = '';
@@ -50,7 +50,7 @@ function ucberkeley_cas_defaultconfig_default_ldap_servers() {
   $ldap_servers_conf->unique_persistent_attr_binary = FALSE;
   $ldap_servers_conf->user_dn_expression = '';
   $ldap_servers_conf->ldap_to_drupal_user = '';
-  $ldap_servers_conf->testing_drupal_username = '213108';
+  $ldap_servers_conf->testing_drupal_username = '212374';
   $ldap_servers_conf->testing_drupal_user_dn = '';
   $ldap_servers_conf->grp_unused = FALSE;
   $ldap_servers_conf->grp_object_cat = '';
@@ -182,9 +182,12 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_auto_assigned_role';
-  $rid_auth_user = array_search('authenticated user', user_roles());
   $strongarm->value = array(
-    $rid_auth_user => TRUE,
+    2 => TRUE,
+    4 => 0,
+    5 => 0,
+    6 => 0,
+    7 => 0,
   );
   $export['cas_auto_assigned_role'] = $strongarm;
 
@@ -192,14 +195,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_cert';
-  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
-    // Pantheon's certificate authority bundle will be at this path in all environments.
-    $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
-  }
-  else {
-    // If Pantheon is not the host, hopefully the user will set the value manually.
-    $strongarm->value = '';
-  }
+  $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
   $export['cas_cert'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -352,7 +348,7 @@ web-hosting-pantheon/update-plan-or-stop-billing';
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_server';
-  $strongarm->value = 'auth-test.berkeley.edu';
+  $strongarm->value = 'auth.berkeley.edu';
   $export['cas_server'] = $strongarm;
 
   $strongarm = new stdClass();

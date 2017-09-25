@@ -1,43 +1,3 @@
-diff --git a/patches/defaultconfig-overrides.patch b/patches/defaultconfig-overrides.patch
-index b4240a0..e69de29 100644
---- a/patches/defaultconfig-overrides.patch
-+++ b/patches/defaultconfig-overrides.patch
-@@ -1,35 +0,0 @@
--diff --git a/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc b/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc
--index c4be2b7..8045020 100644
----- a/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc
--+++ b/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc
--@@ -93,12 +93,9 @@ function ucberkeley_cas_defaultconfig_strongarm() {
--   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
--   $strongarm->api_version = 1;
--   $strongarm->name = 'cas_auto_assigned_role';
--+  $rid_auth_user = array_search('authenticated user', user_roles());
--   $strongarm->value = array(
---    2 => TRUE,
---    4 => 0,
---    5 => 0,
---    6 => 0,
---    7 => 0,
--+    $rid_auth_user => TRUE,
--   );
--   $export['cas_auto_assigned_role'] = $strongarm;
-- 
--@@ -106,7 +103,14 @@ function ucberkeley_cas_defaultconfig_strongarm() {
--   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
--   $strongarm->api_version = 1;
--   $strongarm->name = 'cas_cert';
---  $strongarm->value = '/usr/local/share/certs/cacert.pem';
--+  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
--+    // Pantheon's certificate authority bundle will be at this path in all environments.
--+    $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
--+  }
--+  else {
--+    // If Pantheon is not the host, hopefully the user will set the value manually.
--+    $strongarm->value = '';
--+  }
--   $export['cas_cert'] = $strongarm;
-- 
--   $strongarm = new stdClass();
 diff --git a/ucberkeley_cas.features.defaultconfig.inc b/ucberkeley_cas.features.defaultconfig.inc
 index 2b12d92..13df7c6 100644
 --- a/ucberkeley_cas.features.defaultconfig.inc
@@ -73,15 +33,3 @@ index 2b12d92..13df7c6 100644
    $export['cas_cert'] = $strongarm;
  
    $strongarm = new stdClass();
-diff --git a/ucberkeley_cas.info b/ucberkeley_cas.info
-index aae1698..db6847b 100644
---- a/ucberkeley_cas.info
-+++ b/ucberkeley_cas.info
-@@ -13,7 +13,6 @@ dependencies[] = features
- dependencies[] = ldap_servers
- dependencies[] = realname
- dependencies[] = strongarm
--dependencies[] = text
- dependencies[] = token
- features[ctools][] = strongarm:strongarm:1
- features[defaultconfig][] = default_ldap_servers:ucb_prod
