@@ -46,7 +46,7 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
       }
       break;
     case 'cas_add_user_form':
-      $form['account']['cas_name_txt']['#markup'] = 'To find the CAS User ID for a UC Berkeley employee visit the ' . l('CalNet Directory', 'https://calnet.berkeley.edu/directory/index.pl', array('attributes' => array('target'=>'_blank'))) . ' and search for the person.  In your search results click on the person\'s name. At the top of the page you should see <em>Details for Jane Smith (UID: 111111)</em>. Copy that UID number and paste it into the CAS User ID box.';
+      $form['account']['cas_name_txt']['#markup'] = 'To find the CAS User ID for a UC Berkeley employee visit the ' . l('CalNet Directory', 'https://calnet.berkeley.edu/directory/index.pl', array('attributes' => array('target' => '_blank'))) . ' and search for the person.  In your search results click on the person\'s name. At the top of the page you should see <em>Details for Jane Smith (UID: 111111)</em>. Copy that UID number and paste it into the CAS User ID box.';
       $form['account']['cas_name']['#title'] = 'CAS User ID';
       $form['account']['cas_name']['#description'] = 'In order to create a new CalNet (CAS) authenticated user, just enter the person\'s CAS UID here. ' . $form['account']['cas_name']['#description'];
       break;
@@ -304,4 +304,79 @@ The <a href="https://github.com/ucb-ist-drupal/ucberkeley_cas-7/tree/master" tar
 EOT;
 
   return $out;
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Alter views to use realname value instead of username.
+ *
+ * @param $views
+ */
+
+
+function ucberkeley_cas_views_default_views_alter(&$views) {
+// Modify Admin Views' Adminminstration: Users view
+  $realname_column_order = array(
+    'views_bulk_operations',
+    'realname',
+    'name',
+    'mail',
+    'rid',
+    'created',
+    'login',
+    'edit_node',
+  );
+
+  if (array_key_exists('admin_views_user', $views)) {
+    $handler =& $views['admin_views_user']->display['default']->handler;
+    $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
+    $handler->display->display_options['style_options']['columns']['mail'] = 'realname';
+    // Order the columns correctly
+    $handler->display->display_options['style_options']['columns'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['columns']);
+    $handler->display->display_options['style_options']['info']['realname'] = array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '<br />',
+      'empty_column' => 0,
+    );
+    // Order the columns
+    $handler->display->display_options['style_options']['info'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['info']);
+    // Field: Realname: Real name
+    $handler->display->display_options['fields']['realname']['id'] = 'realname';
+    $handler->display->display_options['fields']['realname']['table'] = 'realname';
+    $handler->display->display_options['fields']['realname']['field'] = 'realname';
+    $handler->display->display_options['fields']['realname']['label'] = 'NameR';
+    // Field: User: Name
+    $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+    // Order the columns
+    $handler->display->display_options['fields'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['fields']);
+  }
+
+  // Modify Total Control's: control_users View
+  if (array_key_exists('control_users', $views)) {
+    $handler =& $views['control_users']->display['default']->handler;
+    $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
+    // Order the columns correctly
+    $handler->display->display_options['style_options']['columns']['realname'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['columns']);
+    $handler->display->display_options['style_options']['info']['realname'] = array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '<br />',
+      'empty_column' => 0,
+    );
+    // Order the columns
+    $handler->display->display_options['style_options']['info'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['info']);
+    // Field: Realname: Real name
+    $handler->display->display_options['fields']['realname']['id'] = 'realname';
+    $handler->display->display_options['fields']['realname']['table'] = 'realname';
+    $handler->display->display_options['fields']['realname']['field'] = 'realname';
+    $handler->display->display_options['fields']['realname']['label'] = 'NameR';
+    // Field: User: Name
+    $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+    // Order the columns
+    $handler->display->display_options['fields'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['fields']);
+  }
 }
