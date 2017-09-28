@@ -317,7 +317,7 @@ EOT;
 
 function ucberkeley_cas_views_default_views_alter(&$views) {
 // Modify Admin Views' Adminminstration: Users view
-  $realname_column_order = array(
+  $control_user_column_order = array(
     'views_bulk_operations',
     'realname',
     'name',
@@ -327,13 +327,15 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     'login',
     'edit_node',
   );
+  $admin_views_user_column_order = $control_user_column_order;
+  unset($admin_views_user_column_order[6]); // Login column doesn't exist in admin_views_user
 
   if (array_key_exists('admin_views_user', $views)) {
     $handler =& $views['admin_views_user']->display['default']->handler;
     $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
     $handler->display->display_options['style_options']['columns']['mail'] = 'realname';
     // Order the columns correctly
-    $handler->display->display_options['style_options']['columns'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['columns']);
+    $handler->display->display_options['style_options']['columns'] = array_merge(array_flip($admin_views_user_column_order), $handler->display->display_options['style_options']['columns']);
     $handler->display->display_options['style_options']['info']['realname'] = array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
@@ -342,7 +344,7 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
       'empty_column' => 0,
     );
     // Order the columns
-    $handler->display->display_options['style_options']['info'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['info']);
+    $handler->display->display_options['style_options']['info'] = array_merge(array_flip($admin_views_user_column_order), $handler->display->display_options['style_options']['info']);
     // Field: Realname: Real name
     $handler->display->display_options['fields']['realname']['id'] = 'realname';
     $handler->display->display_options['fields']['realname']['table'] = 'realname';
@@ -351,7 +353,7 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     // Field: User: Name
     $handler->display->display_options['fields']['name']['exclude'] = TRUE;
     // Order the columns
-    $handler->display->display_options['fields'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['fields']);
+    $handler->display->display_options['fields'] = array_merge(array_flip($admin_views_user_column_order), $handler->display->display_options['fields']);
   }
 
   // Modify Total Control's: control_users View
@@ -359,7 +361,7 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     $handler =& $views['control_users']->display['default']->handler;
     $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
     // Order the columns correctly
-    $handler->display->display_options['style_options']['columns']['realname'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['columns']);
+    $handler->display->display_options['style_options']['columns'] = array_merge(array_flip($control_user_column_order), $handler->display->display_options['style_options']['columns']);
     $handler->display->display_options['style_options']['info']['realname'] = array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
@@ -368,7 +370,7 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
       'empty_column' => 0,
     );
     // Order the columns
-    $handler->display->display_options['style_options']['info'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['style_options']['info']);
+    $handler->display->display_options['style_options']['info'] = array_merge(array_flip($control_user_column_order), $handler->display->display_options['style_options']['info']);
     // Field: Realname: Real name
     $handler->display->display_options['fields']['realname']['id'] = 'realname';
     $handler->display->display_options['fields']['realname']['table'] = 'realname';
@@ -377,6 +379,6 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     // Field: User: Name
     $handler->display->display_options['fields']['name']['exclude'] = TRUE;
     // Order the columns
-    $handler->display->display_options['fields'] = array_merge(array_flip($realname_column_order), $handler->display->display_options['fields']);
+    $handler->display->display_options['fields'] = array_merge(array_flip($control_user_column_order), $handler->display->display_options['fields']);
   }
 }
