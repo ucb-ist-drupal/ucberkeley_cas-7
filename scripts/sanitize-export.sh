@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+if [[ ! $PWD =~ scripts$ ]]; then
+  echo "Please cd to the 'scripts' directory before running this."
+  exit 1
+fi
 cd ..
 sed -E -i '' \
 -e "s/$ldap_servers_conf->bind_method = 1;/$ldap_servers_conf->bind_method = 3;/" \
