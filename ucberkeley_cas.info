@@ -13,6 +13,7 @@ dependencies[] = features
 dependencies[] = ldap_servers
 dependencies[] = realname
 dependencies[] = strongarm
+dependencies[] = text
 dependencies[] = token
 features[ctools][] = strongarm:strongarm:1
 features[defaultconfig][] = default_ldap_servers:ucb_prod

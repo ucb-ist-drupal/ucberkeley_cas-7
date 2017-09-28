@@ -22,7 +22,7 @@ function ucberkeley_cas_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 0,
       ),
       'featured' => array(
         'label' => 'above',
