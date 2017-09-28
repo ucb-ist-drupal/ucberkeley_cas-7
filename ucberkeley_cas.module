@@ -327,8 +327,18 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     'login',
     'edit_node',
   );
-  $admin_views_user_column_order = $control_user_column_order;
-  unset($admin_views_user_column_order[6]); // Login column doesn't exist in admin_views_user
+  $admin_views_user_column_order = array(
+    'views_bulk_operations',
+    'realname',
+    'name',
+    'mail',
+    'status',
+    'rid',
+    'created',
+    'access',
+    'edit_node',
+    'cancel_node',
+  );
 
   if (array_key_exists('admin_views_user', $views)) {
     $handler =& $views['admin_views_user']->display['default']->handler;
@@ -360,8 +370,10 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
   if (array_key_exists('control_users', $views)) {
     $handler =& $views['control_users']->display['default']->handler;
     $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
-    // Order the columns correctly
+    // Order the columns correctly.
     $handler->display->display_options['style_options']['columns'] = array_merge(array_flip($control_user_column_order), $handler->display->display_options['style_options']['columns']);
+    // Make sure the vbo value is set.
+    $handler->display->display_options['style_options']['columns']['views_bulk_operations'] = 'views_bulk_operations';
     $handler->display->display_options['style_options']['info']['realname'] = array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
