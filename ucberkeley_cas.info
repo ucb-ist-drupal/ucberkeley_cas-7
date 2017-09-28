@@ -45,6 +45,7 @@ features[defaultconfig][] = strongarm:cas_registerURL
 features[defaultconfig][] = strongarm:cas_server
 features[defaultconfig][] = strongarm:cas_uri
 features[defaultconfig][] = strongarm:cas_user_register
+features[defaultconfig][] = strongarm:realname_pattern
 features[defaultconfig][] = strongarm:user_mail_status_activated_notify
 features[features_api][] = api:2
 features[field_base][] = field_display_name
