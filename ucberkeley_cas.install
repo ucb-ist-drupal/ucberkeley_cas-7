@@ -1,4 +1,6 @@
 <?php
+define('WATCHDOG_TYPE', basename(__FILE__, '.install'));
+
 /**
  * Implementation of hook requirements:
  * This helps the user upgrade from ucb_cas-7.x-1.x to ucberkeley_cas-7.x-2.x
@@ -187,6 +189,20 @@ function ucberkeley_cas_hook_update_dependencies() {
   return $dependencies;
 }
 
+function revert_views($view_names) {
+  foreach ($view_names as $view_name) {
+    // Revert the view
+    $view = views_get_view($view_name);
+    if ($view->type == t('Overridden')) {
+      // Revert the view.
+      $view->delete();
+      // Clear its cache.
+      ctools_include('object-cache');
+      ctools_object_cache_clear('view', $view->name);
+    }
+  }
+}
+
 /**
  * Revert ucberkeley_cas.feature
  */
@@ -263,5 +279,117 @@ function ucberkeley_cas_update_7303() {
   variable_set('cas_attributes', $cas_attributes);
 }
 
+/**
+ * Revert ucberkeley_cas feature. Revert user views.
+ */
+function ucberkeley_cas_update_7304(&$sandbox) {
+  features_revert(array('ucberkeley_cas' => array('field_instance', 'field_base', 'variable')));
+  cache_clear_all(); //TODO what is the cid for views?
+  revert_views(array(
+    'admin_views_user',
+    'control_users'
+  ));
+}
+
+/**
+ * Update the users table: Replace user.name with CAS UID. Move user first/lastname to field_display_name.
+ */
+function ucberkeley_cas_update_7305(&$sandbox) {
+  // Using the batch api would be better...
+
+  $sid = 'ucb_prod';
+  $ldap_server = new LdapServer($sid);
+  $attributes = array(
+    'berkeleyEduFirstName',
+    'berkeleyEduLastName',
+    'givenname',
+    'sn'
+  );
+
+  $users = entity_load('user');
+
+  foreach ($users as $uid => $data) {
+
+    // Skip anonymous user and user 1.
+    if (in_array($uid, array(0, 1))) {
+      unset($data);
+      continue;
+    }
+
+
+    if (empty($data->cas_name)) {
+      $msg = t("No CAS UID for @name. Skipping this user.", array('@name' => $data->name));
+      watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
+      drupal_set_message($msg, 'warning');
+      unset($data);
+      continue;
+    }
+
+    $filter = '(' . $ldap_server->user_attr . '=' . $data->cas_name . ')';
+
+    foreach ($ldap_server->basedn as $basedn) {
+      if (empty($basedn)) {
+        continue;
+      }
+      $result = $ldap_server->search($basedn, $filter, $attributes);
+      if (!$result || !isset($result['count']) || !$result['count']) {
+        continue;
+      }
+      else {
+        // Must find exactly one user.
+        if ($result['count'] != 1) {
+          $count = $result['count'];
+          //watchdog('ldap_servers', "Error: !count users found with $filter under $basedn.", array('!count' => $count), WATCHDOG_ERROR);
+          $msg = t("> 1 user found with @filter under @basedn.", array('@filter' => $filter, '@basedn' => $basedn));
+          watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
+          drupal_set_message($msg, 'warning');
+          continue;
+        }
+        else {
+          break;
+        }
+      }
+    }
+
+    $user_name = "";
+    if ((!isset($result[0]['berkeleyedufirstname'][0]) || !isset($result[0]['berkeleyedulastname'][0]) ||
+        empty($result[0]['berkeleyedufirstname'][0]) || !empty($result[0]['berkeleyedulastname'][0]))
+      &&
+      (!isset($result[0]['givenname'][0]) || !isset($result[0]['sn'][0]) ||
+        empty($result[0]['givenname'][0]) || empty($result[0]['sn'][0]))
+    ) {
+
+      // Some (all?) of these people who are not found in LDAP are terminated
+      // employees. Use the last name we had for them.
+      // Remove ", BA" and ", PhD" etc from ends of names:
+      $user_name = preg_replace("/,.*/", "", $data->name);
+      // Admin could probably block/remove this account, so let them know.
+      $msg = t("No LDAP names found for @cas_name, so using @name. (This person may no longer be employed by UC Berkeley.)", array('@cas_name' => $data->cas_name, '@name' =>  $user_name));
+      watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
+      drupal_set_message($msg);
+    }
+
+
+    if (isset($result[0]['berkeleyedufirstname'][0]) && isset($result[0]['berkeleyedulastname'][0]) &&
+      !empty($result[0]['berkeleyedufirstname'][0]) && !empty($result[0]['berkeleyedulastname'][0])
+    ) {
+      $user_name = $result[0]['berkeleyedufirstname'][0] . " " . $result[0]['berkeleyedulastname'][0];
+    }
+    elseif (isset($result[0]['givenname'][0]) && isset($result[0]['sn'][0]) &&
+      !empty($result[0]['givenname'][0]) && !empty($result[0]['sn'][0])
+    ) {
+      $user_name = $result[0]['givenname'][0] . " " . $result[0]['sn'][0];
+    }
+
+    $wrapper = entity_metadata_wrapper('user', $data);
+    $wrapper->field_display_name->set($user_name);
+    $wrapper->name->set($data->cas_name);
+    $wrapper->save();
+    $msg = t("New name assiged to for @cas_name: @display_name", array('@cas_name' => $data->cas_name, '@display_name' =>  $wrapper->field_display_name->value()));
+    watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
+    drupal_set_message($msg);
+    unset($data);
+  }
+}
 
 
