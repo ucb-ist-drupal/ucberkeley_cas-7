@@ -327,6 +327,11 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     'login',
     'edit_node',
   );
+  $control_user_filters_order = array(
+    'realname',
+    'mail',
+    'rid',
+  );
   $admin_views_user_column_order = array(
     'views_bulk_operations',
     'realname',
@@ -338,6 +343,12 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     'access',
     'edit_node',
     'cancel_node',
+  );
+  $admin_views_user_filter_order = array(
+    'realname',
+    'mail',
+    'status',
+    'rid',
   );
 
   if (array_key_exists('admin_views_user', $views)) {
@@ -359,11 +370,27 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     $handler->display->display_options['fields']['realname']['id'] = 'realname';
     $handler->display->display_options['fields']['realname']['table'] = 'realname';
     $handler->display->display_options['fields']['realname']['field'] = 'realname';
-    $handler->display->display_options['fields']['realname']['label'] = 'NameR';
+    $handler->display->display_options['fields']['realname']['label'] = 'Name';
     // Field: User: Name
     $handler->display->display_options['fields']['name']['exclude'] = TRUE;
     // Order the columns
     $handler->display->display_options['fields'] = array_merge(array_flip($admin_views_user_column_order), $handler->display->display_options['fields']);
+
+    /* Filter criterion: Realname: Name */
+    unset($handler->display->display_options['filters']['name']);
+    $handler->display->display_options['filters']['realname']['id'] = 'realname';
+    $handler->display->display_options['filters']['realname']['table'] = 'realname';
+    $handler->display->display_options['filters']['realname']['field'] = 'realname';
+    $handler->display->display_options['filters']['realname']['operator'] = 'contains';
+    $handler->display->display_options['filters']['realname']['group'] = 1;
+    $handler->display->display_options['filters']['realname']['exposed'] = TRUE;
+    $handler->display->display_options['filters']['realname']['expose']['operator_id'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['label'] = 'Name';
+    $handler->display->display_options['filters']['realname']['expose']['operator'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['identifier'] = 'realname';
+    $handler->display->display_options['filters']['realname']['expose']['remember'] = TRUE;
+    // Order the columns
+    $handler->display->display_options['filters'] = array_merge(array_flip($admin_views_user_filter_order), $handler->display->display_options['filters']);
   }
 
   // Modify Total Control's: control_users View
@@ -387,10 +414,42 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     $handler->display->display_options['fields']['realname']['id'] = 'realname';
     $handler->display->display_options['fields']['realname']['table'] = 'realname';
     $handler->display->display_options['fields']['realname']['field'] = 'realname';
-    $handler->display->display_options['fields']['realname']['label'] = 'NameR';
+    $handler->display->display_options['fields']['realname']['label'] = 'Name';
     // Field: User: Name
     $handler->display->display_options['fields']['name']['exclude'] = TRUE;
     // Order the columns
     $handler->display->display_options['fields'] = array_merge(array_flip($control_user_column_order), $handler->display->display_options['fields']);
+
+    /* Filter criterion: Realname: Name */
+    unset($handler->display->display_options['filters']['uid_1']);
+    $handler->display->display_options['filters']['realname']['id'] = 'realname';
+    $handler->display->display_options['filters']['realname']['table'] = 'realname';
+    $handler->display->display_options['filters']['realname']['field'] = 'realname';
+    $handler->display->display_options['filters']['realname']['operator'] = 'contains';
+    $handler->display->display_options['filters']['realname']['group'] = 1;
+    $handler->display->display_options['filters']['realname']['exposed'] = TRUE;
+    $handler->display->display_options['filters']['realname']['expose']['operator_id'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['label'] = 'Name';
+    $handler->display->display_options['filters']['realname']['expose']['operator'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['identifier'] = 'realname';
+    $handler->display->display_options['filters']['realname']['expose']['remember_roles'] = array(
+      2 => '2',
+      1 => 0,
+      4 => 0,
+      5 => 0,
+      8 => 0,
+      6 => 0,
+      7 => 0,
+    );
+    $handler->display->display_options['filters']['realname']['autocomplete_filter'] = 1;
+    $handler->display->display_options['filters']['realname']['autocomplete_items'] = '10';
+    $handler->display->display_options['filters']['realname']['autocomplete_min_chars'] = '0';
+    $handler->display->display_options['filters']['realname']['autocomplete_field'] = 'realname';
+    $handler->display->display_options['filters']['realname']['autocomplete_raw_suggestion'] = 1;
+    $handler->display->display_options['filters']['realname']['autocomplete_raw_dropdown'] = 1;
+    $handler->display->display_options['filters']['realname']['autocomplete_dependent'] = 0;
+    // Order the columns
+    $handler->display->display_options['filters'] = array_merge(array_flip($control_user_filters_order), $handler->display->display_options['filters']);
   }
 }
+
