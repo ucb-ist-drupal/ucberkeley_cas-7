@@ -12,6 +12,7 @@ sed -E -i '' \
 -e "s/$ldap_servers_conf->testing_drupal_username = '[^']+';/$ldap_servers_conf->testing_drupal_username = '213108';/" \
 -e "s/1 => 'ou=guests,dc=berkeley,dc=edu',//" \
 ucberkeley_cas.features.defaultconfig.inc
-patch < patches/defaultconfig-overrides.patch
+# -B: write the .orig file to /tmp.  Don't want this backup in the project.
+patch -B /tmp/ < patches/defaultconfig-overrides.patch
 
 
