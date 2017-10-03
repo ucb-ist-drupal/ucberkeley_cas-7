@@ -283,7 +283,13 @@ function ucberkeley_cas_update_7303() {
  * Revert ucberkeley_cas feature. Revert user views.
  */
 function ucberkeley_cas_update_7304(&$sandbox) {
-  features_revert(array('ucberkeley_cas' => array('field_instance', 'field_base', 'variable')));
+  features_revert(array(
+    'ucberkeley_cas' => array(
+      'field_instance',
+      'field_base',
+      'variable'
+    )
+  ));
   cache_clear_all(); //TODO what is the cid for views?
   revert_views(array(
     'admin_views_user',
@@ -340,7 +346,10 @@ function ucberkeley_cas_update_7305(&$sandbox) {
         if ($result['count'] != 1) {
           $count = $result['count'];
           //watchdog('ldap_servers', "Error: !count users found with $filter under $basedn.", array('!count' => $count), WATCHDOG_ERROR);
-          $msg = t("> 1 user found with @filter under @basedn.", array('@filter' => $filter, '@basedn' => $basedn));
+          $msg = t("> 1 user found with @filter under @basedn.", array(
+            '@filter' => $filter,
+            '@basedn' => $basedn
+          ));
           watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
           drupal_set_message($msg, 'warning');
           continue;
@@ -364,7 +373,10 @@ function ucberkeley_cas_update_7305(&$sandbox) {
       // Remove ", BA" and ", PhD" etc from ends of names:
       $user_name = preg_replace("/,.*/", "", $data->name);
       // Admin could probably block/remove this account, so let them know.
-      $msg = t("No LDAP names found for @cas_name, so using @name. (This person may no longer be employed by UC Berkeley.)", array('@cas_name' => $data->cas_name, '@name' =>  $user_name));
+      $msg = t("No LDAP names found for @cas_name, so using @name. (This person may no longer be employed by UC Berkeley.)", array(
+        '@cas_name' => $data->cas_name,
+        '@name' => $user_name
+      ));
       watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
       drupal_set_message($msg);
     }
@@ -385,11 +397,26 @@ function ucberkeley_cas_update_7305(&$sandbox) {
     $wrapper->field_display_name->set($user_name);
     $wrapper->name->set($data->cas_name);
     $wrapper->save();
-    $msg = t("New name assiged to for @cas_name: @display_name", array('@cas_name' => $data->cas_name, '@display_name' =>  $wrapper->field_display_name->value()));
+    $msg = t("New name assiged to for @cas_name: @display_name", array(
+      '@cas_name' => $data->cas_name,
+      '@display_name' => $wrapper->field_display_name->value()
+    ));
     watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
     drupal_set_message($msg);
     unset($data);
   }
+}
+
+/**
+ * Hide the realname field on the user bundle since it duplicates field_display_name.
+ */
+function ucberkeley_cas_update_7306(&$sandbox) {
+  // Get settings for user bundle.
+  $bundle_settings = field_bundle_settings('user', 'user');
+  // Set visibility for realname field to Hidden.
+  $bundle_settings['extra_fields']['display']['realname']['default']['visible'] = 0;
+  // Save updated bundle settings.
+  field_bundle_settings('user', 'user', $bundle_settings);
 }
 
 
