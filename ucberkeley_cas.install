@@ -189,7 +189,7 @@ function ucberkeley_cas_hook_update_dependencies() {
   return $dependencies;
 }
 
-function revert_views($view_names) {
+function ucberkeley_cas_revert_views($view_names) {
   foreach ($view_names as $view_name) {
     // Revert the view
     $view = views_get_view($view_name);
@@ -202,6 +202,14 @@ function revert_views($view_names) {
     }
   }
 }
+
+function ucberkeley_cas_invalidate_views_cache($view_names) {
+  foreach ($view_names as $view_name) {
+    cache_clear_all('ctools_export:views_view:' . $view_name, 'cache_views', TRUE);
+    cache_clear_all($view_name, 'cache_views_data', TRUE);
+  }
+}
+
 
 /**
  * Revert ucberkeley_cas.feature
@@ -290,11 +298,12 @@ function ucberkeley_cas_update_7304(&$sandbox) {
       'variable'
     )
   ));
-  cache_clear_all(); //TODO what is the cid for views?
-  revert_views(array(
+  $user_views = array(
     'admin_views_user',
     'control_users'
-  ));
+  );
+  ucberkeley_cas_invalidate_views_cache($user_views);
+  ucberkeley_cas_revert_views($user_views);
 }
 
 /**
