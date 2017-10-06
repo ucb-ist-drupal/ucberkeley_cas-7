@@ -345,100 +345,39 @@ function ucberkeley_cas_update_7305(&$sandbox) {
 
   foreach ($result as $data) {
 
-    if (empty($data->init)) {
-      $msg = t("No CAS UID for @name. Skipping this user.", array('@name' => $data->name));
+    // Records with a NULL init field are users that didn't login via CAS
+    // Non numeric init records (e.g. email addresses) may exist.  Maybe these were logins that happened before cas.module was enabled?
+    if (empty($data->init) || !is_numeric($data->init)) {
+      $msg = t("No CAS UID for @name. Maybe this user did not authenticate via CAS. Skipping...", array('@name' => $data->name));
       watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
       //drupal_set_message($msg, 'warning');
       $sandbox['messages'][] = $msg;
+      $sandbox['progress']++;
+      $sandbox['current_user'] = $data->uid;
       unset($data);
       continue;
     }
 
-    $filter = '(' . $ldap_server->user_attr . '=' . $data->init . ')';
+    // Remove ", BA" and ", PhD" etc from ends of names:
+    $user_name = preg_replace("/,.*/", "", $data->name);
 
-    foreach ($ldap_server->basedn as $basedn) {
-      if (empty($basedn)) {
-        continue;
-      }
-      $ldap_result = $ldap_server->search($basedn, $filter, $attributes);
-      if (!$ldap_result || !isset($ldap_result['count']) || !$ldap_result['count']) {
-        continue;
-      }
-      else {
-        // Must find exactly one user.
-        if ($ldap_result['count'] != 1) {
-          $count = $ldap_result['count'];
-          //watchdog('ldap_servers', "Error: !count users found with $filter under $basedn.", array('!count' => $count), WATCHDOG_ERROR);
-          $msg = t("> 1 user found with @filter under @basedn.", array(
-            '@filter' => $filter,
-            '@basedn' => $basedn
-          ));
-          watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
-          //drupal_set_message($msg, 'warning');
-          $sandbox['messages'][] = $msg;
-          continue;
-        }
-        else {
-          break;
-        }
-      }
-    }
-
-    $user_name = "";
-    if ((!isset($ldap_result[0]['berkeleyedufirstname'][0]) || !isset($ldap_result[0]['berkeleyedulastname'][0]) ||
-        empty($ldap_result[0]['berkeleyedufirstname'][0]) || !empty($ldap_result[0]['berkeleyedulastname'][0]))
-      &&
-      (!isset($ldap_result[0]['givenname'][0]) || !isset($ldap_result[0]['sn'][0]) ||
-        empty($ldap_result[0]['givenname'][0]) || empty($ldap_result[0]['sn'][0]))
-    ) {
-
-      // Some (all?) of these people who are not found in LDAP are terminated
-      // employees. Use the last name we had for them.
-      // Remove ", BA" and ", PhD" etc from ends of names:
-      $user_name = preg_replace("/,.*/", "", $data->name);
-      // Admin could probably block/remove this account, so let them know.
-      $msg = t("No LDAP names found for @cas_name, so using @name. (This person may no longer be employed by UC Berkeley.)", array(
-        '@cas_name' => $data->init,
-        '@name' => $user_name
-      ));
-      watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
-      //drupal_set_message($msg);
-      $sandbox['messages'][] = $msg;
-    }
-
-
-    if (isset($ldap_result[0]['berkeleyedufirstname'][0]) && isset($ldap_result[0]['berkeleyedulastname'][0]) &&
-      !empty($ldap_result[0]['berkeleyedufirstname'][0]) && !empty($ldap_result[0]['berkeleyedulastname'][0])
-    ) {
-      $user_name = $ldap_result[0]['berkeleyedufirstname'][0] . " " . $ldap_result[0]['berkeleyedulastname'][0];
-    }
-    elseif (isset($ldap_result[0]['givenname'][0]) && isset($ldap_result[0]['sn'][0]) &&
-      !empty($ldap_result[0]['givenname'][0]) && !empty($ldap_result[0]['sn'][0])
-    ) {
-      $user_name = $ldap_result[0]['givenname'][0] . " " . $ldap_result[0]['sn'][0];
-    }
-
-    //$user_object = user_load(array($data->uid));
-    //$user_object = (object) $user;
-    $wrapper = entity_metadata_wrapper('user', $data->uid);
-    $wrapper->field_display_name->set($user_name);
     // If name is already set to the CAS UID (there could have been an aborted earlier run) don't try to update it again because this will cause a PDO Exception.
-    $existing_name = $wrapper->name->value();
-    if ($existing_name != $data->init) {
+    if (!is_numeric($user_name)) {
+      $wrapper = entity_metadata_wrapper('user', $data->uid);
       $wrapper->name->set($data->init);
+      $wrapper->field_display_name->set($user_name);
       $msg = t("New name assiged to for @cas_name: @display_name", array(
         '@cas_name' => $data->init,
         '@display_name' => $wrapper->field_display_name->value()
       ));
+      $wrapper->save();
     }
     else {
-      $msg = t("CAS UID (@cas_name) already in correct field. Display name set to @display_name.", array(
+      $msg = t("CAS UID (@cas_name) already in correct field.", array(
         '@cas_name' => $data->init,
-        '@display_name' => $wrapper->field_display_name->value()
+        '@display_name' => $user_name
       ));
-
     }
-    $wrapper->save();
 
     watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
     //drupal_set_message($msg);
@@ -455,7 +394,7 @@ function ucberkeley_cas_update_7305(&$sandbox) {
     // to the user.
     //$final_message = '<ul><li>' . implode('</li><li>', $sandbox['messages']) . "</li></ul>";
     $final_message = implode("\n", $sandbox['messages']);
-    return t("Users table update complete:\n@message", array('@message' => $final_message));
+    return t("Users table update complete:\n<pre>\n@message\n</pre>\n", array('@message' => $final_message));
   }
 }
 
