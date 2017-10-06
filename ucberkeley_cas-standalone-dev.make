@@ -9,7 +9,7 @@ libraries[phpcas][download][url] = "https://github.com/Jasig/phpCAS/archive/1.3.
 projects[cas][type] = module
 projects[cas][version] = 1.5
 projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
-projects[cas][patch][2914223] = "https://www.drupal.org/files/issues/cas-2914223-format-username.patch""
+projects[cas][patch][2914223] = "https://www.drupal.org/files/issues/cas-2914223-format-username.patch"
 
 ; CAS Attributes
 projects[cas_attributes][type] = module
