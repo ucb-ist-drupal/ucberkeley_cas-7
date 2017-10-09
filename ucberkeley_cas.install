@@ -290,7 +290,7 @@ function ucberkeley_cas_update_7303() {
 /**
  * Enable Realname. Revert ucberkeley_cas feature. Revert user views.
  */
-function ucberkeley_cas_update_7304(&$sandbox) {
+function ucberkeley_cas_update_7401() {
   module_enable(array('realname'));
   drupal_flush_all_caches();
   features_revert(array(
@@ -307,7 +307,7 @@ function ucberkeley_cas_update_7304(&$sandbox) {
 /**
  * Hide the realname field on the user bundle since it duplicates field_display_name.
  */
-function ucberkeley_cas_update_7305(&$sandbox) {
+function ucberkeley_cas_update_7402() {
   // Get settings for user bundle.
   $bundle_settings = field_bundle_settings('user', 'user');
   // Set visibility for realname field to Hidden.
@@ -316,11 +316,20 @@ function ucberkeley_cas_update_7305(&$sandbox) {
   field_bundle_settings('user', 'user', $bundle_settings);
 }
 
+/**
+ * Temporarily unset pathauto_user_pattern to speed up the big user update we are about to do.
+ */
+function ucberkeley_cas_update_7403() {
+  if (module_exists('pathauto')) {
+    variable_set('pathauto_user_pattern', '');
+  }
+}
+
 
 /**
  * Update the users table: Replace user.name with CAS UID. Move user first and lastname to field_display_name.
  */
-function ucberkeley_cas_update_7306(&$sandbox) {
+function ucberkeley_cas_update_7404(&$sandbox) {
 
   // Use the sandbox at your convenience to store the information needed
   // to track progression between successive calls to the function.
@@ -419,5 +428,15 @@ function ucberkeley_cas_update_7306(&$sandbox) {
   drupal_flush_all_caches();
 }
 
+/**
+ * Restore pathauto_user_pattern and update pathauto user aliases.
+ */
+function ucberkeley_cas_update_7405() {
+  if (module_exists('pathauto') && module_exists('realname')) {
+    variable_set('pathauto_user_pattern', 'users/[user:name]');
+    $users = entity_load('user');
+    pathauto_user_update_alias_multiple(array_keys($users), 'bulkupdate');
+  }
+}
 
 
