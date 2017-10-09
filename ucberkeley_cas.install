@@ -288,9 +288,10 @@ function ucberkeley_cas_update_7303() {
 }
 
 /**
- * Revert ucberkeley_cas feature. Revert user views.
+ * Enable Realname. Revert ucberkeley_cas feature. Revert user views.
  */
 function ucberkeley_cas_update_7304(&$sandbox) {
+  module_enable(array('realname'));
   drupal_flush_all_caches();
   features_revert(array(
     'ucberkeley_cas' => array(
@@ -413,6 +414,9 @@ function ucberkeley_cas_update_7306(&$sandbox) {
     $final_message = implode("\n", $sandbox['messages']);
     return t("Users table update complete:\n<pre>\n@message\n</pre>\n", array('@message' => $final_message));
   }
+
+  // On some Pantheon-hosted sites admin_views_user and and control_users views fail to show new fields.
+  drupal_flush_all_caches();
 }
 
 
