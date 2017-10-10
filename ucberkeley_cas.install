@@ -312,6 +312,7 @@ function ucberkeley_cas_update_7402() {
   $bundle_settings = field_bundle_settings('user', 'user');
   // Set visibility for realname field to Hidden.
   $bundle_settings['extra_fields']['display']['realname']['default']['visible'] = 0;
+  $bundle_settings['extra_fields']['display']['realname']['default']['weight'] = 0;
   // Save updated bundle settings.
   field_bundle_settings('user', 'user', $bundle_settings);
 }
