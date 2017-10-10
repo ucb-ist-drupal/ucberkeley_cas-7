@@ -6,6 +6,7 @@ ucberkeley_cas 7.x-4.0
   * Facilitates integration with CalGroups using ldap_authorization.module. 
   * Adds Real Name module.
   * No updates to other modules or libraries.
+  * [Relase Notes](http://uc-berkeley-cas.readthedocs.io/en/latest/release_notes/). 
 
 ucberkeley_cas 7.x-3.1.1
 ========================
