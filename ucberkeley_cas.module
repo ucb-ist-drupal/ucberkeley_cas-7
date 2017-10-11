@@ -35,6 +35,7 @@ function ucberkeley_cas_init() {
  * @param $form_id
  */
 function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
+  $x=1;
   switch ($form_id) {
     case 'user_profile_form':
       if (user_access('administer users') && (variable_get('cas_hide_password', 0) == 1)) {
@@ -51,6 +52,30 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
       $form['account']['cas_name']['#description'] = 'In order to create a new CalNet (CAS) authenticated user, just enter the person\'s CAS UID here. ' . $form['account']['cas_name']['#description'];
       break;
   }
+}
+/**
+ * Implements hook_form_FORM_ID_alter() when editing the node form.
+ *
+ * Per https://www.drupal.org/node/985944#comment-6808736, we can't display
+ * the real name as the $form['author'['name'] value because the form wants
+ * the users.name value.  Change the title/description to make this a bit more
+ * clear to the user.
+ */
+function ucberkeley_cas_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $user = user_load_by_name($form['author']['name']['#default_value']);
+  $form['author']['name']['#title'] .=  " <em>" . format_username($user) . "</em>. (Below is this user's ID.)";
+  $form['author']['name']['#description'] = "Begin typing a user's name to find the corresponding ID. " . $form['author']['name']['#description'];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() when editing the file entity form.
+ *
+ * Same reason as ucberkeley_cas_form_node_form_alter().
+ */
+function ucberkeley_cas_form_file_entity_edit_alter(&$form, &$form_state, $form_id) {
+  $user = user_load_by_name($form['user']['name']['#default_value']);
+  $form['user']['name']['#title'] .=  " <em>" . format_username($user) . "</em>. (Below is this user's ID.)";
+  $form['user']['name']['#description'] = "Begin typing a user's name to find the corresponding ID. " . $form['user']['name']['#description'];
 }
 
 /**
