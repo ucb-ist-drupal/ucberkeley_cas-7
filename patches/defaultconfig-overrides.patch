@@ -1,8 +1,8 @@
-diff --git a/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc b/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc
-index c4be2b7..8045020 100644
---- a/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc
-+++ b/profiles/openberkeley/modules/ucb/ucberkeley_cas/ucberkeley_cas.features.defaultconfig.inc
-@@ -93,12 +93,9 @@ function ucberkeley_cas_defaultconfig_strongarm() {
+diff --git a/ucberkeley_cas.features.defaultconfig.inc b/ucberkeley_cas.features.defaultconfig.inc
+index 2b12d92..13df7c6 100644
+--- a/ucberkeley_cas.features.defaultconfig.inc
++++ b/ucberkeley_cas.features.defaultconfig.inc
+@@ -181,12 +181,9 @@ function ucberkeley_cas_defaultconfig_strongarm() {
    $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
    $strongarm->api_version = 1;
    $strongarm->name = 'cas_auto_assigned_role';
@@ -17,11 +17,11 @@ index c4be2b7..8045020 100644
    );
    $export['cas_auto_assigned_role'] = $strongarm;
  
-@@ -106,7 +103,14 @@ function ucberkeley_cas_defaultconfig_strongarm() {
+@@ -194,7 +191,14 @@ function ucberkeley_cas_defaultconfig_strongarm() {
    $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
    $strongarm->api_version = 1;
    $strongarm->name = 'cas_cert';
--  $strongarm->value = '/usr/local/share/certs/cacert.pem';
+-  $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
 +  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
 +    // Pantheon's certificate authority bundle will be at this path in all environments.
 +    $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';

@@ -1,3 +1,13 @@
+ucberkeley_cas 7.x-4.0
+==========================
+* OPENUCB-1546: Use cas.uid for users.name value and moves the user name to a custom field
+  * Prevents the error `PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Jane Smith' for key 'name': UPDATE {users} SET name=:db_update_placeholder_0,
+                        pass=:db_update_placehold`
+  * Facilitates integration with CalGroups using ldap_authorization.module. 
+  * Adds Real Name module.
+  * No updates to other modules or libraries.
+  * [Relase Notes](http://uc-berkeley-cas.readthedocs.io/en/latest/release_notes/). 
+
 ucberkeley_cas 7.x-3.1.1
 ========================
 * Update the ldap module version in the installation requirements.

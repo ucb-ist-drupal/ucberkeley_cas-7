@@ -45,6 +45,7 @@ drush make -y --no-core --no-cache --contrib-destination=. $MAKEFILE $BUILD_DIR/
 mv $BUILD_DIR/build_ucberkeley_cas/modules/* $BUILD_DIR
 mv $BUILD_DIR/cas* $BUILD_DIR/ucberkeley_cas/
 mv $BUILD_DIR/ldap $BUILD_DIR/ucberkeley_cas/
+mv $BUILD_DIR/realname $BUILD_DIR/ucberkeley_cas/
 mv $BUILD_DIR/build_ucberkeley_cas/libraries/phpcas $BUILD_DIR/ucberkeley_cas/cas/CAS
 rm -rf $BUILD_DIR/build_ucberkeley_cas
 rm $BUILD_DIR/ucberkeley_cas/.gitignore

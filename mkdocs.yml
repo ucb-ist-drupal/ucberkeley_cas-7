@@ -11,6 +11,7 @@ pages:
   - Drush Commands: drush.md
   - Environments Configurations Module: envconf.md
   - LDAP Access: ldap_access.md
+  - Release Notes: release_notes.md
   - FAQ: faq.md
 markdown_extensions:
     - admonition:

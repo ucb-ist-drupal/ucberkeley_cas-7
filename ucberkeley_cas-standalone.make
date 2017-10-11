@@ -9,6 +9,7 @@ libraries[phpcas][download][url] = "https://github.com/Jasig/phpCAS/archive/1.3.
 projects[cas][type] = module
 projects[cas][version] = 1.5
 projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
+projects[cas][patch][2914223] = "https://www.drupal.org/files/issues/cas-2914223-format-username.patch"
 
 ; CAS Attributes
 projects[cas_attributes][type] = module
@@ -19,6 +20,10 @@ projects[ldap][type] = module
 projects[ldap][version] = 2.2
 ; If https://github.com/CellarDoorMedia/Lockr-Patches/pull/2 is accepted, update the URI to point to Cellar Door's file.
 projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/bwood/Lockr-Patches/8a4f85a981f7b012da5e4b7786c759d4c9429280/drupal7/ldap/ldap-7.x-2.2-key-integration.patch"
+
+; Realname
+projects[realname][type] = module
+projects[realname][version] = 1.3
 
 ; UC Berkeley CAS Feature
 ; TODO: update dl options
