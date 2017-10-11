@@ -1,4 +1,4 @@
-ucberkeley_cas 7.x-4.0
+ucberkeley_cas 7.x-4.0.0
 ==========================
 * OPENUCB-1546: Use cas.uid for users.name value and moves the user name to a custom field
   * Prevents the error `PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Jane Smith' for key 'name': UPDATE {users} SET name=:db_update_placeholder_0,
