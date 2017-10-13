@@ -62,7 +62,7 @@ foreach ($users as $uid => $data) {
 
   if (empty($data->cas_name)) {
     $msg = t("No CAS UID for @name. Skipping this user.", array('@name' => $data->name));
-    watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
+    watchdog(WATCHDOG_TYPE, $msg, array(), WATCHDOG_WARNING);
     drupal_set_message($msg, 'warning');
     unset($data);
     continue;
@@ -84,7 +84,7 @@ foreach ($users as $uid => $data) {
         $count = $result['count'];
         //watchdog('ldap_servers', "Error: !count users found with $filter under $basedn.", array('!count' => $count), WATCHDOG_ERROR);
         $msg = t("> 1 user found with @filter under @basedn.", array('@filter' => $filter, '@basedn' => $basedn));
-        watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
+        watchdog(WATCHDOG_TYPE, $msg, array(), WATCHDOG_WARNING);
         drupal_set_message($msg, 'warning');
         continue;
       }
@@ -108,7 +108,7 @@ foreach ($users as $uid => $data) {
     $user_name = preg_replace("/,.*/", "", $data->name);
     // Admin could probably block/remove this account, so let them know.
     $msg = t("No LDAP names found for @cas_name, so using @name. (This person may no longer be employed by UC Berkeley.)", array('@cas_name' => $data->cas_name, '@name' =>  $user_name));
-    watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
+    watchdog(WATCHDOG_TYPE, $msg, array(), WATCHDOG_INFO);
     drupal_set_message($msg);
   }
 
@@ -128,8 +128,8 @@ foreach ($users as $uid => $data) {
   $wrapper->field_display_name->set($user_name);
   $wrapper->name->set($data->cas_name);
   $wrapper->save();
-  $msg = t("New name assiged to for @cas_name: @display_name", array('@cas_name' => $data->cas_name, '@display_name' =>  $wrapper->field_display_name->value()));
-  watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
+  $msg = t("New name assigned for @cas_name: @display_name", array('@cas_name' => $data->cas_name, '@display_name' =>  $wrapper->field_display_name->value()));
+  watchdog(WATCHDOG_TYPE, $msg, array(), WATCHDOG_INFO);
   drupal_set_message($msg);
   unset($data);
 }

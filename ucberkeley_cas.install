@@ -374,7 +374,7 @@ function ucberkeley_cas_update_7404(&$sandbox) {
     $cas_uid_exists = TRUE;
     if (empty($data->init) || !is_numeric($data->init)) {
       $msg = t("No CAS UID for @name. Maybe this user did not authenticate via CAS.", array('@name' => $data->name));
-      watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_WARNING);
+      watchdog(WATCHDOG_TYPE, $msg, array(), WATCHDOG_WARNING);
       $cas_uid_exists = FALSE;
     }
 
@@ -391,7 +391,7 @@ function ucberkeley_cas_update_7404(&$sandbox) {
         $wrapper->name->set($data->init);
       }
       $wrapper->field_display_name->set($data->name);
-      $msg = t("New name assiged to for @cas_name: @display_name", array(
+      $msg = t("New name assigned for @cas_name: @display_name", array(
         '@cas_name' => $data->init,
         '@display_name' => $wrapper->field_display_name->value()
       ));
@@ -408,7 +408,7 @@ function ucberkeley_cas_update_7404(&$sandbox) {
       ));
     }
 
-    watchdog(WATCHDOG_TYPE, $msg, WATCHDOG_INFO);
+    watchdog(WATCHDOG_TYPE, $msg, array(), WATCHDOG_INFO);
     //drupal_set_message($msg);
     $sandbox['messages'][] = $msg;
     // Update our progress information.
