@@ -250,7 +250,7 @@ function ucberkeley_cas_update_7302() {
   }
   else {
     $cas_cert_warning = "Security best practice: Visit /admin/config/people/cas and set 'Certificate Authority PEM Certificate' to the path of the certificate authority bundle on your server.";
-    watchdog('ucberkeley_cas', $cas_cert_warning, array(), WATCHDOG_WARNING);
+    watchdog(WATCHDOG_TYPE, $cas_cert_warning, array(), WATCHDOG_WARNING);
   }
 }
 
