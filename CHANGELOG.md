@@ -1,5 +1,11 @@
+ucberkeley_cas 7.x-4.0.1
+========================
+* OPENUCB-1720: Watchdog error causes dblog page to break.
+  * Corrected arguments to watchdog calls in ucberkeley_cas.install and 
+    scripts/realname_update.php.
+
 ucberkeley_cas 7.x-4.0.0
-==========================
+========================
 * OPENUCB-1546: Use cas.uid for users.name value and moves the user name to a custom field
   * Prevents the error `PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Jane Smith' for key 'name': UPDATE {users} SET name=:db_update_placeholder_0,
                         pass=:db_update_placehold`
