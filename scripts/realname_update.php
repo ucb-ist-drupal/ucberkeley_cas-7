@@ -82,7 +82,6 @@ foreach ($users as $uid => $data) {
       // Must find exactly one user.
       if ($result['count'] != 1) {
         $count = $result['count'];
-        //watchdog('ldap_servers', "Error: !count users found with $filter under $basedn.", array('!count' => $count), WATCHDOG_ERROR);
         $msg = t("> 1 user found with @filter under @basedn.", array('@filter' => $filter, '@basedn' => $basedn));
         watchdog(WATCHDOG_TYPE, $msg, array(), WATCHDOG_WARNING);
         drupal_set_message($msg, 'warning');
