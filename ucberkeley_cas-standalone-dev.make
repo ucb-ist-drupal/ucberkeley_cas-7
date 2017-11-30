@@ -24,6 +24,7 @@ projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/bwood/Lo
 ; Realname
 projects[realname][type] = module
 projects[realname][version] = 1.3
+projects[realname][patch][2926684] = https://www.drupal.org/files/issues/realname-views-autocomplete-2926684-2.patch
 
 ; UC Berkeley CAS Feature
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
