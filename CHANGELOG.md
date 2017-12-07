@@ -1,3 +1,17 @@
+ucberkeley_cas 7.x-4.0.2
+========================
+* OPENUCB-1768: Username autocomplete is broken in Views
+  * Applies https://www.drupal.org/files/issues/realname-views-autocomplete-2926684-2.patch, 
+  which in conjuntion with https://www.drupal.org/files/issues/views-ajax-autocomplete-1264794-21-3.18.patch
+  fixes the autocomplete in the Admin Views view admin_views_node.
+* OPENUCB-1747: Remove a test on `empty()` which was causing update.php to fail 
+  on sites using PHP < 5.5. (Those PHP versions are out of support and not 
+  receiving security updates!)
+* OPENUCB-1746: Remove superfluous paths in cas_pages
+  * "web-hosting" paths crept into our default config. (admin/config/people/cas 
+  \> Redirection). These paths will not be installed on any new sites. They 
+  must be manually removed from existing sites.
+      
 ucberkeley_cas 7.x-4.0.1
 ========================
 * OPENUCB-1720: Watchdog error causes dblog page to break.
