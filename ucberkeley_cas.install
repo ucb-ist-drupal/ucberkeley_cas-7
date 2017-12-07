@@ -397,7 +397,7 @@ function ucberkeley_cas_update_7404(&$sandbox) {
       ));
       $wrapper->save();
     }
-    elseif (empty($wrapper->field_display_name->value())) {
+    elseif (!$wrapper->field_display_name->value()) {
       $wrapper->field_display_name->set($data->name);
       $wrapper->save();
     }
