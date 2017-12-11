@@ -79,6 +79,25 @@ function ucberkeley_cas_form_file_entity_edit_alter(&$form, &$form_state, $form_
 }
 
 /**
+ * Implements hook_views_bulk_operations_form_alter().
+ */
+function ucberkeley_cas_views_bulk_operations_form_alter(&$form, &$form_state, $vbo) {
+  if ($form_state['step'] == 'views_bulk_operations_config_form') {
+    $operation = $form_state['operation'];
+
+    // Convert the 'Username' field on the 'Change author' operation to
+    // always be an autocomplete field, rather than select.
+    if ($operation->id() == 'action::node_assign_owner_action' && $form['owner_name']['#type'] == 'select') {
+      $form['owner_name']['#type'] = 'textfield';
+      $form['owner_name']['#autocomplete_path'] = 'user/autocomplete';
+      $form['owner_name']['#size'] = 6;
+      $form['owner_name']['#maxlength'] = 60;
+      unset($form['owner_name']['#options']);
+    }
+  }
+}
+
+/**
  * Implements hook_menu().
  *
  * Create a back door to prevent admin lockouts
