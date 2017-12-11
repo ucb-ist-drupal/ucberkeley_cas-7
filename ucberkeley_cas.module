@@ -90,8 +90,8 @@ function ucberkeley_cas_views_bulk_operations_form_alter(&$form, &$form_state, $
     if ($operation->id() == 'action::node_assign_owner_action' && $form['owner_name']['#type'] == 'select') {
       $form['owner_name']['#type'] = 'textfield';
       $form['owner_name']['#autocomplete_path'] = 'user/autocomplete';
-      $form['owner_name']['#size'] = 6;
-      $form['owner_name']['#maxlength'] = 60;
+      $form['owner_name']['#size'] = 60;
+      $form['owner_name']['#maxlength'] = 128;
       unset($form['owner_name']['#options']);
     }
   }
