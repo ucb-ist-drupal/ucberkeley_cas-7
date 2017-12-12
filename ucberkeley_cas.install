@@ -189,7 +189,11 @@ function ucberkeley_cas_hook_update_dependencies() {
   return $dependencies;
 }
 
-function ucberkeley_cas_revert_views($view_names) {
+/**
+ * Revert views.
+ * @param array $view_names
+ */
+function ucberkeley_cas_revert_views(array $view_names) {
   foreach ($view_names as $view_name) {
     // Revert the view
     $view = views_get_view($view_name);
@@ -203,7 +207,11 @@ function ucberkeley_cas_revert_views($view_names) {
   }
 }
 
-function ucberkeley_cas_invalidate_views_cache($view_names) {
+/**
+ * Clear the views cache.
+ * @param array $view_names
+ */
+function ucberkeley_cas_invalidate_views_cache(array $view_names) {
   foreach ($view_names as $view_name) {
     cache_clear_all('ctools_export:views_view:' . $view_name, 'cache_views', TRUE);
     cache_clear_all($view_name, 'cache_views_data', TRUE);
@@ -439,6 +447,15 @@ function ucberkeley_cas_update_7405() {
     $users = entity_load('user');
     pathauto_user_update_alias_multiple(array_keys($users), 'bulkupdate');
   }
+}
+
+/**
+ * OPENUCB-1797: Enable 'contains' autocomplete in dashboard > content view.
+ */
+function ucberkeley_cas_update_7406() {
+  $views = array('admin_views_node');
+  ucberkeley_cas_invalidate_views_cache($views);
+  ucberkeley_cas_revert_views($views);
 }
 
 

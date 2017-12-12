@@ -431,62 +431,25 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     // Default display
     $handler =& $views['admin_views_node']->display['default']->handler;
     $handler->display->display_options['fields']['realname'] = $realname_field;
-/*
-    $handler->display->display_options['fields']['realname']['id'] = 'realname';
-    $handler->display->display_options['fields']['realname']['table'] = 'realname';
-    $handler->display->display_options['fields']['realname']['field'] = 'realname';
-    $handler->display->display_options['fields']['realname']['relationship'] = 'uid';
-    $handler->display->display_options['fields']['realname']['exclude'] = TRUE;
-*/
-    // Remove user filter
-    unset($handler->display->display_options['filters']['uid']);
-
     // Page display
     $page_handler =& $views['admin_views_node']->display['page_1']->handler;
     $page_handler->display->display_options['fields']['realname'] = $realname_field;
-    /* Field: Realname: Real name */
-/*
-    $page_handler->display->display_options['fields']['realname']['id'] = 'realname';
-    $page_handler->display->display_options['fields']['realname']['table'] = 'realname';
-    $page_handler->display->display_options['fields']['realname']['field'] = 'realname';
-    $page_handler->display->display_options['fields']['realname']['relationship'] = 'uid';
-    $page_handler->display->display_options['fields']['realname']['exclude'] = TRUE;
-*/
-    $page_handler->display->display_options['defaults']['filter_groups'] = FALSE;
-    $page_handler->display->display_options['defaults']['filters'] = FALSE;
-    /* Filter criterion: Content: Title */
-    $page_handler->display->display_options['filters']['title']['id'] = 'title';
-    $page_handler->display->display_options['filters']['title']['table'] = 'node';
-    $page_handler->display->display_options['filters']['title']['field'] = 'title';
-    $page_handler->display->display_options['filters']['title']['operator'] = 'contains';
-    $page_handler->display->display_options['filters']['title']['exposed'] = TRUE;
-    $page_handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
-    $page_handler->display->display_options['filters']['title']['expose']['label'] = 'Title';
-    $page_handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
-    $page_handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
-    $page_handler->display->display_options['filters']['title']['expose']['remember'] = TRUE;
-    /* Filter criterion: Content: Type */
-    $page_handler->display->display_options['filters']['type']['id'] = 'type';
-    $page_handler->display->display_options['filters']['type']['table'] = 'node';
-    $page_handler->display->display_options['filters']['type']['field'] = 'type';
-    $page_handler->display->display_options['filters']['type']['exposed'] = TRUE;
-    $page_handler->display->display_options['filters']['type']['expose']['operator_id'] = 'type_op';
-    $page_handler->display->display_options['filters']['type']['expose']['label'] = 'Type';
-    $page_handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
-    $page_handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
-    $page_handler->display->display_options['filters']['type']['expose']['remember'] = TRUE;
+
+    // Remove user filter
+    unset($handler->display->display_options['filters']['uid']);
+
     /* Filter criterion: Realname: Name */
-    $page_handler->display->display_options['filters']['realname']['id'] = 'realname';
-    $page_handler->display->display_options['filters']['realname']['table'] = 'realname';
-    $page_handler->display->display_options['filters']['realname']['field'] = 'realname';
-    $page_handler->display->display_options['filters']['realname']['relationship'] = 'uid';
-    $page_handler->display->display_options['filters']['realname']['operator'] = 'contains';
-    $page_handler->display->display_options['filters']['realname']['exposed'] = TRUE;
-    $page_handler->display->display_options['filters']['realname']['expose']['operator_id'] = 'realname_op';
-    $page_handler->display->display_options['filters']['realname']['expose']['label'] = 'Author';
-    $page_handler->display->display_options['filters']['realname']['expose']['operator'] = 'realname_op';
-    $page_handler->display->display_options['filters']['realname']['expose']['identifier'] = 'realname';
-    $page_handler->display->display_options['filters']['realname']['expose']['remember_roles'] = array(
+    $handler->display->display_options['filters']['realname']['id'] = 'realname';
+    $handler->display->display_options['filters']['realname']['table'] = 'realname';
+    $handler->display->display_options['filters']['realname']['field'] = 'realname';
+    $handler->display->display_options['filters']['realname']['relationship'] = 'uid';
+    $handler->display->display_options['filters']['realname']['operator'] = 'contains';
+    $handler->display->display_options['filters']['realname']['exposed'] = TRUE;
+    $handler->display->display_options['filters']['realname']['expose']['operator_id'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['label'] = 'Author';
+    $handler->display->display_options['filters']['realname']['expose']['operator'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['identifier'] = 'realname';
+    $handler->display->display_options['filters']['realname']['expose']['remember_roles'] = array(
       2 => '2',
       1 => 0,
       6 => 0,
@@ -495,35 +458,23 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
       5 => 0,
       3 => 0,
     );
-    $page_handler->display->display_options['filters']['realname']['expose']['autocomplete_filter'] = 1;
-    $page_handler->display->display_options['filters']['realname']['expose']['autocomplete_items'] = '10';
-    $page_handler->display->display_options['filters']['realname']['expose']['autocomplete_min_chars'] = '0';
-    $page_handler->display->display_options['filters']['realname']['expose']['autocomplete_field'] = 'realname';
-    $page_handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_suggestion'] = 1;
-    $page_handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_dropdown'] = 1;
-    $page_handler->display->display_options['filters']['realname']['expose']['autocomplete_dependent'] = 0;
-    /* Filter criterion: Content: Published */
-    $page_handler->display->display_options['filters']['status']['id'] = 'status';
-    $page_handler->display->display_options['filters']['status']['table'] = 'node';
-    $page_handler->display->display_options['filters']['status']['field'] = 'status';
-    $page_handler->display->display_options['filters']['status']['value'] = 'All';
-    $page_handler->display->display_options['filters']['status']['exposed'] = TRUE;
-    $page_handler->display->display_options['filters']['status']['expose']['operator_id'] = '';
-    $page_handler->display->display_options['filters']['status']['expose']['label'] = 'Published';
-    $page_handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
-    $page_handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
-    $page_handler->display->display_options['filters']['status']['expose']['remember'] = TRUE;
-    /* Filter criterion: Taxonomy term: Vocabulary */
-    $page_handler->display->display_options['filters']['vid']['id'] = 'vid';
-    $page_handler->display->display_options['filters']['vid']['table'] = 'taxonomy_term_data';
-    $page_handler->display->display_options['filters']['vid']['field'] = 'vid';
-    $page_handler->display->display_options['filters']['vid']['relationship'] = 'term_node_tid';
-    $page_handler->display->display_options['filters']['vid']['exposed'] = TRUE;
-    $page_handler->display->display_options['filters']['vid']['expose']['operator_id'] = 'vid_op';
-    $page_handler->display->display_options['filters']['vid']['expose']['label'] = 'Vocabulary';
-    $page_handler->display->display_options['filters']['vid']['expose']['operator'] = 'vid_op';
-    $page_handler->display->display_options['filters']['vid']['expose']['identifier'] = 'vid';
-    $page_handler->display->display_options['filters']['vid']['expose']['remember'] = TRUE;
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_filter'] = 1;
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_items'] = '10';
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_min_chars'] = '0';
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_field'] = 'realname';
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_suggestion'] = 1;
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_dropdown'] = 1;
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_dependent'] = 0;
+
+    $exposed_filter_order = array(
+      'title',
+      'type',
+      'realname',
+      'status',
+      'vid'
+    );
+    // Order the columns
+    $handler->display->display_options['filters'] = array_merge(array_flip($exposed_filter_order), $handler->display->display_options['filters']);
   }
     // Modify Total Control's: control_users View
   if (array_key_exists('control_users', $views)) {
