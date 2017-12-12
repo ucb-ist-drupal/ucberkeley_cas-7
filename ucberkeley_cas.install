@@ -190,36 +190,6 @@ function ucberkeley_cas_hook_update_dependencies() {
 }
 
 /**
- * Revert views.
- * @param array $view_names
- */
-function ucberkeley_cas_revert_views(array $view_names) {
-  foreach ($view_names as $view_name) {
-    // Revert the view
-    $view = views_get_view($view_name);
-    if ($view->type == t('Overridden')) {
-      // Revert the view.
-      $view->delete();
-      // Clear its cache.
-      ctools_include('object-cache');
-      ctools_object_cache_clear('view', $view->name);
-    }
-  }
-}
-
-/**
- * Clear the views cache.
- * @param array $view_names
- */
-function ucberkeley_cas_invalidate_views_cache(array $view_names) {
-  foreach ($view_names as $view_name) {
-    cache_clear_all('ctools_export:views_view:' . $view_name, 'cache_views', TRUE);
-    cache_clear_all($view_name, 'cache_views_data', TRUE);
-  }
-}
-
-
-/**
  * Revert ucberkeley_cas.feature
  */
 function ucberkeley_cas_update_7000(&$sandbox) {
