@@ -357,45 +357,43 @@ EOT;
  *
  * @param $views
  */
-
-
 function ucberkeley_cas_views_default_views_alter(&$views) {
-// Modify Admin Views' Adminminstration: Users view
-  $control_user_column_order = array(
-    'views_bulk_operations',
-    'realname',
-    'name',
-    'mail',
-    'rid',
-    'created',
-    'login',
-    'edit_node',
-  );
-  $control_user_filters_order = array(
-    'realname',
-    'mail',
-    'rid',
-  );
-  $admin_views_user_column_order = array(
-    'views_bulk_operations',
-    'realname',
-    'name',
-    'mail',
-    'status',
-    'rid',
-    'created',
-    'access',
-    'edit_node',
-    'cancel_node',
-  );
-  $admin_views_user_filter_order = array(
-    'realname',
-    'mail',
-    'status',
-    'rid',
-  );
-
+  // Modify Admin Views' Adminminstration: Users view
   if (array_key_exists('admin_views_user', $views)) {
+    $control_user_column_order = array(
+      'views_bulk_operations',
+      'realname',
+      'name',
+      'mail',
+      'rid',
+      'created',
+      'login',
+      'edit_node',
+    );
+    $control_user_filters_order = array(
+      'realname',
+      'mail',
+      'rid',
+    );
+    $admin_views_user_column_order = array(
+      'views_bulk_operations',
+      'realname',
+      'name',
+      'mail',
+      'status',
+      'rid',
+      'created',
+      'access',
+      'edit_node',
+      'cancel_node',
+    );
+    $admin_views_user_filter_order = array(
+      'realname',
+      'mail',
+      'status',
+      'rid',
+    );
+
     $handler =& $views['admin_views_user']->display['default']->handler;
     $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
     $handler->display->display_options['style_options']['columns']['mail'] = 'realname';
@@ -437,7 +435,67 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     $handler->display->display_options['filters'] = array_merge(array_flip($admin_views_user_filter_order), $handler->display->display_options['filters']);
   }
 
-  // Modify Total Control's: control_users View
+  // Modify Admin Views' Adminminstration: Nodes view
+  if (array_key_exists('admin_views_node', $views)) {
+
+    $realname_field = array(
+      'id' => 'realname',
+      'table' => 'realname',
+      'field' => 'realname',
+      'relationship' => 'uid',
+      'exclude' => TRUE
+    );
+
+    /* Field: Realname: Real name */
+    // Default display
+    $handler =& $views['admin_views_node']->display['default']->handler;
+    $handler->display->display_options['fields']['realname'] = $realname_field;
+    // Page display
+    $page_handler =& $views['admin_views_node']->display['page_1']->handler;
+    $page_handler->display->display_options['fields']['realname'] = $realname_field;
+
+    // Remove user filter
+    unset($handler->display->display_options['filters']['uid']);
+
+    /* Filter criterion: Realname: Name */
+    $handler->display->display_options['filters']['realname']['id'] = 'realname';
+    $handler->display->display_options['filters']['realname']['table'] = 'realname';
+    $handler->display->display_options['filters']['realname']['field'] = 'realname';
+    $handler->display->display_options['filters']['realname']['relationship'] = 'uid';
+    $handler->display->display_options['filters']['realname']['operator'] = 'contains';
+    $handler->display->display_options['filters']['realname']['exposed'] = TRUE;
+    $handler->display->display_options['filters']['realname']['expose']['operator_id'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['label'] = 'Author';
+    $handler->display->display_options['filters']['realname']['expose']['operator'] = 'realname_op';
+    $handler->display->display_options['filters']['realname']['expose']['identifier'] = 'realname';
+    $handler->display->display_options['filters']['realname']['expose']['remember_roles'] = array(
+      2 => '2',
+      1 => 0,
+      6 => 0,
+      4 => 0,
+      7 => 0,
+      5 => 0,
+      3 => 0,
+    );
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_filter'] = 1;
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_items'] = '10';
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_min_chars'] = '0';
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_field'] = 'realname';
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_suggestion'] = 1;
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_dropdown'] = 1;
+    $handler->display->display_options['filters']['realname']['expose']['autocomplete_dependent'] = 0;
+
+    $exposed_filter_order = array(
+      'title',
+      'type',
+      'realname',
+      'status',
+      'vid'
+    );
+    // Order the columns
+    $handler->display->display_options['filters'] = array_merge(array_flip($exposed_filter_order), $handler->display->display_options['filters']);
+  }
+    // Modify Total Control's: control_users View
   if (array_key_exists('control_users', $views)) {
     $handler =& $views['control_users']->display['default']->handler;
     $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
@@ -494,6 +552,35 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     $handler->display->display_options['filters']['realname']['expose']['autocomplete_dependent'] = 0;
     // Order the columns
     $handler->display->display_options['filters'] = array_merge(array_flip($control_user_filters_order), $handler->display->display_options['filters']);
+  }
+}
+
+/**
+ * Revert views.
+ * @param array $view_names
+ */
+function ucberkeley_cas_revert_views(array $view_names) {
+  foreach ($view_names as $view_name) {
+    // Revert the view
+    $view = views_get_view($view_name);
+    if ($view->type == t('Overridden')) {
+      // Revert the view.
+      $view->delete();
+      // Clear its cache.
+      ctools_include('object-cache');
+      ctools_object_cache_clear('view', $view->name);
+    }
+  }
+}
+
+/**
+ * Clear the views cache.
+ * @param array $view_names
+ */
+function ucberkeley_cas_invalidate_views_cache(array $view_names) {
+  foreach ($view_names as $view_name) {
+    cache_clear_all('ctools_export:views_view:' . $view_name, 'cache_views', TRUE);
+    cache_clear_all($view_name, 'cache_views_data', TRUE);
   }
 }
 
