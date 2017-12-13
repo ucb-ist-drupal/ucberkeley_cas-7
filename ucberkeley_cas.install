@@ -442,3 +442,20 @@ function ucberkeley_cas_update_7405() {
 }
 
 
+/**
+ * OPENUCB-1802: Enuser that user1 has a Display Name.
+ */
+function ucberkeley_cas_update_7408() {
+  $wrapper = entity_metadata_wrapper('user', 1);
+
+  $name = 'User 1';
+  if ($wrapper->name->value()) {
+    $name = $wrapper->name->value();
+  }
+
+  if (!$wrapper->field_display_name->value()) {
+    $wrapper->field_display_name->set($name);
+    $wrapper->save();
+    watchdog(WATCHDOG_TYPE, "Display name set to @name for uid 1.", array('@name' => $name), WATCHDOG_NOTICE);
+  }
+}
