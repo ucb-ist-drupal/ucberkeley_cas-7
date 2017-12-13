@@ -3,7 +3,7 @@ This section is for note on UC Berkeley CAS releases.  If there is no
 information here about the release you are interested in, please check 
 [CHANGELOG.md](https://github.com/bwood/ucberkeley_cas-7/blob/master/CHANGELOG.md).
 
-## ucberkeley_cas-7.x-4.0
+## ucberkeley_cas-7.x-4.0.0
 
 The motivation for this major release was:
 
@@ -24,7 +24,7 @@ manage the display of usernames and it updates the users table to replace
 "firstname lastname" in the name field with the user's CAS user id (a unique 
 number).  
 
-### Updating to UC Berkeley CAS 4.0
+### Updating to UC Berkeley CAS 4.0.0
 
 1. Backup the code, files and database for your site to allow you to restore a 
 known working state in the event that anything goes wrong when you upgrade to 
@@ -38,10 +38,13 @@ the code and run the updates.
 3. Remove your ucberkeley_cas directory and replace it with version 4.0 of the
 code.
 
-4. Run the database updates by visiting Drupal's update.php URL while logged in 
+4. UC Berkeley CAS 4.0.0 introduces a new dependencies on the [Entity](https://www.drupal.org/project/entity) 
+module. If entity is not installed and enabled on your site, please add it now.
+
+5. Run the database updates by visiting Drupal's update.php URL while logged in 
 to the site as user 1. Alternatively use `drush updb`.
 
-5. Inspect the messages written to the screen during the update process. (Most
+6. Inspect the messages written to the screen during the update process. (Most
 of these messages are also written to Drupal's log at /admin/reports/dblog --
 if you have dblog enabled.) 
 
