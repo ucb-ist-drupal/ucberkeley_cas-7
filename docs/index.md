@@ -70,6 +70,7 @@ You need the following modules installed:
 * [Token](http://drupal.org/project/token)
 * [CTools](http://drupal.org/project/ctools)
 * [Default Config](http://drupal.org/project/defaultconfig)
+* [Entity](https://www.drupal.org/project/entity)
 
 UC Berkeley CAS will install these modules:
 
