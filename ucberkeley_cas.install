@@ -36,7 +36,7 @@ EOT;
 <p>Here's what to do:</p>
 <p>
 1. Disable UC Berkeley Environment Configurations by un-checking its entry at /admin/modules and clicking submit (or by using drush).<br />
-2. Download <a href="http://drupal-apps.berkeley.edu/content/ucb-environment-configurations">the new version of UC Berkeley Environment Configurations</a>.<br />
+2. Download <a href="https://github.com/bwood/ucberkeley_envconf-7">the latest version of UC Berkeley Environment Configurations</a>.<br />
 3. Using your file manager simply remove the ucb_envconf folder from your site (look under /sites/all/modules or /profiles).<br />
 4. Unpack the new version of ucberkeley_envconf and copy it into /sites/all/modules (or your preferred module directory.) <br />
 5. Enable ucberkeley_envconf. (Running update.php is not required.)
