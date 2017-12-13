@@ -429,3 +429,36 @@ function ucberkeley_cas_update_7406() {
 }
 
 
+/**
+ * OPENUCB-1794: Clean up superfluous paths that were mistakenly added to the site variable cas_paths.
+ */
+function ucberkeley_cas_update_7407() {
+  if (array_key_exists('PANTHEON_SITE_NAME', $_ENV)) {
+    // Don't remove these paths on the websolutions site.
+    if ($_ENV['PANTHEON_SITE_NAME'] == 'websolutions-ob') {
+      return t("Skipping @function for websolutions-ob.", array('@function' => __FUNCTION__));
+    }
+  }
+
+  $paths_filtered = array();
+  $paths = trim(variable_get('cas_pages', ''));
+  $paths = explode("\n", $paths);
+
+  $paths_filtered = array_filter($paths, function($value) {
+    $exclude = array(
+      'web-hosting/launch-your-pantheon-site',
+      'web-hosting/get-open-berkeley',
+      'web-hosting/my-sites',
+      'web-hosting-pantheon/upgrade-paid-plan',
+      'web-hosting-pantheon/update-plan-or-stop-billing'
+    );
+
+    $value = trim($value);
+    if (in_array($value, $exclude) || empty($value)) {
+      return FALSE;
+    }
+    return TRUE;
+  });
+
+  variable_set('cas_pages', implode("\n", $paths_filtered));
+}
