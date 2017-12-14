@@ -25,6 +25,7 @@ projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/bwood/Lo
 projects[realname][type] = module
 projects[realname][version] = 1.3
 projects[realname][patch][2926684] = https://www.drupal.org/files/issues/realname-views-autocomplete-2926684-2.patch
+projects[realname][patch][2930637] = https://www.drupal.org/files/issues/realname-autocomplete-contains-2930637-2.patch
 
 ; UC Berkeley CAS Feature
 ; TODO: update dl options
