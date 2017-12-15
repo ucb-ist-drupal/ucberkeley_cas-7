@@ -117,7 +117,7 @@ function ucberkeley_cas_defaultconfig_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 0,
+          'weight' => -10,
         ),
         'featured' => array(
           'label' => 'above',
@@ -312,8 +312,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_pages';
   $strongarm->value = 'node/add/*
-node/*/edit/*
-';
+node/*/edit/*';
   $export['cas_pages'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -364,6 +363,20 @@ node/*/edit/*
   $strongarm->name = 'cas_user_register';
   $strongarm->value = 1;
   $export['cas_user_register'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'realname_autocomplete_contains';
+  $strongarm->value = 1;
+  $export['realname_autocomplete_contains'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'realname_autocomplete_contains_max_users';
+  $strongarm->value = '1000';
+  $export['realname_autocomplete_contains_max_users'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
