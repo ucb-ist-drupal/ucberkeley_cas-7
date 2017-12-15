@@ -312,12 +312,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_pages';
   $strongarm->value = 'node/add/*
-node/*/edit/*
-web-hosting/launch-your-pantheon-site
-web-hosting/get-open-berkeley
-web-hosting/my-sites
-web-hosting-pantheon/upgrade-paid-plan
-web-hosting-pantheon/update-plan-or-stop-billing';
+node/*/edit/*';
   $export['cas_pages'] = $strongarm;
 
   $strongarm = new stdClass();
