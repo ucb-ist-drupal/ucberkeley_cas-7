@@ -2,6 +2,7 @@ ucberkeley_cas 7.x-4.0.3
 ========================
 * [OPENUCB-1787] - VBO field to bulk change content ownership displays UIDs
   * Applies to sites using [Admin Views](https://www.drupal.org/project/admin_views).
+  * Adds [autocomplete "contains" behavior](https://www.drupal.org/project/realname/issues/2930637).
 * [OPENUCB-1797] - Username autocomplete only starts from beginning of name
   * Applies to sites using [Admin Views](https://www.drupal.org/project/admin_views).
 * [OPENUCB-1748] - UC Berkeley CAS: Update documentation to mention dependency on entity
@@ -9,7 +10,7 @@ ucberkeley_cas 7.x-4.0.3
   * The featurized configuration added "web-hosting" paths to the Redirection 
   settings on all sites.  This was not a problem, but let's clean it up.
 * [OPENUCB-1083] - Remove mentions of drupal-apps.berkeley.edu from UC Berkeley CAS
-
+* [OPENUCB-1802] - Display name is not set for ucbadmin on new site installations. Fix that.
 
 ucberkeley_cas 7.x-4.0.2
 ========================
