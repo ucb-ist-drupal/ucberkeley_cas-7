@@ -367,20 +367,6 @@ node/*/edit/*';
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'realname_autocomplete_contains';
-  $strongarm->value = 1;
-  $export['realname_autocomplete_contains'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'realname_autocomplete_contains_max_users';
-  $strongarm->value = '1000';
-  $export['realname_autocomplete_contains_max_users'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'user_mail_status_activated_notify';
   $strongarm->value = 0;
   $export['user_mail_status_activated_notify'] = $strongarm;
