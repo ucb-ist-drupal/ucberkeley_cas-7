@@ -86,8 +86,11 @@ function ucberkeley_cas_views_bulk_operations_form_alter(&$form, &$form_state, $
     $operation = $form_state['operation'];
 
     // Convert the 'Username' field on the 'Change author' operation to
-    // always be an autocomplete field, rather than select.
-    if ($operation->id() == 'action::node_assign_owner_action' && $form['owner_name']['#type'] == 'select') {
+    // always be an autocomplete field, rather than select. (user.module 
+    // makes it a select field if the number of users is < 200.)
+    // We want this alter to happen even when the field is already an
+    // autocomplete text field because we are also changing #size to 60.
+    if ($operation->id() == 'action::node_assign_owner_action') {
       $form['owner_name']['#type'] = 'textfield';
       $form['owner_name']['#autocomplete_path'] = 'user/autocomplete';
       $form['owner_name']['#size'] = 60;
