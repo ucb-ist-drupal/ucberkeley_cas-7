@@ -1,28 +1,27 @@
 diff --git a/ucberkeley_cas.features.defaultconfig.inc b/ucberkeley_cas.features.defaultconfig.inc
-index c8bf989..9fe5bcd 100644
+index 2b12d92..13df7c6 100644
 --- a/ucberkeley_cas.features.defaultconfig.inc
 +++ b/ucberkeley_cas.features.defaultconfig.inc
-@@ -182,13 +182,9 @@ function ucberkeley_cas_defaultconfig_strongarm() {
+@@ -181,12 +181,9 @@ function ucberkeley_cas_defaultconfig_strongarm() {
    $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
    $strongarm->api_version = 1;
    $strongarm->name = 'cas_auto_assigned_role';
 +  $rid_auth_user = array_search('authenticated user', user_roles());
    $strongarm->value = array(
 -    2 => TRUE,
--    6 => 0,
 -    4 => 0,
--    7 => 0,
 -    5 => 0,
--    3 => 0,
+-    6 => 0,
+-    7 => 0,
 +    $rid_auth_user => TRUE,
    );
    $export['cas_auto_assigned_role'] = $strongarm;
  
-@@ -196,7 +192,14 @@ function ucberkeley_cas_defaultconfig_strongarm() {
+@@ -194,7 +191,14 @@ function ucberkeley_cas_defaultconfig_strongarm() {
    $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
    $strongarm->api_version = 1;
    $strongarm->name = 'cas_cert';
--  $strongarm->value = '/usr/local/share/certs/cacert.pem';
+-  $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
 +  if (array_key_exists('PANTHEON_ENVIRONMENT', $_ENV)) {
 +    // Pantheon's certificate authority bundle will be at this path in all environments.
 +    $strongarm->value = '/etc/ssl/certs/ca-bundle.crt';
