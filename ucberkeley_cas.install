@@ -484,6 +484,10 @@ function ucberkeley_cas_set_user1_display_name() {
   $wrapper = entity_metadata_wrapper('user', 1);
 
   $name = 'admin';
+  if (variable_get('install_profile', '') == 'openberkeley') {
+    $name = 'ucbadmin';
+  }
+
   // This is called post feature enable and sometimes we get the undesirable placeholder string.
   if ($wrapper->name->value() && strpos($wrapper->name->value(), 'placeholder') === FALSE) {
     $name = $wrapper->name->value();
