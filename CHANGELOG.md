@@ -1,8 +1,7 @@
 ucberkeley_cas 7.x-4.0.3
 ========================
-* [OPENUCB-1787] - VBO field to bulk change content ownership displays UIDs
+* [OPENUCB-1787] - VBO field to bulk change content ownership should display username, not UID. 
   * Applies to sites using [Admin Views](https://www.drupal.org/project/admin_views).
-  * Adds [autocomplete "contains" behavior](https://www.drupal.org/project/realname/issues/2930637).
 * [OPENUCB-1797] - Username autocomplete only starts from beginning of name
   * Applies to sites using [Admin Views](https://www.drupal.org/project/admin_views).
 * [OPENUCB-1748] - UC Berkeley CAS: Update documentation to mention dependency on entity
