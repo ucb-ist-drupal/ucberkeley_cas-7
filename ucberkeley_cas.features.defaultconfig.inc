@@ -117,7 +117,7 @@ function ucberkeley_cas_defaultconfig_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 0,
+          'weight' => -10,
         ),
         'featured' => array(
           'label' => 'above',
@@ -312,8 +312,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_pages';
   $strongarm->value = 'node/add/*
-node/*/edit/*
-';
+node/*/edit/*';
   $export['cas_pages'] = $strongarm;
 
   $strongarm = new stdClass();
