@@ -167,7 +167,19 @@ function ucberkeley_cas_install() {
   }
   // Set a flag so that we know installation has just completed.  Process the flag in ucberkeley_cas_init()
   $_SESSION['ucberkeley_cas_installed'] = TRUE;
+
 }
+
+/**
+ * Implementation of hook_post_features_enable_feature.
+ */
+function ucberkeley_cas_post_features_enable_feature($component) {
+  if ($component == 'variable') {
+    // Make sure user1 has a display name field.
+    ucberkeley_cas_set_user1_display_name();
+  }
+}
+
 
 /**
  * Implementation of hook_uninstall
@@ -444,7 +456,7 @@ function ucberkeley_cas_update_7407() {
   $paths = trim(variable_get('cas_pages', ''));
   $paths = explode("\n", $paths);
 
-  $paths_filtered = array_filter($paths, function($value) {
+  $paths_filtered = array_filter($paths, function ($value) {
     $exclude = array(
       'web-hosting/launch-your-pantheon-site',
       'web-hosting/get-open-berkeley',
@@ -463,13 +475,17 @@ function ucberkeley_cas_update_7407() {
 }
 
 /**
- * OPENUCB-1802: Enuser that user1 has a Display Name.
+ * Make sure user1 has a display name (realname) value.
  */
-function ucberkeley_cas_update_7408() {
+function ucberkeley_cas_set_user1_display_name() {
+  if (!module_exists('realname')) {
+    return NULL;
+  }
   $wrapper = entity_metadata_wrapper('user', 1);
 
-  $name = 'User 1';
-  if ($wrapper->name->value()) {
+  $name = 'admin';
+  // This is called post feature enable and sometimes we get the undesirable placeholder string.
+  if ($wrapper->name->value() && strpos($wrapper->name->value(), 'placeholder') === FALSE) {
     $name = $wrapper->name->value();
   }
 
@@ -478,5 +494,12 @@ function ucberkeley_cas_update_7408() {
     $wrapper->save();
     watchdog(WATCHDOG_TYPE, "Display name set to @name for uid 1.", array('@name' => $name), WATCHDOG_NOTICE);
   }
+}
+
+/**
+ * OPENUCB-1802: Enuser that user1 has a Display Name.
+ */
+function ucberkeley_cas_update_7408() {
+  ucberkeley_cas_set_user1_display_name();
 }
 
