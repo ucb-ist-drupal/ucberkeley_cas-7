@@ -31,4 +31,4 @@ projects[realname][patch][2926684] = https://www.drupal.org/files/issues/realnam
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "release-403"
+;projects[ucberkeley_cas][download][branch] = "release-403"
