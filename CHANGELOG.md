@@ -1,3 +1,9 @@
+ucberkeley_cas 7.x-4.0.4
+========================
+* [OPENUCB-1819] - features-diff results in PHP warnings. Column and 
+filter order arrays were not being applyed to the altered control_users view.
+  * Applies to sites using [Total Control](https://www.drupal.org/project/total_control) module.
+
 ucberkeley_cas 7.x-4.0.3
 ========================
 * [OPENUCB-1787] - VBO field to bulk change content author should display username, not UID. 
