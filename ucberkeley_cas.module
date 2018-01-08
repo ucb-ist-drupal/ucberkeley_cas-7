@@ -363,21 +363,6 @@ EOT;
 function ucberkeley_cas_views_default_views_alter(&$views) {
   // Modify Admin Views' Adminminstration: Users view
   if (array_key_exists('admin_views_user', $views)) {
-    $control_user_column_order = array(
-      'views_bulk_operations',
-      'realname',
-      'name',
-      'mail',
-      'rid',
-      'created',
-      'login',
-      'edit_node',
-    );
-    $control_user_filters_order = array(
-      'realname',
-      'mail',
-      'rid',
-    );
     $admin_views_user_column_order = array(
       'views_bulk_operations',
       'realname',
@@ -500,6 +485,22 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
   }
     // Modify Total Control's: control_users View
   if (array_key_exists('control_users', $views)) {
+    $control_user_column_order = array(
+      'views_bulk_operations',
+      'realname',
+      'name',
+      'mail',
+      'rid',
+      'created',
+      'login',
+      'edit_node',
+    );
+    $control_user_filters_order = array(
+      'realname',
+      'mail',
+      'rid',
+    );
+
     $handler =& $views['control_users']->display['default']->handler;
     $handler->display->display_options['style_options']['columns']['realname'] = 'realname';
     // Order the columns correctly.
