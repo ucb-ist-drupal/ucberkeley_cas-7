@@ -186,7 +186,7 @@ cas_server: auth-test.berkeley.edu
 ```
 
 ## Upgrading 
-### Upgrading to a new version of ucberkeley_cas (version 2.x or 3.x) 
+### Upgrading to a new version of ucberkeley_cas (versions > 1.x) 
 
 Follow this procedure to upgrade ucberkeley_cas:
 
@@ -194,7 +194,7 @@ Upgrade the module on your development site first and test it.
 Before you upgrade the module on your live site, make a backup of your
 live site's database just in case there is a problem.
 
-1. Delete the ucberkeley_cas folder form your modules directory.
+1. Delete the ucberkeley_cas folder from your modules directory.
 2. Replace it with the new version of the module downloaded which you
 downloaded and unarchived
 3. Run update.php on your drupal site.
@@ -223,9 +223,9 @@ Here's what to do:
 
 #### If you are using ucb\_envconf 1.x, upgrade to ucberkeley\_envconf 2.x 
 
-_For background on UC Berkeley Environments Configurations see [this UC Berkeley Environments Configuration section](#the-uc-berkeley-environment-configurations-module)._
+_For background on UC Berkeley Environments Configurations see [the UC Berkeley Environments Configuration section](#the-uc-berkeley-environment-configurations-module)._
 
-The module UCB Berkeley CAS (ucberkeley_cas) can optionally be used with the UC 
+The module UC Berkeley CAS (ucberkeley_cas) can optionally be used with the UC 
 Berkeley Environment Configurations module. If you have upgraded from an old 
 (1.x) version of UC Berkeley CAS, you may also have an old version of UC 
 Berkeley Environments Configurations installed. If this is the case, the UC 
@@ -253,7 +253,7 @@ UC Berkeley CAS will attempt to configure the ldap server for ldap.berkeley.edu
 at `/admin/config/people/ldap/servers`.  If this duplicates servers that you 
 previously configured, disable your old entries.
 
-If you are using UC Berkeley CAS with UCB Environments Configurations,
+If you are using UC Berkeley CAS with UC Berkeley Environments Configurations,
 it's important that your LDAP server uses the same "sid" (see the `ldap_servers` table
 in the database) that is specified in `ucberkeley_cas.features.defaultconfig.inc`.
 
@@ -262,7 +262,7 @@ in the database) that is specified in `ucberkeley_cas.features.defaultconfig.inc
 To remove UC Berkeley CAS from your site see the modules listed in the [Requirements](#requirements) section above.
 
 1. Disable these modules at admin/modules.
-2. Uninstall these modules at admin/modules/uninstall. *Uninstalling will disable any CAS-authenticated users on your site. Re-enabling those users is not straightforward.*
+2. Uninstall these modules at admin/modules/uninstall. *Uninstalling will disable any CAS-authenticated users on your site.*
 
 ### Avoid Uninstalling the CAS Module 
 
