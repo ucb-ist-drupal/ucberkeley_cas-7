@@ -18,6 +18,8 @@ projects[cas_attributes][version] = 1.0-rc3
 projects[ldap][type] = module
 projects[ldap][version] = 2.4
 projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/CellarDoorMedia/Lockr-Patches/master/drupal7/ldap/ldap-7.x-2.2-key-integration.patch"
+; remove mcrypt for PHP 7.2 compatibility.
+projects[ldap][patch][2907312] = "https://www.drupal.org/files/issues/2018-10-10/backport-removal-bind-encryption-2907312-10.patch"
 
 ; Realname
 projects[realname][type] = module
