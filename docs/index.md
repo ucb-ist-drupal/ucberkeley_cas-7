@@ -106,7 +106,7 @@ server.
 2. Download the tarball included with [the latest release of UC Berkeley CAS](https://github.com/bwood/ucberkeley_cas-7/releases),
 (e.g. ucberkeley_cas-7.x-x.x.tar.gz) to the host serving your Drupal site.
 3. Unarchive the module in sites/all/modules
-4. Enable the module at admin/modules.
+4. Enable the module at admin/modules. 
 5. Make sure your [CAS registration|https://calnetweb.berkeley.edu/calnet-technologists/cas/casifying-your-web-application-or-web-server/cas-registration] 
 has been processed.
 6. Test your site:
