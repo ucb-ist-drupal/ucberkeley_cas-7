@@ -1,3 +1,11 @@
+ucberkeley_cas 7.x-5.0.0
+========================
+* [OPENUCB-2014] - Update ucberkeley_cas for PHP 7.2
+  * Update to phpCAS 1.3.6
+  * Update to ldap-7.x-2.4
+  * Update to cas-7.x-1.7
+* Add basic Behat tests
+
 ucberkeley_cas 7.x-4.0.4
 ========================
 * [OPENUCB-1819] - features-diff results in PHP warnings. Column and 
