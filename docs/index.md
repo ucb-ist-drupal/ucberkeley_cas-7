@@ -58,7 +58,7 @@ http://example.com/cas and login with your CalNet id.
 4. In your main window, where you are logged in as User 1, edit the new user that got
 created in the last step and assign it the "administrator" role (or whichever role is appropriate). (More info:
 [Setup a CalNet-authenticated administrator](#setup-a-calnet-authenticated-administrator))
-5. Visit the path /admin/config/people/ucbcas on your site for recommendations on further configuration.
+5. Visit the path /admin/config/people/ucberkeley_cas on your site for recommendations on further configuration.
 6. Subscribe to [ucberkeley-cas-drupal-users@lists.berkeley.edu](https://calmail.berkeley.edu/manage/list/listinfo/ucberkeley-cas-drupal-users@lists.berkeley.edu) for information on releases and security advisories.
 
 ## Requirements 
@@ -106,8 +106,8 @@ server.
 2. Download the tarball included with [the latest release of UC Berkeley CAS](https://github.com/bwood/ucberkeley_cas-7/releases),
 (e.g. ucberkeley_cas-7.x-x.x.tar.gz) to the host serving your Drupal site.
 3. Unarchive the module in sites/all/modules
-4. Enable the module at admin/modules.
-5. Make sure your [CAS registration|https://calnetweb.berkeley.edu/calnet-technologists/cas/casifying-your-web-application-or-web-server/cas-registration] 
+4. Enable the module at admin/modules. (During this step you may notice the message "CAS has been enabled. Please configure it." You can disregard this.  We have already applied the UC Berkeley configuration for you.)
+5. Make sure your [CAS registration](https://calnetweb.berkeley.edu/calnet-technologists/cas/casifying-your-web-application-or-web-server/cas-registration) 
 has been processed.
 6. Test your site:
 
@@ -186,7 +186,7 @@ cas_server: auth-test.berkeley.edu
 ```
 
 ## Upgrading 
-### Upgrading to a new version of ucberkeley_cas (version 2.x or 3.x) 
+### Upgrading to a new version of ucberkeley_cas (versions > 1.x) 
 
 Follow this procedure to upgrade ucberkeley_cas:
 
@@ -194,7 +194,7 @@ Upgrade the module on your development site first and test it.
 Before you upgrade the module on your live site, make a backup of your
 live site's database just in case there is a problem.
 
-1. Delete the ucberkeley_cas folder form your modules directory.
+1. Delete the ucberkeley_cas folder from your modules directory.
 2. Replace it with the new version of the module downloaded which you
 downloaded and unarchived
 3. Run update.php on your drupal site.
@@ -223,9 +223,9 @@ Here's what to do:
 
 #### If you are using ucb\_envconf 1.x, upgrade to ucberkeley\_envconf 2.x 
 
-_For background on UC Berkeley Environments Configurations see [this UC Berkeley Environments Configuration section](#the-uc-berkeley-environment-configurations-module)._
+_For background on UC Berkeley Environments Configurations see [the UC Berkeley Environments Configuration section](#the-uc-berkeley-environment-configurations-module)._
 
-The module UCB Berkeley CAS (ucberkeley_cas) can optionally be used with the UC 
+The module UC Berkeley CAS (ucberkeley_cas) can optionally be used with the UC 
 Berkeley Environment Configurations module. If you have upgraded from an old 
 (1.x) version of UC Berkeley CAS, you may also have an old version of UC 
 Berkeley Environments Configurations installed. If this is the case, the UC 
@@ -253,7 +253,7 @@ UC Berkeley CAS will attempt to configure the ldap server for ldap.berkeley.edu
 at `/admin/config/people/ldap/servers`.  If this duplicates servers that you 
 previously configured, disable your old entries.
 
-If you are using UC Berkeley CAS with UCB Environments Configurations,
+If you are using UC Berkeley CAS with UC Berkeley Environments Configurations,
 it's important that your LDAP server uses the same "sid" (see the `ldap_servers` table
 in the database) that is specified in `ucberkeley_cas.features.defaultconfig.inc`.
 
@@ -262,7 +262,7 @@ in the database) that is specified in `ucberkeley_cas.features.defaultconfig.inc
 To remove UC Berkeley CAS from your site see the modules listed in the [Requirements](#requirements) section above.
 
 1. Disable these modules at admin/modules.
-2. Uninstall these modules at admin/modules/uninstall. *Uninstalling will disable any CAS-authenticated users on your site. Re-enabling those users is not straightforward.*
+2. Uninstall these modules at admin/modules/uninstall. *Uninstalling will disable any CAS-authenticated users on your site.*
 
 ### Avoid Uninstalling the CAS Module 
 

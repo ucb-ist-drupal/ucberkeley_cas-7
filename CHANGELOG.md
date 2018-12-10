@@ -1,3 +1,12 @@
+ucberkeley_cas 7.x-5.0.0
+========================
+* [OPENUCB-2014] - Update ucberkeley_cas for PHP 7.2
+  * Update to phpCAS 1.3.6
+  * Update to cas-7.x-1.7  
+  * Update to ldap-7.x-2.4
+    * A patch has been applied that removes support for the PHP mcrypt extension (deprecated in PHP 7.1 and removed in PHP 7.2), which was in use by the ldap module bundled with UC Berkeley CAS.  Specifically this means the option “Encrypt Stored LDAP Passwords?” at `admin/config/people/ldap` has been removed. If you rely on this setting, you should review this [LDAP drupal.org issue](https://www.drupal.org/project/ldap/issues/2907312) for the LDAP module project before updating to version 5.0.0. [This information on protecting your bind password](https://uc-berkeley-cas.readthedocs.io/en/latest/ldap_access/) (binddn) may also be of use.
+* Add rudimentary Behat tests.
+
 ucberkeley_cas 7.x-4.0.4
 ========================
 * [OPENUCB-1819] - features-diff results in PHP warnings. Column and 
