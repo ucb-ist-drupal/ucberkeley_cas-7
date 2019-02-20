@@ -1,6 +1,7 @@
 ucberkeley_cas 7.x-5.0.1
 ========================
-* [OPENUCB-1987] - Usernames like O'Brein result in display of names with HTML-encoded characters. 
+* [OPENUCB-1987] - Usernames like O'Brein result in display of names with HTML-encoded characters.
+ 
 ucberkeley_cas 7.x-5.0.0
 ========================
 * [OPENUCB-2014] - Update ucberkeley_cas for PHP 7.2
