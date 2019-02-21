@@ -13,6 +13,8 @@ projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-
 ; CAS Attributes
 projects[cas_attributes][type] = module
 projects[cas_attributes][version] = 1.0-rc3
+; fix single quotes in field data
+projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2019-02-06/cas_attributes-single-quotes-3031238-4.patch
 
 ; LDAP
 projects[ldap][type] = module
@@ -31,4 +33,4 @@ projects[realname][patch][2926684] = https://www.drupal.org/files/issues/realnam
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2014"
+projects[ucberkeley_cas][download][branch] = "openucb-1987"
