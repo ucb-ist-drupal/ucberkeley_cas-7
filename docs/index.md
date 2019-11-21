@@ -77,6 +77,7 @@ UC Berkeley CAS will install these modules:
 * [CAS](http://drupal.org/project/cas)
 * [CAS Attributes](http://drupal.org/project/cas_attributes)
 * [LDAP](http://drupal.org/project/ldap)
+* [Real Name](http://drupal.org/project/realname)
 
 Specific versions of the above modules are specified in ucberkeley_cas-7.x.make. If your site is using unsupported versions of these modules, you'll be notified of the problem when you attemp to enable UC Berkeley CAS.
 
