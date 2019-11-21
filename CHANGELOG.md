@@ -1,3 +1,11 @@
+ucberkeley_cas 7.x-5.1.0
+========================
+* [OPENUCB-2142] - Update UC Berkeley CAS modules
+  * Update phpCAS to 1.3.8
+  * Update ldap to 7.x-2.5 and remove patch 2907312 which was previously needed for PHP 7.2 compatibility.  That patch has been merged. 
+  * Update ldap-7.x-2.5-key-integration.patch needed for key.module (and Lockr.io) compatibility.
+  * Update realname.module to 7.x-1.4
+  
 ucberkeley_cas 7.x-5.0.1
 ========================
 * [OPENUCB-1987] - Usernames like O'Brein result in display of names with HTML-encoded characters.
