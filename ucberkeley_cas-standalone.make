@@ -19,7 +19,7 @@ projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2
 ; LDAP
 projects[ldap][type] = module
 projects[ldap][version] = 2.5
-projects[ldap][patch][patchforkey] = "https://raw.githubusercontent.com/bwood/Lockr-Patches/master/drupal7/ldap/ldap-7.x-2.5-key-integration.patch"
+projects[ldap][patch][patchforkey] = "https://github.com/CellarDoorMedia/Lockr-Patches/raw/master/drupal7/ldap/ldap-7.x-2.5-key-integration.patch"
 
 ; Realname
 projects[realname][type] = module
