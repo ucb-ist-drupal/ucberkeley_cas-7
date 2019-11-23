@@ -12,8 +12,8 @@ function ucberkeley_cas_requirements($phase) {
   $requirements = array();
   $t = get_t();
 
-  $cas_req_version = '1.5';
-  $ldap_req_version = '2.4';
+  $cas_req_version = '1.7';
+  $ldap_req_version = '2.5';
   $cas_attributes_req_version = '1.0-rc3';
 
   $update_message = <<<EOT
