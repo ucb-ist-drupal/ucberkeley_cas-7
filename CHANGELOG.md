@@ -5,6 +5,7 @@ ucberkeley_cas 7.x-5.1.0
   * Update ldap to 7.x-2.5 and remove patch 2907312 which was previously needed for PHP 7.2 compatibility.  That patch has been merged. 
   * Update ldap-7.x-2.5-key-integration.patch needed for key.module (and Lockr.io) compatibility.
   * Update realname.module to 7.x-1.4
+  * Add ucberkeley_cas_update_7510() to resubmit the LDAP Servers admin form as specified by ldap_servers_update_7209()
   
 ucberkeley_cas 7.x-5.0.1
 ========================
