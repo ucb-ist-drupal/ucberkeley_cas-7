@@ -507,3 +507,79 @@ function ucberkeley_cas_update_7408() {
   ucberkeley_cas_set_user1_display_name();
 }
 
+/**
+ * Implements hook_update_dependencies().
+ * Ensure this module's updates run after certain updates for other modules.
+ *
+ * @return mixed
+ */
+function ucberkeley_cas_update_dependencies() {
+  $dependencies['ucberkeley_cas']['7510'] = [
+    'ldap_servers' => '7209'
+  ];
+
+  return $dependencies;
+}
+
+/**
+ * OPENUCB-2142: Resubmit the LDAP Servers admin form as specified by ldap_servers_update_7209()
+ */
+function ucberkeley_cas_update_7510() {
+  $form_state = [];
+  require_once drupal_get_path('module', 'ldap_servers') . '/ldap_servers.admin.inc';
+  $form_id = 'ldap_servers_admin_form';
+  $form = drupal_get_form($form_id, 'edit', 'ucb_prod');
+
+  $form_state += form_state_defaults();
+  drupal_process_form($form_id, $form, $form_state);
+
+  // If Lockr and Key are in use, set the bindpw appropriately.
+  if ((module_exists('key')) && (module_exists('lockr'))) {
+
+    $query = db_select('key_config', 'k')
+      ->condition('k.key_type', 'authentication', '=')
+      ->condition('k.key_provider', 'lockr', '=')
+      ->fields('k', ['id']);
+    $result = $query->execute();
+    $data = $result->fetchCol();
+
+    if (count($data) > 1) {
+      drupal_set_message(
+        t('Multiple lockr entries in key_config table. We can\'t automatically reset LDAP Servers for you. Please visit /admin/config/people/ldap/servers, edit your server, ensure that the settings under Binding Method are correct, and submit the form.'),
+        'warning'
+      );
+    }
+
+    if (count($data) < 1) {
+      drupal_set_message(
+        t('No lockr entries in key_config table. Will not set LDAP bindpw.'),
+        'warning'
+      );
+    }
+
+    if (count($data) == 1) {
+      $form_state['values']['bindpw'] = $data[0];
+    }
+    else {
+      $form_state['values']['bindpw'] = '';
+    }
+
+  }
+
+  $button = drupal_strtolower($form_state['clicked_button']['#value']);
+  $op = ($button == 'add') ? 'add' : 'edit';
+  ldap_servers_module_load_include('php', 'ldap_servers', 'LdapServerAdmin.class');
+  $server = new LdapServerAdmin($form_state['values']['sid']);
+  // Add form data to object and save or create.
+  $server->drupalFormSubmit($op, $form_state['values']);
+
+  if ($server->hasError() != FALSE) {
+    drupal_set_message(t('LDAP Server %name update yielded !error_name: !error_message', [
+      '!error_name' => $server->errorName(),
+      '!error_message' => $server->errorMsg(),
+      '%name' => $server->name
+    ]), 'error');
+    return FALSE;
+  }
+}
+
