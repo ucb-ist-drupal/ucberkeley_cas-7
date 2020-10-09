@@ -1,3 +1,8 @@
+ucberkeley_cas 7.x-5.1.1
+========================
+* [OPENUCB-2297] Update LDAP module for PHP 7.4 compatibility
+* Update documentation regarding CAS failover.
+  
 ucberkeley_cas 7.x-5.1.0
 ========================
 * [OPENUCB-2142] - Update UC Berkeley CAS modules
