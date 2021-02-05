@@ -1,3 +1,8 @@
+ucberkeley_cas 7.x-5.1.2
+========================
+* [OPENUCB-2352] Decode HTML entities in CAS display names
+  * Improvement on OPENUCB-1987.
+
 ucberkeley_cas 7.x-5.1.1
 ========================
 * [OPENUCB-2297] Update LDAP module for PHP 7.4 compatibility
