@@ -14,7 +14,7 @@ projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-
 projects[cas_attributes][type] = module
 projects[cas_attributes][version] = 1.0-rc3
 ; fix single quotes in field data
-projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2019-02-06/cas_attributes-single-quotes-3031238-4.patch
+projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2019-02-06/cas_attributes-single-quotes-3031238-9.patch
 
 ; LDAP
 projects[ldap][type] = module
