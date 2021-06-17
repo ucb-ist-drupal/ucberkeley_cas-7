@@ -18,9 +18,8 @@ projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2
 
 ; LDAP
 projects[ldap][type] = module
-projects[ldap][version] = 2.5
+projects[ldap][version] = 2.6
 projects[ldap][patch][patchforkey] = "https://github.com/CellarDoorMedia/Lockr-Patches/raw/master/drupal7/ldap/ldap-7.x-2.5-key-integration.patch"
-projects[ldap][patch][3161065] = https://www.drupal.org/files/issues/2020-07-23/ldap_php74_curly_braces_offset_syntax_3161065-3.patch
 
 ; Realname
 projects[realname][type] = module
