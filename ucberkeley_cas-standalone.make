@@ -3,7 +3,7 @@ core = 7.x
 
 ; phpCAS library
 libraries[phpcas][download][type] = "get"
-libraries[phpcas][download][url] = "https://github.com/Jasig/phpCAS/archive/1.3.8.tar.gz"
+libraries[phpcas][download][url] = "https://github.com/Jasig/phpCAS/archive/1.4.0.tar.gz"
 
 ; CAS
 projects[cas][type] = module
