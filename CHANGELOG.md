@@ -1,3 +1,7 @@
+ucberkeley_cas 7.x-5.1.3
+========================
+* [OPENUCB-2421] Update to ldap 7.x-2.6.
+
 ucberkeley_cas 7.x-5.1.2
 ========================
 * [OPENUCB-2352] Decode HTML entities in CAS display names
