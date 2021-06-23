@@ -1,6 +1,5 @@
 ucberkeley_cas 7.x-5.1.3
 ========================
-* Update to phpCAS 1.4.0
 * [OPENUCB-2421] Update to ldap 7.x-2.6.
 
 ucberkeley_cas 7.x-5.1.2
