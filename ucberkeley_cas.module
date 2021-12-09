@@ -438,52 +438,56 @@ function ucberkeley_cas_views_default_views_alter(&$views) {
     // Default display
     $handler =& $views['admin_views_node']->display['default']->handler;
     $handler->display->display_options['fields']['realname'] = $realname_field;
+
     // Page display
-    $page_handler =& $views['admin_views_node']->display['page_1']->handler;
-    $page_handler->display->display_options['fields']['realname'] = $realname_field;
+    if (isset($views['admin_views_node']->display['page_1'])) {
+      $page_handler =& $views['admin_views_node']->display['page_1']->handler;
+      $page_handler->display->display_options['fields']['realname'] = $realname_field;
 
-    // Remove user filter
-    unset($handler->display->display_options['filters']['uid']);
+      // Remove user filter
+      unset($handler->display->display_options['filters']['uid']);
 
-    /* Filter criterion: Realname: Name */
-    $handler->display->display_options['filters']['realname']['id'] = 'realname';
-    $handler->display->display_options['filters']['realname']['table'] = 'realname';
-    $handler->display->display_options['filters']['realname']['field'] = 'realname';
-    $handler->display->display_options['filters']['realname']['relationship'] = 'uid';
-    $handler->display->display_options['filters']['realname']['operator'] = 'contains';
-    $handler->display->display_options['filters']['realname']['exposed'] = TRUE;
-    $handler->display->display_options['filters']['realname']['expose']['operator_id'] = 'realname_op';
-    $handler->display->display_options['filters']['realname']['expose']['label'] = 'Author';
-    $handler->display->display_options['filters']['realname']['expose']['operator'] = 'realname_op';
-    $handler->display->display_options['filters']['realname']['expose']['identifier'] = 'realname';
-    $handler->display->display_options['filters']['realname']['expose']['remember_roles'] = array(
-      2 => '2',
-      1 => 0,
-      6 => 0,
-      4 => 0,
-      7 => 0,
-      5 => 0,
-      3 => 0,
-    );
-    $handler->display->display_options['filters']['realname']['expose']['autocomplete_filter'] = 1;
-    $handler->display->display_options['filters']['realname']['expose']['autocomplete_items'] = '10';
-    $handler->display->display_options['filters']['realname']['expose']['autocomplete_min_chars'] = '0';
-    $handler->display->display_options['filters']['realname']['expose']['autocomplete_field'] = 'realname';
-    $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_suggestion'] = 1;
-    $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_dropdown'] = 1;
-    $handler->display->display_options['filters']['realname']['expose']['autocomplete_dependent'] = 0;
+      /* Filter criterion: Realname: Name */
+      $handler->display->display_options['filters']['realname']['id'] = 'realname';
+      $handler->display->display_options['filters']['realname']['table'] = 'realname';
+      $handler->display->display_options['filters']['realname']['field'] = 'realname';
+      $handler->display->display_options['filters']['realname']['relationship'] = 'uid';
+      $handler->display->display_options['filters']['realname']['operator'] = 'contains';
+      $handler->display->display_options['filters']['realname']['exposed'] = TRUE;
+      $handler->display->display_options['filters']['realname']['expose']['operator_id'] = 'realname_op';
+      $handler->display->display_options['filters']['realname']['expose']['label'] = 'Author';
+      $handler->display->display_options['filters']['realname']['expose']['operator'] = 'realname_op';
+      $handler->display->display_options['filters']['realname']['expose']['identifier'] = 'realname';
+      $handler->display->display_options['filters']['realname']['expose']['remember_roles'] = array(
+        2 => '2',
+        1 => 0,
+        6 => 0,
+        4 => 0,
+        7 => 0,
+        5 => 0,
+        3 => 0,
+      );
+      $handler->display->display_options['filters']['realname']['expose']['autocomplete_filter'] = 1;
+      $handler->display->display_options['filters']['realname']['expose']['autocomplete_items'] = '10';
+      $handler->display->display_options['filters']['realname']['expose']['autocomplete_min_chars'] = '0';
+      $handler->display->display_options['filters']['realname']['expose']['autocomplete_field'] = 'realname';
+      $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_suggestion'] = 1;
+      $handler->display->display_options['filters']['realname']['expose']['autocomplete_raw_dropdown'] = 1;
+      $handler->display->display_options['filters']['realname']['expose']['autocomplete_dependent'] = 0;
 
-    $exposed_filter_order = array(
-      'title',
-      'type',
-      'realname',
-      'status',
-      'vid'
-    );
-    // Order the columns
-    $handler->display->display_options['filters'] = array_merge(array_flip($exposed_filter_order), $handler->display->display_options['filters']);
+      $exposed_filter_order = array(
+        'title',
+        'type',
+        'realname',
+        'status',
+        'vid'
+      );
+      // Order the columns
+      $handler->display->display_options['filters'] = array_merge(array_flip($exposed_filter_order), $handler->display->display_options['filters']);
+    }
   }
-    // Modify Total Control's: control_users View
+
+  // Modify Total Control's: control_users View
   if (array_key_exists('control_users', $views)) {
     $control_user_column_order = array(
       'views_bulk_operations',
