@@ -1,3 +1,7 @@
+ucberkeley_cas 7.x-5.1.4
+========================
+* [OPENUCB-2580] Correct dblog warnings when running under PHP 8.
+
 ucberkeley_cas 7.x-5.1.3
 ========================
 * [OPENUCB-2421] Update to ldap 7.x-2.6.
