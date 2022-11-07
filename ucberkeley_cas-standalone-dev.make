@@ -22,6 +22,7 @@ projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2
 projects[ldap][type] = module
 projects[ldap][version] = 2.6
 projects[ldap][patch][patchforkey] = "https://github.com/CellarDoorMedia/Lockr-Patches/raw/master/drupal7/ldap/ldap-7.x-2.5-key-integration.patch"
+projects[ldap][patch][3302242] = "patches/ldap-php-8-compatibility-3302242-7-modified.patch"
 
 ; Realname
 projects[realname][type] = module
@@ -33,5 +34,5 @@ projects[realname][patch][2926684] = https://www.drupal.org/files/issues/realnam
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2421"
+projects[ucberkeley_cas][download][branch] = "ob-2580-php8"
 
