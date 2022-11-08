@@ -271,7 +271,7 @@ EOT;
     $out .= '<h4>' . t('Site Status: Login blocks enabled') . '</h4>';
     $out .= '<table>';
     $out .= '<tr><th>Block Name</th><th>Region</th><th>Module Providing Block</th></tr>';
-    while (list($k, $v) = each($login_blocks)) {
+    foreach ($login_blocks as $k => $v) {
       $out .= '<tr>';
       $out .= '<td>' . $v[0] . '</td>';
       $out .= '<td>' . $v[1] . '</td>';
