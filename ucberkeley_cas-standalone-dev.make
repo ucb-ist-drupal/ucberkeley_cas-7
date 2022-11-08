@@ -2,6 +2,7 @@ api = 2
 core = 7.x
 
 ; phpCAS library
+libraries[phpcas][type] = "libraries"
 libraries[phpcas][download][type] = "get"
 ;; cas 7.x-1.7 generates many warnings with phpCAS 1.4.0 so we are staying on 1.3.8
 ;; https://jira-secure.berkeley.edu/browse/OPENUCB-2421?focusedCommentId=1641203&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-1641203
