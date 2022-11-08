@@ -1,7 +1,9 @@
 ucberkeley_cas 7.x-5.1.4
 ========================
-* [OPENUCB-2580] Correct dblog warnings when running under PHP 8.
-
+* [OPENUCB-2580] PHP 8.1 compatibility
+  * Resolve:  Deprecated: Required parameter $flatten follows optional parameter $type in /code/profiles/openberkeley/modules/ucb/ucberkeley_cas/ldap/ldap_servers/ldap_servers.module on line 584
+  * Remove `each()` function in ucberkeley_cas.module.
+  
 ucberkeley_cas 7.x-5.1.3
 ========================
 * [OPENUCB-2421] Update to ldap 7.x-2.6.
