@@ -49,14 +49,13 @@ mv $BUILD_DIR/realname $BUILD_DIR/ucberkeley_cas/
 mv $BUILD_DIR/build_ucberkeley_cas/libraries/phpcas $BUILD_DIR/ucberkeley_cas/cas/CAS
 rm -rf $BUILD_DIR/build_ucberkeley_cas
 rm $BUILD_DIR/ucberkeley_cas/.gitignore
+# remove .orig file resulting from application of patches/ldap-php-8-compatibility-3302242-7-modified.patch
+rm $BUILD_DIR/ucberkeley_cas/ldap/ldap_servers/LdapServer.class.php.orig
 cd $BUILD_DIR
 
 # remove drush datestamps from info files which result in unnecessary modifications.
 find ucberkeley_cas -name "*.info" -print0 |xargs -0 sed -i.rebuild-bak -e 's/datestamp = \"[[:digit:]]\{1,\}\".*//' -e 's/Information added by drush on [[:digit:]]\{4\}-[[:digit:]]\{2\}-[[:digit:]]\{2\}/Information added by drush/'
 find ucberkeley_cas -name "*.rebuild-bak" | xargs rm -f
-
-# remove .orig file resulting from application of patches/ldap-php-8-compatibility-3302242-7-modified.patch
-rm $BUILD_BUILD_DIR/ldap/ldap_servers/LdapServer.class.php.orig
 
 VER=`$AWK -F = '/version =.*$/{gsub(/ /, "", $0); print $2}' ucberkeley_cas/ucberkeley_cas.info`
 echo ""
