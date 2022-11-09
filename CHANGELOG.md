@@ -1,3 +1,9 @@
+ucberkeley_cas 7.x-5.1.5
+========================
+* Minor clean-up of release 5.1.4
+  * Remove inconsequential .orig file from tarball.
+  * Correct branches and tags in makefiles.
+
 ucberkeley_cas 7.x-5.1.4
 ========================
 * [OPENUCB-2580] PHP 8.1 compatibility
