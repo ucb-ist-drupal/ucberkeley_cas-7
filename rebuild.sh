@@ -49,6 +49,8 @@ mv $BUILD_DIR/realname $BUILD_DIR/ucberkeley_cas/
 mv $BUILD_DIR/build_ucberkeley_cas/libraries/phpcas $BUILD_DIR/ucberkeley_cas/cas/CAS
 rm -rf $BUILD_DIR/build_ucberkeley_cas
 rm $BUILD_DIR/ucberkeley_cas/.gitignore
+# remove .orig file resulting from application of patches/ldap-php-8-compatibility-3302242-7-modified.patch
+rm $BUILD_DIR/ucberkeley_cas/ldap/ldap_servers/LdapServer.class.php.orig
 cd $BUILD_DIR
 
 # remove drush datestamps from info files which result in unnecessary modifications.
