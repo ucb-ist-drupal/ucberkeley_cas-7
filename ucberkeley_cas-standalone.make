@@ -2,9 +2,7 @@ api = 2
 core = 7.x
 
 ; phpCAS library
-libraries[phpcas][type] = "libraries"
-libraries[phpcas][download][type] = "get"
-libraries[phpcas][download][url] = "https://github.com/apereo/phpCAS/archive/refs/tags/1.6.0.tar.gz"
+;; This is now installed by composer in rebuild.sh.
 
 ; CAS
 projects[cas][type] = module
