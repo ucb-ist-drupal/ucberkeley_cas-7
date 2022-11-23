@@ -2,16 +2,13 @@ api = 2
 core = 7.x
 
 ; phpCAS library
-libraries[phpcas][type] = "libraries"
-libraries[phpcas][download][type] = "get"
-;; cas 7.x-1.7 generates many warnings with phpCAS 1.4.0 so we are staying on 1.3.8
-;; https://jira-secure.berkeley.edu/browse/OPENUCB-2421?focusedCommentId=1641203&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-1641203
-libraries[phpcas][download][url] = "https://github.com/Jasig/phpCAS/archive/1.3.8.tar.gz"
+;; This is now installed by composer in rebuild.sh.
 
 ; CAS
 projects[cas][type] = module
 projects[cas][version] = 1.7
 projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
+projects[cas][patch][3319937] = "https://git.drupalcode.org/project/cas/-/merge_requests/19.diff"
 
 ; CAS Attributes
 projects[cas_attributes][type] = module
@@ -37,4 +34,4 @@ projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
 projects[ucberkeley_cas][download][branch] = "master"
-projects[ucberkeley_cas][download][tag] = "7.x-5.1.5"
+projects[ucberkeley_cas][download][tag] = "7.x-5.1.6"

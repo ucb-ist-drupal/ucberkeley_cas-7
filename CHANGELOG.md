@@ -1,3 +1,12 @@
+ucberkeley_cas 7.x-5.1.6
+========================
+* [OPENUCB-2621] Update to phpCAS 1.6.0 
+  * Addresses: https://nvd.nist.gov/vuln/detail/CVE-2022-39369
+  * Apply patch: https://git.drupalcode.org/project/cas/-/merge_requests/19.diff
+  * [Sites must set $base_url to address the vulnerability](https://git.drupalcode.org/project/cas/-/merge_requests/19.diff).
+  * rebuild.sh now uses compser instead of `drush make` to install phpCAS.
+  * rebuild.sh adds a custom CAS.php entry point to resolve the phpCAS warning: `User deprecated function: phpCAS autoloader is deprecated. Install phpCAS using composer instead. in require_once()`
+  
 ucberkeley_cas 7.x-5.1.5
 ========================
 * Minor clean-up of release 5.1.4
