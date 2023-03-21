@@ -6,9 +6,8 @@ core = 7.x
 
 ; CAS
 projects[cas][type] = module
-projects[cas][version] = 1.7
+projects[cas][version] = 1.8
 projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
-projects[cas][patch][3319937] = "https://git.drupalcode.org/project/cas/-/merge_requests/19.diff"
 
 ; CAS Attributes
 projects[cas_attributes][type] = module
