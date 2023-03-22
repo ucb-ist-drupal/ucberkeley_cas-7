@@ -25,6 +25,7 @@ projects[ldap][patch][3302242] = "patches/ldap-php-8-compatibility-3302242-7-mod
 projects[realname][type] = module
 projects[realname][version] = 1.4
 projects[realname][patch][2926684] = https://www.drupal.org/files/issues/realname-views-autocomplete-2926684-2.patch
+projects[realname][patch][3263690] = https://www.drupal.org/files/issues/2022-03-17/realname_autocomplete_array_offset_warning-3263690-2.patch
 
 ; UC Berkeley CAS Feature
 ; TODO: update dl options
