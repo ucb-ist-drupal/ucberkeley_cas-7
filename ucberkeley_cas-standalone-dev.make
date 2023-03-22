@@ -32,5 +32,5 @@ projects[realname][patch][3263690] = https://www.drupal.org/files/issues/2022-03
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2621-phpCas160"
+projects[ucberkeley_cas][download][branch] = "openucb-2529"
 
