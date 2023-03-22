@@ -6,9 +6,8 @@ core = 7.x
 
 ; CAS
 projects[cas][type] = module
-projects[cas][version] = 1.7
+projects[cas][version] = 1.8
 projects[cas][patch][1394666] = "https://drupal.org/files/cas-library-detection-1394666-15.patch"
-projects[cas][patch][3319937] = "https://git.drupalcode.org/project/cas/-/merge_requests/19.diff"
 
 ; CAS Attributes
 projects[cas_attributes][type] = module
@@ -26,11 +25,12 @@ projects[ldap][patch][3302242] = "patches/ldap-php-8-compatibility-3302242-7-mod
 projects[realname][type] = module
 projects[realname][version] = 1.4
 projects[realname][patch][2926684] = https://www.drupal.org/files/issues/realname-views-autocomplete-2926684-2.patch
+projects[realname][patch][3263690] = https://www.drupal.org/files/issues/2022-03-17/realname_autocomplete_array_offset_warning-3263690-2.patch
 
 ; UC Berkeley CAS Feature
 ; specify type=module to prevent "No release history was found for the requested project (ucberkeley_cas)."
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2621-phpCas160"
+projects[ucberkeley_cas][download][branch] = "openucb-2529"
 

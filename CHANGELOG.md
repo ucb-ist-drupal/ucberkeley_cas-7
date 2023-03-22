@@ -1,3 +1,7 @@
+ucberkeley_cas 7.x-5.1.7
+========================
+* [OPENUCB-2529] Realname PHP Warnings and CAS version 1.8
+
 ucberkeley_cas 7.x-5.1.6
 ========================
 * [OPENUCB-2621] Update to phpCAS 1.6.0 
