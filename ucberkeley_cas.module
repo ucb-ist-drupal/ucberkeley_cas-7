@@ -615,6 +615,25 @@ function ucberkeley_cas_cron_queue_info() {
  * Implements hook_cron().
  */
 function ucberkeley_cas_cron() {
+
+  if (variable_get('ucberkeley_cas_update_display_name', TRUE) == FALSE) {
+    $num_deleted = db_delete('queue')
+      ->condition('name', 'display_name')
+      ->execute();
+
+    watchdog(
+      'ucberkeley_cas',
+      'Display name update on cron is disabled for this site. @num_deleted users awaiting updates in the queue have been removed.',
+      [
+        '@num_deleted' => $num_deleted,
+      ]
+    );
+
+    return TRUE;
+  }
+
+
+
   // Ensure cas_attributes setting is correct.
   ucberkeley_cas_ensure_attributes_sync_login();
 
@@ -648,6 +667,15 @@ function ucberkeley_cas_cron() {
 }
 
 function ucberkeley_cas_update_display_name($account) {
+
+  if (variable_get('ucberkeley_cas_update_display_name', TRUE) == FALSE) {
+    watchdog(
+      'ucberkeley_cas',
+      'Display name update on cron is disabled for this site.'
+    );
+
+    return TRUE;
+  }
 
   $display_name_orig = $account->realname;
 
