@@ -2,6 +2,7 @@ ucberkeley_cas 7.x-5.2.0
 ========================
 * [OPENUCB-2671] First steps related to periodic updates of displayname.
   * Change the token for field_display_name from `[cas:ldap:givenname] [cas:ldap:sn]` to `[cas:ldap:displayname]`.
+  * Prevent editing field_display_name on user_profile_form.
 
 ucberkeley_cas 7.x-5.1.7
 ========================
@@ -9,13 +10,13 @@ ucberkeley_cas 7.x-5.1.7
 
 ucberkeley_cas 7.x-5.1.6
 ========================
-* [OPENUCB-2621] Update to phpCAS 1.6.0 
+* [OPENUCB-2621] Update to phpCAS 1.6.0
   * Addresses: https://nvd.nist.gov/vuln/detail/CVE-2022-39369
   * Apply patch: https://git.drupalcode.org/project/cas/-/merge_requests/19.diff
   * [Sites must set $base_url to address the vulnerability](https://git.drupalcode.org/project/cas/-/merge_requests/19.diff).
   * rebuild.sh now uses compser instead of `drush make` to install phpCAS.
   * rebuild.sh adds a custom CAS.php entry point to resolve the phpCAS warning: `User deprecated function: phpCAS autoloader is deprecated. Install phpCAS using composer instead. in require_once()`
-  
+
 ucberkeley_cas 7.x-5.1.5
 ========================
 * Minor clean-up of release 5.1.4
@@ -27,7 +28,7 @@ ucberkeley_cas 7.x-5.1.4
 * [OPENUCB-2580] PHP 8.1 compatibility
   * Resolve:  Deprecated: Required parameter $flatten follows optional parameter $type in /code/profiles/openberkeley/modules/ucb/ucberkeley_cas/ldap/ldap_servers/ldap_servers.module on line 584
   * Remove `each()` function in ucberkeley_cas.module.
-  
+
 ucberkeley_cas 7.x-5.1.3
 ========================
 * [OPENUCB-2421] Update to ldap 7.x-2.6.
@@ -41,44 +42,44 @@ ucberkeley_cas 7.x-5.1.1
 ========================
 * [OPENUCB-2297] Update LDAP module for PHP 7.4 compatibility
 * Update documentation regarding CAS failover.
-  
+
 ucberkeley_cas 7.x-5.1.0
 ========================
 * [OPENUCB-2142] - Update UC Berkeley CAS modules
   * Update phpCAS to 1.3.8
-  * Update ldap to 7.x-2.5 and remove patch 2907312 which was previously needed for PHP 7.2 compatibility.  That patch has been merged. 
+  * Update ldap to 7.x-2.5 and remove patch 2907312 which was previously needed for PHP 7.2 compatibility.  That patch has been merged.
   * Update ldap-7.x-2.5-key-integration.patch needed for key.module (and Lockr.io) compatibility.
   * Update realname.module to 7.x-1.4
   * Add ucberkeley_cas_update_7510() to resubmit the LDAP Servers admin form as specified by ldap_servers_update_7209()
-  
+
 ucberkeley_cas 7.x-5.0.1
 ========================
 * [OPENUCB-1987] - Usernames like O'Brein result in display of names with HTML-encoded characters.
- 
+
 ucberkeley_cas 7.x-5.0.0
 ========================
 * [OPENUCB-2014] - Update ucberkeley_cas for PHP 7.2
   * Update to phpCAS 1.3.6
-  * Update to cas-7.x-1.7  
+  * Update to cas-7.x-1.7
   * Update to ldap-7.x-2.4
     * A patch has been applied that removes support for the PHP mcrypt extension (deprecated in PHP 7.1 and removed in PHP 7.2), which was in use by the ldap module bundled with UC Berkeley CAS.  Specifically this means the option “Encrypt Stored LDAP Passwords?” at `admin/config/people/ldap` has been removed. If you rely on this setting, you should review this [LDAP drupal.org issue](https://www.drupal.org/project/ldap/issues/2907312) for the LDAP module project before updating to version 5.0.0. [This information on protecting your bind password](https://uc-berkeley-cas.readthedocs.io/en/latest/ldap_access/) (binddn) may also be of use.
 * Add rudimentary Behat tests.
 
 ucberkeley_cas 7.x-4.0.4
 ========================
-* [OPENUCB-1819] - features-diff results in PHP warnings. Column and 
+* [OPENUCB-1819] - features-diff results in PHP warnings. Column and
 filter order arrays were not being applyed to the altered control_users view.
   * Applies to sites using [Total Control](https://www.drupal.org/project/total_control) module.
 
 ucberkeley_cas 7.x-4.0.3
 ========================
-* [OPENUCB-1787] - VBO field to bulk change content author should display username, not UID. 
+* [OPENUCB-1787] - VBO field to bulk change content author should display username, not UID.
   * Applies to sites using [Admin Views](https://www.drupal.org/project/admin_views).
 * [OPENUCB-1797] - Username autocomplete only matches beginning of name, should use "contains."
   * Applies to sites using [Admin Views](https://www.drupal.org/project/admin_views).
 * [OPENUCB-1748] - UC Berkeley CAS: Update documentation to mention dependency on entity
 * [OPENUCB-1794] - UC Berkeley CAS: Clean up superfluous paths in cas_pages in existing sites
-  * The featurized configuration added "web-hosting" paths to the Redirection 
+  * The featurized configuration added "web-hosting" paths to the Redirection
   settings on all sites.  This was not a problem, but let's clean it up.
 * [OPENUCB-1083] - Remove mentions of drupal-apps.berkeley.edu from UC Berkeley CAS
 * [OPENUCB-1802] - Display name is not set for ucbadmin on new site installations. Fix that.
@@ -86,21 +87,21 @@ ucberkeley_cas 7.x-4.0.3
 ucberkeley_cas 7.x-4.0.2
 ========================
 * OPENUCB-1768: Username autocomplete is broken in Views
-  * Applies https://www.drupal.org/files/issues/realname-views-autocomplete-2926684-2.patch, 
+  * Applies https://www.drupal.org/files/issues/realname-views-autocomplete-2926684-2.patch,
   which in conjuntion with https://www.drupal.org/files/issues/views-ajax-autocomplete-1264794-21-3.18.patch
   fixes the autocomplete in the Admin Views view admin_views_node.
-* OPENUCB-1747: Remove a test on `empty()` which was causing update.php to fail 
-  on sites using PHP < 5.5. (Those PHP versions are out of support and not 
+* OPENUCB-1747: Remove a test on `empty()` which was causing update.php to fail
+  on sites using PHP < 5.5. (Those PHP versions are out of support and not
   receiving security updates!)
 * OPENUCB-1746: Remove superfluous paths in cas_pages
-  * "web-hosting" paths crept into our default config. (admin/config/people/cas 
-  \> Redirection). These paths will not be installed on any new sites. They 
+  * "web-hosting" paths crept into our default config. (admin/config/people/cas
+  \> Redirection). These paths will not be installed on any new sites. They
   must be manually removed from existing sites.
-      
+
 ucberkeley_cas 7.x-4.0.1
 ========================
 * OPENUCB-1720: Watchdog error causes dblog page to break.
-  * Corrected arguments to watchdog calls in ucberkeley_cas.install and 
+  * Corrected arguments to watchdog calls in ucberkeley_cas.install and
     scripts/realname_update.php.
 
 ucberkeley_cas 7.x-4.0.0
@@ -108,15 +109,15 @@ ucberkeley_cas 7.x-4.0.0
 * OPENUCB-1546: Use cas.uid for users.name value and moves the user name to a custom field
   * Prevents the error `PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Jane Smith' for key 'name': UPDATE {users} SET name=:db_update_placeholder_0,
                         pass=:db_update_placehold`
-  * Facilitates integration with CalGroups using ldap_authorization.module. 
+  * Facilitates integration with CalGroups using ldap_authorization.module.
   * Adds Real Name module.
   * No updates to other modules or libraries.
-  * [Release Notes](http://uc-berkeley-cas.readthedocs.io/en/latest/release_notes/). 
+  * [Release Notes](http://uc-berkeley-cas.readthedocs.io/en/latest/release_notes/).
 
 ucberkeley_cas 7.x-3.1.1
 ========================
 * Update the ldap module version in the installation requirements.
- 
+
 ucberkeley_cas 7.x-3.1.0
 ========================
 * OPENUCB-1575: Upgrade to ldap-7.x-2.2 per [LDAP - Critical - Data Injection -SA-CONTRIB-2017-052](https://www.drupal.org/node/2882805)
@@ -134,10 +135,10 @@ ucberkeley_cas 7.x-3.0.0-rc.1
         * Makes it possible to login at /cas or /CAS or /cAs etc.
         * Fixes error 'Call to undefined function _drush_user_print_info()' when using `drush cas-user-create`
     * New features
-      * Ability to add multiple CAS users at /admin/people/cas/create. Must specify CAS UIDs. 
+      * Ability to add multiple CAS users at /admin/people/cas/create. Must specify CAS UIDs.
       * Ability to add role to multiple users via `drush cas-user-add-role builder 212373,212374`. (Specify comma separated CAS UIDs.)
       * Config: admin/config/people/cas: Use "CAS Server 3.0 or higher."
-      * Config: admin/config/people/cas: Redirect unauthorized user to CAS if they attempt to visit "node edit" or "node add" paths. 
+      * Config: admin/config/people/cas: Redirect unauthorized user to CAS if they attempt to visit "node edit" or "node add" paths.
   * cas_attributes updated 7.x-1.0-beta2 --> 7.x-1.0-rc3
     * Fixes issues listed at https://www.drupal.org/project/cas_attributes/releases/7.x-1.0-rc1
       * Note: https://www.drupal.org/node/1399304 only applies to `cas:attributes` tokens.  We are currently using `cas:ldap` tokens, and none of the tokens that we need are multivalued.
@@ -147,15 +148,15 @@ ucberkeley_cas 7.x-3.0.0-rc.1
     * Fixes issues listed at https://www.drupal.org/project/ldap/releases/7.x-2.0
     * Applied patch [fixing watchdog bug](https://www.drupal.org/node/2870792).
     * Applied patch [fixing update warning](https://www.drupal.org/node/2870798).
-  
+
  New Features in the ucberkeley_cas configuration
    * Start TLS is enabled on the LDAP connection.
    * If the site is hosted on Pantheon set "Certificate Authority PEM Certificate" to `/etc/ssl/certs/ca-bundle.crt` to enable certificate verification.
 
-      
+
  Removed functionality:
    * Removed [Apps](https://www.drupal.org/project/apps) integration.
-   
+
 ucberkeley_cas 7.x-2.3.0
 ========================
 * OPENUCB-1542: Update phpCAS to version 1.3.5. This is a security release for phpCAS, but the vulnerability is mitigated on UC Berkeley CAS servers.
@@ -166,7 +167,7 @@ ucberkeley_cas 7.x-2.2
 * OPENUCB-768: Move cas_attributes from defaultconfig to strongarm.  Add update
   hook to revert the feature.  This compliments the ucberkeley_envconf 2.2 which
   no does no management of cas_attributes. This change resovles a bug in version
-  2.1 which yeilded blank cas_attributes for CAS administrators added during 
+  2.1 which yeilded blank cas_attributes for CAS administrators added during
   'drush site-install'.
 
 
@@ -236,7 +237,7 @@ ucberkeley_cas 7.x-2.0-alpha4
 ucb_cas 7.x-1.3-beta2
 ===================
 * DUPCODE-47: clean up auto_assigned roles.  If you created a new role after installing ucb_cas
-newly added users were automatically assigned the new role in some situations. Take a look at 
+newly added users were automatically assigned the new role in some situations. Take a look at
 /admin/config/people/cas > User Accounts and ensure that the correct roles are selected there.
 
 ucb_cas 7.x-1.3-beta1
