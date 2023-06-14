@@ -657,8 +657,17 @@ function ucberkeley_cas_update_display_name($account) {
   // dblog. https://jira-secure.berkeley.edu/browse/OPENUCB-2671?focusedId=1925367&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1925367
   @cas_attributes_cas_user_presave($edit, $account);
 
-  // Proceed only if the name is different.
-  if ($edit['field_display_name'][LANGUAGE_NONE][0]['value'] != $display_name_orig) {
+
+  if (!array_key_exists('field_display_name', $edit)) {
+    // Set an empty value if this key doesn't exist.
+    $edit['field_display_name'][LANGUAGE_NONE][0]['value'] = '';
+  }
+
+  $display_name_new = $edit['field_display_name'][LANGUAGE_NONE][0]['value'];
+
+  // Proceed only if the name is not empty and if it has changed.
+  // If the new display name is empty, the user is probably no longer in LDAP.  I.e. they've left UCB.
+  if (!empty($display_name_new) && $display_name_new != $display_name_orig) {
     $context['message'] = 'CAS UID: ' . check_plain($account->cas_name) . ': ' . check_plain($display_name_orig) . 'Found updated display name: ' . check_plain($account->realname);
     watchdog(
       'ucberkeley_cas',
@@ -666,7 +675,7 @@ function ucberkeley_cas_update_display_name($account) {
       [
         '@uid' => check_plain($account->cas_name),
         '@name_orig' => check_plain($display_name_orig),
-        '@name_new' => check_plain($edit['field_display_name'][LANGUAGE_NONE][0]['value']),
+        '@name_new' => check_plain($display_name_new),
       ],
     );
     user_save($account, $edit);
@@ -680,10 +689,7 @@ function ucberkeley_cas_update_display_name($account) {
         '@name_orig' => check_plain($display_name_orig),
       ],
     );
-
   }
-
-  //todo any problem if mail is NULL?
 }
 
 function ucberkeley_cas_ensure_attributes_sync_login() {
