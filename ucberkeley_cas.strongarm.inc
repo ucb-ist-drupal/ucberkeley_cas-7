@@ -24,7 +24,7 @@ function ucberkeley_cas_strongarm() {
   $strongarm->value = array(
     'name' => '[cas:ldap:uid]',
     'mail' => '[cas:ldap:mail]',
-    'field_display_name' => '[cas:ldap:givenname] [cas:ldap:sn]',
+    'field_display_name' => '[cas:ldap:displayname]',
   );
   $export['cas_attributes_relations'] = $strongarm;
 
