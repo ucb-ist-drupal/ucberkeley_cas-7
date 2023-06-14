@@ -596,3 +596,93 @@ function ucberkeley_cas_invalidate_views_cache(array $view_names) {
   }
 }
 
+/**
+ * Implements hook_cron_queue_info().
+ */
+function ucberkeley_cas_cron_queue_info() {
+  $queues['display_name'] = [
+    // This is the callback function for each queue item.
+    'worker callback' => 'ucberkeley_cas_update_display_name',
+    // This is the max run time per cron run in seconds.
+    // Todo: what happens if this is exceeded?
+    'time' => 180,
+  ];
+
+  return $queues;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function ucberkeley_cas_cron() {
+  // Ensure cas_attributes setting is correct.
+  ucberkeley_cas_ensure_attributes_sync_login();
+
+  drupal_set_message('Checking users for updated display names.');
+  $queue = DrupalQueue::get('display_name');
+
+  $users = entity_load('user');
+  foreach ($users as $uid => $account) {
+    // Skip non cas users like users 0 and 1
+    if (!$account->cas_name) {
+      continue;
+    }
+    $queue->createItem($account);
+  }
+}
+
+function ucberkeley_cas_update_display_name($account) {
+
+  $display_name_orig = $account->realname;
+
+  $edit['cas_user']['name'] = $account->cas_name;
+
+  // Using @ to suppress errors here.  When we hit a user who is no longer in LDAP it will generate a PHP Warning in
+  // dblog. https://jira-secure.berkeley.edu/browse/OPENUCB-2671?focusedId=1925367&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1925367
+  @cas_attributes_cas_user_presave($edit, $account);
+  
+  // Proceed only if the name is different.
+  if ($account->realname != $display_name_orig) {
+    $context['message'] = 'CAS UID: ' . check_plain($account->cas_name) . ': ' . check_plain($display_name_orig) . 'Found updated display name: ' . check_plain($account->realname);
+    watchdog(
+      'ucberkeley_cas',
+      'CAS UID: @uid: @name_orig: Found updated display name: @name_new',
+      [
+        '@uid' => check_plain($account->cas_name),
+        '@name_orig' => check_plain($display_name_orig),
+        '@name_new' => check_plain($account->realname),
+      ],
+    );
+    user_save($account, $edit);
+  }
+  else {
+    watchdog(
+      'ucberkeley_cas',
+      'CAS UID: @uid: @name_orig: No change.',
+      [
+        '@uid' => check_plain($account->cas_name),
+        '@name_orig' => check_plain($display_name_orig),
+      ],
+    );
+
+  }
+
+  //todo any problem if mail is NULL?
+}
+
+function ucberkeley_cas_ensure_attributes_sync_login() {
+  $sync_every_variable_name = 'cas_attributes_sync_every_login';
+  if (variable_get($sync_every_variable_name) != TRUE) {
+    // cas_attributes_cas_user_presave will not proceed unless this option is true.
+    variable_set($sync_every_variable_name, 1);
+    watchdog(
+      'ucberkeley_cas',
+      'Re-enabling @setting becuase it is required for display name updates.',
+      [
+        '@setting' => $sync_every_variable_name,
+      ],
+      WATCHDOG_WARNING
+    );
+  }
+}
+
