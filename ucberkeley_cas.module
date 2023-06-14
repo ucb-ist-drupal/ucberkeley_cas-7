@@ -605,7 +605,7 @@ function ucberkeley_cas_cron_queue_info() {
     'worker callback' => 'ucberkeley_cas_update_display_name',
     // This is the max run time per cron run in seconds.
     // Todo: what happens if this is exceeded?
-    'time' => 180,
+    'time' => 170,
   ];
 
   return $queues;
@@ -621,13 +621,29 @@ function ucberkeley_cas_cron() {
   drupal_set_message('Checking users for updated display names.');
   $queue = DrupalQueue::get('display_name');
 
-  $users = entity_load('user');
-  foreach ($users as $uid => $account) {
-    // Skip non cas users like users 0 and 1
-    if (!$account->cas_name) {
-      continue;
+  $queue_size = $queue->numberOfItems();
+  if ($queue_size == 0) {
+    $users = entity_load('user');
+    watchdog(
+      'ucberkeley_cas',
+      'Adding @count users to the queue for display name updates.',
+      ['@count' => count($users)],
+    );
+
+    foreach ($users as $uid => $account) {
+      // Skip non cas users like users 0 and 1
+      if (!$account->cas_name) {
+        continue;
+      }
+      $queue->createItem($account);
     }
-    $queue->createItem($account);
+  }
+  else {
+    watchdog(
+      'ucberkeley_cas',
+      'Processing display name updates for the remaining @queue_size users.',
+      ['@queue_size' => $queue_size],
+    );
   }
 }
 
@@ -640,9 +656,9 @@ function ucberkeley_cas_update_display_name($account) {
   // Using @ to suppress errors here.  When we hit a user who is no longer in LDAP it will generate a PHP Warning in
   // dblog. https://jira-secure.berkeley.edu/browse/OPENUCB-2671?focusedId=1925367&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1925367
   @cas_attributes_cas_user_presave($edit, $account);
-  
+
   // Proceed only if the name is different.
-  if ($account->realname != $display_name_orig) {
+  if ($edit['field_display_name'][LANGUAGE_NONE][0]['value'] != $display_name_orig) {
     $context['message'] = 'CAS UID: ' . check_plain($account->cas_name) . ': ' . check_plain($display_name_orig) . 'Found updated display name: ' . check_plain($account->realname);
     watchdog(
       'ucberkeley_cas',
@@ -650,7 +666,7 @@ function ucberkeley_cas_update_display_name($account) {
       [
         '@uid' => check_plain($account->cas_name),
         '@name_orig' => check_plain($display_name_orig),
-        '@name_new' => check_plain($account->realname),
+        '@name_new' => check_plain($edit['field_display_name'][LANGUAGE_NONE][0]['value']),
       ],
     );
     user_save($account, $edit);
