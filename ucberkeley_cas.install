@@ -601,3 +601,12 @@ function ucberkeley_cas_update_7511() {
 }
 
 
+/**
+ * OPENUCB-2671: Revert ucberkeley_cas to implement the cas_attributes_relations change from
+ * '[cas:ldap:givenname] [cas:ldap:sn]' to '[cas:ldap:displayname]'.
+ */
+function ucberkeley_cas_update_7520(&$sandbox) {
+  $messages = [];
+  features_revert(['ucberkeley_cas' => ['variable']]);
+  return implode('<br />', $messages);
+}

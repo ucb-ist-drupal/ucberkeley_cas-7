@@ -1,3 +1,8 @@
+ucberkeley_cas 7.x-5.2.0
+========================
+* [OPENUCB-2671] First steps related to periodic updates of displayname.
+  * Change the token for field_display_name from `[cas:ldap:givenname] [cas:ldap:sn]` to `[cas:ldap:displayname]`.
+
 ucberkeley_cas 7.x-5.1.7
 ========================
 * [OPENUCB-2529] Realname PHP Warnings and CAS version 1.8
