@@ -45,6 +45,9 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
           $form['account']['pass']['#description'] = '<strong>Since this is a CAS user, their password can\'t be changed.</strong> <a href="https://github.com/ucb-ist-drupal/ucberkeley_cas-7#users_cannot" target="_new">More info</a>.';
         }
       }
+      // Prevent editing Display Name because it is updated with new LDAP values on each login.
+      // Use readonly instead of disabled for accessibilty reasons.
+      $form['field_display_name'][LANGUAGE_NONE][0]['value']['#attributes']['readonly'] = 'readonly';
       break;
     case 'cas_add_user_form':
       $form['account']['cas_name_txt']['#markup'] = 'To find the CAS User ID for a UC Berkeley employee visit the ' . l('CalNet Directory', 'https://calnet.berkeley.edu/directory/index.pl', array('attributes' => array('target' => '_blank'))) . ' and search for the person.  In your search results click on the person\'s name. At the top of the page you should see <em>Details for Jane Smith (UID: 111111)</em>. Copy that UID number and paste it into the CAS User ID box.';
@@ -86,7 +89,7 @@ function ucberkeley_cas_views_bulk_operations_form_alter(&$form, &$form_state, $
     $operation = $form_state['operation'];
 
     // Convert the 'Username' field on the 'Change author' operation to
-    // always be an autocomplete field, rather than select. (user.module 
+    // always be an autocomplete field, rather than select. (user.module
     // makes it a select field if the number of users is < 200.)
     // We want this alter to happen even when the field is already an
     // autocomplete text field because we are also changing #size to 60.
@@ -184,7 +187,7 @@ function ucberkeley_cas_admin() {
 
   $out = '<h2>' . t('UC Berkeley CAS Configuration Review') . '</h2>';
   $use_case_text = <<<EOT
-These are the most common ways Drupal is being used at UC Berkeley.  
+These are the most common ways Drupal is being used at UC Berkeley.
 Think about which case applies to your site, and then consider the configuration
 recommentations below.
 EOT;
@@ -242,9 +245,9 @@ EOT;
 <li>Additonally requiring a CAS login for certain nodes may be a good idea:</li>
   <ul>
   <li>For example if you have a webform at <b>node/1234</b> that requires the user to be logged in, you can add <b>node/1234</b>
-  to Redirection > Specific Pages, and select "Require CAS loogin for specific pages" on the <a href="/admin/config/people/cas" 
+  to Redirection > Specific Pages, and select "Require CAS loogin for specific pages" on the <a href="/admin/config/people/cas"
   target = "_new">CAS settings page</a>.
-  </li> 
+  </li>
   </ul>
 </ul>
 EOT;
@@ -261,7 +264,7 @@ EOT;
   $login_blocks_on_advice_off_2 = <<<EOT
 <b>If this site follows use case #2</b>,&nbsp;$change_text<br/>
 <ul>
-<li>Since users need to authenticate to your site, you should consider <a href="/admin/structure/block" target = "_new">enabling a login block</a>. 
+<li>Since users need to authenticate to your site, you should consider <a href="/admin/structure/block" target = "_new">enabling a login block</a>.
 (Make sure you have enabled the Core Block module.) Find the User Login block and set a region for it. (Then reload this page.)</li>
 <li>Alternatively, add a login link via your theme.</li>
 EOT;
