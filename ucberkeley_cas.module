@@ -669,7 +669,25 @@ function ucberkeley_cas_cron() {
   }
 }
 
+function ucberkeley_cas_get_ldap_server() {
+  $cas_attr_ldap_server = variable_get('cas_attributes_ldap_server', NULL);
+
+  if (empty($cas_attr_ldap_server)) {
+    // No CAS server configured.
+    return FALSE;
+  }
+
+  $ldap_server = ldap_servers_get_servers($cas_attr_ldap_server, 'enabled', TRUE);
+  if (empty($ldap_server)) {
+    // We cannot load the server.
+    return FALSE;
+  }
+
+  return $ldap_server;
+}
+
 function ucberkeley_cas_update_display_name($account) {
+  global $ucberkeley_cas_ldap_server;
 
   if (variable_get('ucberkeley_cas_update_display_name', TRUE) == FALSE) {
     watchdog(
@@ -680,8 +698,20 @@ function ucberkeley_cas_update_display_name($account) {
     return TRUE;
   }
 
-  $display_name_orig = $account->realname;
+  // Create a global ldap_server with a connection and a bind which we can use in _cas_ldap_attributes.
+  if ($ucberkeley_cas_ldap_server = ucberkeley_cas_get_ldap_server()) {
+    // Create the connection and the bind before we start processing the queue.  Reuse this bind while processing the
+    // queue. (Avoid creating a new connection/bind for each queue item!)
 
+    // cas_ldap.module never does a ->disconnect() on the ldap server. It just let's php close the connection when it
+    // terminates.  We will do the same thing here, since it's difficult to acertain when the queue finishes. (An
+    // alternative would be to register a shutdown function.
+    $ucberkeley_cas_ldap_server->connect();
+    $ucberkeley_cas_ldap_server->bind();
+  }
+
+
+  $display_name_orig = $account->realname;
   $edit['cas_user']['name'] = $account->cas_name;
 
   // Using @ to suppress errors here.  When we hit a user who is no longer in LDAP it will generate a PHP Warning in
