@@ -635,11 +635,13 @@ function ucberkeley_cas_cron() {
     return TRUE;
   }
 
-
-
   // Ensure cas_attributes setting is correct.
   ucberkeley_cas_ensure_attributes_sync_login();
+  // If the queue is empty, add users.
+  ucberkeley_cas_add_users_queue();
+}
 
+function ucberkeley_cas_add_users_queue() {
   drupal_set_message('Checking users for updated display names.');
   $queue = DrupalQueue::get('display_name');
 
@@ -726,6 +728,9 @@ function ucberkeley_cas_update_display_name($account) {
 
   $display_name_new = $edit['field_display_name'][LANGUAGE_NONE][0]['value'];
 
+  // The default status of the update.
+  $status = TRUE;
+
   // Proceed only if the name is not empty and if it has changed.
   // If the new display name is empty, the user is probably no longer in LDAP.  I.e. they've left UCB.
   if (!empty($display_name_new) && $display_name_new != $display_name_orig) {
@@ -739,7 +744,9 @@ function ucberkeley_cas_update_display_name($account) {
         '@name_new' => check_plain($display_name_new),
       ],
     );
-    user_save($account, $edit);
+    if (!user_save($account, $edit)) {
+      $status = FALSE;
+    }
   }
   else {
     watchdog(
@@ -751,6 +758,8 @@ function ucberkeley_cas_update_display_name($account) {
       ],
     );
   }
+
+  return $status;
 }
 
 function ucberkeley_cas_ensure_attributes_sync_login() {
