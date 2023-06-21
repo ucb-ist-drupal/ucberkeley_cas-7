@@ -7,6 +7,7 @@ cas
 cas_attributes
 ldap
 realname
+composer
 
 # Packages #
 ############
