@@ -614,11 +614,67 @@ function ucberkeley_cas_cron_queue_info() {
   return $queues;
 }
 
+function ucberkeley_cas_cron_recent($message = TRUE, $cron_max_exec = 180) {
+  // Cron runs for up to 180 on Pantheon. If cron might be running do not proceed.
+  $sec_since_cron = time() - variable_get('cron_last');
+  if ($sec_since_cron < $cron_max_exec) {
+    $sec_wait = $cron_max_exec - $sec_since_cron;
+    if ($message) {
+      drupal_set_message(
+        t(
+          'Cron began @sec ago. To ensure that cron is not processing display name updates, please wait @wait seconds to run this command.',
+          [
+            '@sec' => $sec_since_cron,
+            '@wait' => $sec_wait
+          ]
+        )
+      );
+    }
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Update any expired items in the table so they will be processed.
+ * @return void
+ */
+function ucberkeley_cas_queue_expire_update() {
+
+  // Only proceed if cron is not running.
+  if (ucberkeley_cas_cron_recent(180, FALSE)) {
+    return TRUE;
+  }
+
+  $num = db_update('queue')
+    ->fields(
+      [
+        'expire' => 0
+      ]
+    )
+    ->condition('name', 'display_name')
+    ->condition('expire', 0, '<>')
+    ->condition('expire', time(), '<')
+    ->execute();
+
+  if ($num > 0) {
+    watchdog(
+      'ucberkeley_cas',
+      'Updated @num expired entries in the queue so that they will be processed.',
+      [
+        '@num' => $num,
+      ]
+    );
+  }
+}
+
 /**
  * Implements hook_cron().
  */
 function ucberkeley_cas_cron() {
 
+  // If display name updates are disabled, delete any items left in the queue.
   if (variable_get('ucberkeley_cas_update_display_name', TRUE) == FALSE) {
     $num_deleted = db_delete('queue')
       ->condition('name', 'display_name')
@@ -634,6 +690,22 @@ function ucberkeley_cas_cron() {
 
     return TRUE;
   }
+
+  // Only proceed if cron is not running.
+  if (ucberkeley_cas_cron_recent(FALSE)) {
+    watchdog(
+      'ucberkeley_cas',
+      'Cron ran within the last 180 seconds. Aborting display name updates.',
+      WATCHDOG_WARNING
+    );
+    return TRUE;
+  }
+
+  // Update existing queue items that are nearing expiration.
+  ucberkeley_cas_queue_expire_update();
+
+  // Open the ldap server connection and bind.
+  ucberkeley_cas_ldap_bind();
 
   // Ensure cas_attributes setting is correct.
   ucberkeley_cas_ensure_attributes_sync_login();
@@ -688,17 +760,13 @@ function ucberkeley_cas_get_ldap_server() {
   return $ldap_server;
 }
 
-function ucberkeley_cas_update_display_name($account) {
+/**
+ * Create the ldap server object as a global variable to facilitate reusing ldap connections.
+ *
+ * @return void
+ */
+function ucberkeley_cas_ldap_bind() {
   global $ucberkeley_cas_ldap_server;
-
-  if (variable_get('ucberkeley_cas_update_display_name', TRUE) == FALSE) {
-    watchdog(
-      'ucberkeley_cas',
-      'Display name update on cron is disabled for this site.'
-    );
-
-    return TRUE;
-  }
 
   // Create a global ldap_server with a connection and a bind which we can use in _cas_ldap_attributes.
   if ($ucberkeley_cas_ldap_server = ucberkeley_cas_get_ldap_server()) {
@@ -711,7 +779,18 @@ function ucberkeley_cas_update_display_name($account) {
     $ucberkeley_cas_ldap_server->connect();
     $ucberkeley_cas_ldap_server->bind();
   }
+}
 
+function ucberkeley_cas_update_display_name($account, $verbose = FALSE) {
+
+  if (variable_get('ucberkeley_cas_update_display_name', TRUE) == FALSE) {
+    watchdog(
+      'ucberkeley_cas',
+      'Display name update on cron is disabled for this site.'
+    );
+
+    return TRUE;
+  }
 
   $display_name_orig = $account->realname;
   $edit['cas_user']['name'] = $account->cas_name;
@@ -719,7 +798,6 @@ function ucberkeley_cas_update_display_name($account) {
   // Using @ to suppress errors here.  When we hit a user who is no longer in LDAP it will generate a PHP Warning in
   // dblog. https://jira-secure.berkeley.edu/browse/OPENUCB-2671?focusedId=1925367&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1925367
   @cas_attributes_cas_user_presave($edit, $account);
-
 
   if (!array_key_exists('field_display_name', $edit)) {
     // Set an empty value if this key doesn't exist.
@@ -744,11 +822,14 @@ function ucberkeley_cas_update_display_name($account) {
         '@name_new' => check_plain($display_name_new),
       ],
     );
+
+    // Attempt to save the user with its updated attributes.
     if (!user_save($account, $edit)) {
       $status = FALSE;
     }
+
   }
-  else {
+  elseif ($verbose) {
     watchdog(
       'ucberkeley_cas',
       'CAS UID: @uid: @name_orig: No change.',

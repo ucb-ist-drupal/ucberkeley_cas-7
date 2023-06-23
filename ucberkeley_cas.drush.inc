@@ -11,8 +11,12 @@ function ucberkeley_cas_drush_command() {
       'update-usernames',
       'luu'
     ],
+    'options' => [
+      'verbose' => 'Log messages regarding all users, not just those who had display name updates.'
+    ],
     'examples' => [
-      'Update all users in the site database' => 'drush ldap-update-usernames'
+      'Update all users in the site database' => 'drush ldap-update-usernames',
+      'Update all users in the site database and use verbose logging.' => 'drush luu --verbose'
     ],
   ];
 
@@ -20,15 +24,26 @@ function ucberkeley_cas_drush_command() {
 }
 
 function ucberkeley_cas_ldap_update_usernames () {
+  // Only proceed if cron is not running.
+  if (ucberkeley_cas_cron_recent()) {
+    return TRUE;
+  }
+  // Update existing queue items that are nearing expiration.
+  ucberkeley_cas_queue_expire_update();
+
   // Add users to queue if it is empty.
   ucberkeley_cas_add_users_queue();
 
   // Get the queue object.
   $queue = DrupalQueue::get('display_name');
 
+  // Create the ldap bind.
+  ucberkeley_cas_ldap_bind();
+
+  $verbose = drush_get_option('verbose');
   //Process the queue.
   while ($item = $queue->claimItem( 10)) {
-    if (!ucberkeley_cas_update_display_name($item->data)) {
+    if (!ucberkeley_cas_update_display_name($item->data, $verbose)) {
       drupal_set_message(
         t(
           'Failed to update uid @uid with name, @name.',
