@@ -14,7 +14,7 @@ projects[cas_attributes][type] = module
 projects[cas_attributes][version] = 1.0-rc3
 ; fix single quotes in field data
 projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2021-02-03/cas_attributes-special-characters-3031238-9.patch
-projects[cas_attributes][patch][wps] = patches/cas_ldap-reuse-ldap-connection.patch
+projects[cas_attributes][patch][1] = patches/cas_ldap-reuse-ldap-connection.patch
 
 ; LDAP
 projects[ldap][type] = module
@@ -34,5 +34,5 @@ projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 ; You might need to update this url to reflect your own user:
 projects[ucberkeley_cas][download][url] = "git@github.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2671-grln-interim"
+projects[ucberkeley_cas][download][branch] = "openucb-2671-grln"
 
