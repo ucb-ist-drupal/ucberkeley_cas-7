@@ -24,6 +24,16 @@ function ucberkeley_cas_drush_command() {
 }
 
 function ucberkeley_cas_ldap_update_usernames () {
+
+  // Only proceed if the display name update is enabled.
+  if (!ucberkeley_cas_update_display_name_enabled()) {
+    drupal_set_message(
+      t('Display name update is disabled for this site. (See the variable ucberkeley_cas_update_display_name.)'),
+      'warning',
+    );
+    return TRUE;
+  }
+
   // Only proceed if cron is not running.
   if (ucberkeley_cas_cron_recent()) {
     return TRUE;

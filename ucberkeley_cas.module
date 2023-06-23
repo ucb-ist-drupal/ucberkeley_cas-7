@@ -614,7 +614,7 @@ function ucberkeley_cas_cron_queue_info() {
   return $queues;
 }
 
-function ucberkeley_cas_cron_recent($message = TRUE, $cron_max_exec = 180) {
+function ucberkeley_cas_cron_recent($message = TRUE, $cron_max_exec = 0) {
   // Cron runs for up to 180 on Pantheon. If cron might be running do not proceed.
   $sec_since_cron = time() - variable_get('cron_last');
   if ($sec_since_cron < $cron_max_exec) {
@@ -682,10 +682,7 @@ function ucberkeley_cas_cron() {
 
     watchdog(
       'ucberkeley_cas',
-      'Display name update on cron is disabled for this site. @num_deleted users awaiting updates in the queue have been removed.',
-      [
-        '@num_deleted' => $num_deleted,
-      ]
+      'Display name update on cron is disabled for this site.',
     );
 
     return TRUE;
@@ -781,14 +778,22 @@ function ucberkeley_cas_ldap_bind() {
   }
 }
 
-function ucberkeley_cas_update_display_name($account, $verbose = FALSE) {
-
+function ucberkeley_cas_update_display_name_enabled() {
   if (variable_get('ucberkeley_cas_update_display_name', TRUE) == FALSE) {
     watchdog(
       'ucberkeley_cas',
-      'Display name update on cron is disabled for this site.'
+      'Display name update is disabled for this site. (See the variable ucberkeley_cas_update_display_name.)'
     );
 
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+function ucberkeley_cas_update_display_name($account, $verbose = FALSE) {
+
+  if (!ucberkeley_cas_update_display_name_enabled()) {
     return TRUE;
   }
 
