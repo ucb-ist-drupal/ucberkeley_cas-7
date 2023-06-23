@@ -14,6 +14,7 @@ projects[cas_attributes][type] = module
 projects[cas_attributes][version] = 1.0-rc3
 ; fix single quotes in field data
 projects[cas_attributes][patch][3031238] = https://www.drupal.org/files/issues/2021-02-03/cas_attributes-special-characters-3031238-9.patch
+projects[cas_attributes][patch][wps] = patches/cas_ldap-reuse-ldap-connection.patch
 
 ; LDAP
 projects[ldap][type] = module
