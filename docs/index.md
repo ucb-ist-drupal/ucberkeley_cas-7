@@ -350,8 +350,33 @@ to update user display names on each cron run.
 This cron task can be disabled for a specific site with this command:
 
 ```shell
-drush vset ucberkeley_cas_update_display_name 0
+$ drush vset ucberkeley_cas_update_display_name 0
 ```
+
+Should you wish to run this command without running all cron tasks, you can use the following drush command:
+```shell
+$ drush help ldap-update-usernames
+
+Load all users into a the queue and check for display names that have been updated in LDAP.
+
+Examples:
+ Update all users in the site database     drush ldap-update-usernames
+ Update all users in the site database     drush luu --verbose
+ and use verbose logging.
+
+Options:
+ --verbose                                 Log messages regarding all users, not just those who had
+                                           display name updates.
+
+Aliases: update-usernames, luu
+```
+
+If the code detects that cron has run within the last 3 minutes (which is the maximum execution time for cron on Pantheon), it will refuse to run since there may still be a cron process working on the queue.
+
+If the entire queue cannot be processed within the 3 minute period allowed by Pantheon, the users remaining in the queue will be processed on the next cron run. 
+
+If the cron or the drush command is interrupted (e.g. `^C`) the users remaining in the queue will be processed on the next invocation of the command or of cron. 
+
 
 ## User accounts for testing
 
