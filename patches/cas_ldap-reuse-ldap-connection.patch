@@ -1,0 +1,47 @@
+diff --git a/cas_ldap.module b/cas_ldap.module
+index 257a273..d5e7d17 100644
+--- a/cas_ldap.module
++++ b/cas_ldap.module
+@@ -68,22 +68,30 @@ function cas_ldap_attributes($name) {
+  * Look up the user attributes for the specified user.
+  */
+ function _cas_ldap_attributes($name) {
+-  $cas_attr_ldap_server = variable_get('cas_attributes_ldap_server', NULL);
++  global $ucberkeley_cas_ldap_server;
+ 
+-  if (empty($cas_attr_ldap_server)) {
+-    // No CAS server configured.
+-    return array();
+-  }
++  if (!isset($ucberkeley_cas_ldap_server) || empty($ucberkeley_cas_ldap_server)) {
++    $cas_attr_ldap_server = variable_get('cas_attributes_ldap_server', NULL);
++
++    if (empty($cas_attr_ldap_server)) {
++      // No CAS server configured.
++      return array();
++    }
+ 
+-  $ldap_server = ldap_servers_get_servers($cas_attr_ldap_server, 'enabled', TRUE);
+-  if (empty($ldap_server)) {
+-    // We cannot load the server.
+-    return;
++    $ldap_server = ldap_servers_get_servers($cas_attr_ldap_server, 'enabled', TRUE);
++    if (empty($ldap_server)) {
++      // We cannot load the server.
++      return;
++    }
++
++    // Connect to the server and perform the lookup.
++    $ldap_server->connect();
++    $ldap_server->bind();
++  }
++  else {
++    $ldap_server = $ucberkeley_cas_ldap_server;
+   }
+ 
+-  // Connect to the server and perform the lookup.
+-  $ldap_server->connect();
+-  $ldap_server->bind();
+   $result = $ldap_server->user_lookup($name);
+   return $result['attr'];
+ }
