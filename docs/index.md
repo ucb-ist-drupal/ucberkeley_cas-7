@@ -373,11 +373,23 @@ Aliases: update-usernames, luu
 
 If the code detects that cron has run within the last 3 minutes (which is the maximum execution time for cron on Pantheon), it will refuse to run since there may still be a cron process working on the queue.
 
-If the entire queue cannot be processed within the 3 minute period allowed by Pantheon, the users remaining in the queue will be processed on the next cron run. 
+If the entire queue cannot be processed within the 3 minute period allowed by Pantheon, the users remaining in the queue will be processed on the next cron run.
 
-If the cron or the drush command is interrupted (e.g. `^C`) the users remaining in the queue will be processed on the next invocation of the command or of cron. 
+If the cron or the drush command is interrupted (e.g. `^C`) the users remaining in the queue will be processed on the next invocation of the command or of cron.
 
-
+If the command `$ terminus drush course-capture.wptoucb2671 luu` is used on course-capture which has 18,000 users, the
+server will eventually close the connection for the drush command:
+```shell
+[warning] This environment is in read-only Git mode. If you want to make changes to the codebase of this site (e.g. updating modules or plugins), you will need to toggle into read/write SFTP mode first.
+Connection to appserver.wptoucb2671.808796b4-e2e2-46d3-a5d4-5cfb257fbefc.drush.in closed by remote host.
+[notice] Command: course-capture.wptoucb2671 -- drush luu [Exit: 255]
+[error]`
+```
+however the update will continue to run on the site. You can observe the update running by running this command in a
+different terminal session:
+```shell
+terminus drush course-capture.wptoucb2671 -- watchdog-show --tail
+```
 ## User accounts for testing
 
 [These test accounts](https://calnetweb.berkeley.edu/calnet-technologists/ldap-directory-service/resources-developers/universal-test-ids) can be useful for testing your website.
