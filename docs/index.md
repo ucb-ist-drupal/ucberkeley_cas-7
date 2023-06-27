@@ -52,7 +52,7 @@ login attacks. It also invites users to attempt to login when they really don't 
 ## Quick Start
 
 1. See [Requirements](#requirements)
-2. Install and enable [the most recent release of ucberkeley_cas](https://github.com/bwood/ucberkeley_cas-7/releases). (More info: [Installing](#installation))
+2. Install and enable [the most recent release of ucberkeley_cas](https://github.com/ucb-ist-drupal/ucberkeley_cas-7/releases). (More info: [Installing](#installation))
 3. Using an incognito window (or a second browser) in which you are not logged to the site as User 1, visit the login url
 http://example.com/cas and login with your CalNet id.
 4. In your main window, where you are logged in as User 1, edit the new user that got
@@ -104,7 +104,7 @@ server.
 ## Installation
 
 1. Make sure your site meets the requirements above.
-2. Download the tarball included with [the latest release of UC Berkeley CAS](https://github.com/bwood/ucberkeley_cas-7/releases),
+2. Download the tarball included with [the latest release of UC Berkeley CAS](https://github.com/ucb-ist-drupal/ucberkeley_cas-7/releases),
 (e.g. ucberkeley_cas-7.x-x.x.tar.gz) to the host serving your Drupal site.
 3. Unarchive the module in sites/all/modules
 4. Enable the module at admin/modules. (During this step you may notice the message "CAS has been enabled. Please configure it." You can disregard this.  We have already applied the UC Berkeley configuration for you.)

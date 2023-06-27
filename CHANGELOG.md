@@ -1,7 +1,12 @@
+ucberkeley_cas 7.x-5.3.0
+========================
+* [OPENUCB-2671] Periodic updates of Display Name to meet GRLN requirements.
+  * Implement a cron using Queue API to update usernames from LDAP.
+  * Implement drush ldap-update-username.
+
 ucberkeley_cas 7.x-5.2.0
 ========================
-* [OPENUCB-2671] Periodic updates of Display Name to meet GRLN requirements
-  * Implement a cron using Queue API to update usernames from LDAP.
+* [OPENUCB-2671] Prepare for periodic updates of Display Name to meet GRLN requirements.
   * Change the token for field_display_name to `[cas:ldap:displayname]`.
 
 ucberkeley_cas 7.x-5.1.7
