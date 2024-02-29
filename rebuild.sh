@@ -48,17 +48,15 @@ mv $BUILD_DIR/ldap $BUILD_DIR/ucberkeley_cas/
 mv $BUILD_DIR/realname $BUILD_DIR/ucberkeley_cas/
 rm -rf $BUILD_DIR/build_ucberkeley_cas
 rm $BUILD_DIR/ucberkeley_cas/.gitignore
-# remove .orig file resulting from application of patches/ldap-php-8-compatibility-3302242-7-modified.patch
-rm $BUILD_DIR/ucberkeley_cas/ldap/ldap_servers/LdapServer.class.php.orig
 
 # Install phpCAS with composer
 cd $BUILD_DIR/ucberkeley_cas/cas
 mkdir composer
 cd composer
-composer -n require jasig/phpcas:^1.6.0
+composer -n require apereo/phpcas:^1.6.0
 
 # Customize phpcas installation to work with D7 cas.
-cd $BUILD_DIR/ucberkeley_cas/cas/composer/vendor/jasig/phpcas/source
+cd $BUILD_DIR/ucberkeley_cas/cas/composer/vendor/apereo/phpcas/source
 # Rename the default entry point.
 mv CAS.php phpCAS.php
 # Add our entry point which requires composer's autoload.php and then calls the renamed entry point.
@@ -66,7 +64,7 @@ cp $BUILD_DIR/ucberkeley_cas/patches/files/CAS.php .
 
 # remove drush datestamps from info files which result in unnecessary modifications.
 cd $BUILD_DIR
-find ucberkeley_cas -name "*.info" -print0 |xargs -0 sed -i.rebuild-bak -e 's/datestamp = \"[[:digit:]]\{1,\}\".*//' -e 's/Information added by drush on [[:digit:]]\{4\}-[[:digit:]]\{2\}-[[:digit:]]\{2\}/Information added by drush/'
+find ucberkeley_cas -name "*.info" -print0 |xargs -0 sed -i.rebuild-bak -e '/datestamp = /d' -e 's/Information added by drush on [[:digit:]]\{4\}-[[:digit:]]\{2\}-[[:digit:]]\{2\}/Information added by drush/'
 find ucberkeley_cas -name "*.rebuild-bak" | xargs rm -f
 
 VER=`$AWK -F = '/version =.*$/{gsub(/ /, "", $0); print $2}' ucberkeley_cas/ucberkeley_cas.info`
