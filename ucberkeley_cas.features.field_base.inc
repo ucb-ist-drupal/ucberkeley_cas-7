@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * ucberkeley_cas.features.field_base.inc
@@ -22,6 +23,7 @@ function ucberkeley_cas_field_default_field_bases() {
         0 => 'format',
       ),
     ),
+    'linkchecker_exclude' => 0,
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
