@@ -597,7 +597,7 @@ function ucberkeley_cas_update_7510() {
  * @return void
  */
 function ucberkeley_cas_update_7511() {
-  variable_set('cas_library_dir', 'composer/vendor/apereo/phpcas/source');
+  variable_set('cas_library_dir', 'composer/vendor/jasig/phpcas/source');
 }
 
 
@@ -609,4 +609,13 @@ function ucberkeley_cas_update_7520(&$sandbox) {
   $messages = [];
   features_revert(['ucberkeley_cas' => ['variable']]);
   return implode('<br />', $messages);
+}
+
+/**
+ * OPENUCB-2712: Change location of CAS library source directory.
+ *
+ * @return void
+ */
+function ucberkeley_cas_update_7530() {
+  variable_set('cas_library_dir', 'composer/vendor/apereo/phpcas/source');
 }
