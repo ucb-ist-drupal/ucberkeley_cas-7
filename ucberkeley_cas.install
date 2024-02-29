@@ -597,7 +597,7 @@ function ucberkeley_cas_update_7510() {
  * @return void
  */
 function ucberkeley_cas_update_7511() {
-  variable_set('cas_library_dir', 'composer/vendor/jasig/phpcas/source');
+  variable_set('cas_library_dir', 'composer/vendor/apereo/phpcas/source');
 }
 
 

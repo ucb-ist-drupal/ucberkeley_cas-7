@@ -255,7 +255,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_library_dir';
-  $strongarm->value = 'composer/vendor/jasig/phpcas/source';
+  $strongarm->value = 'composer/vendor/apereo/phpcas/source';
   $export['cas_library_dir'] = $strongarm;
 
   $strongarm = new stdClass();
