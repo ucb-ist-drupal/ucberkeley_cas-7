@@ -110,7 +110,7 @@ function ucberkeley_cas_defaultconfig_field_default_fields() {
       'bundle' => 'user',
       'default_value' => NULL,
       'deleted' => 0,
-      'description' => '',
+      'description' => 'Display names should be updated in the system of record (UC Path for faculty and staff; Student Information Systems for students). See our <a href="https://open.berkeley.edu/guides/site-builders-guide/manage-users">Manage Users documentation</a> for more information.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -143,6 +143,8 @@ function ucberkeley_cas_defaultconfig_field_default_fields() {
         'active' => 1,
         'module' => 'text',
         'settings' => array(
+          'maxlength_js' => 0,
+          'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
           'size' => 60,
         ),
         'type' => 'text_textfield',
@@ -255,7 +257,7 @@ function ucberkeley_cas_defaultconfig_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'cas_library_dir';
-  $strongarm->value = 'composer/vendor/jasig/phpcas/source';
+  $strongarm->value = 'composer/vendor/apereo/phpcas/source';
   $export['cas_library_dir'] = $strongarm;
 
   $strongarm = new stdClass();

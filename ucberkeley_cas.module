@@ -42,7 +42,7 @@ function ucberkeley_cas_form_alter(&$form, &$form_state, $form_id) {
         $account = $form['#user'];
         if (!empty($account->cas_name)) {
           $form['account']['pass']['#disabled'] = TRUE;
-          $form['account']['pass']['#description'] = '<strong>Since this is a CAS user, their password can\'t be changed.</strong> <a href="https://github.com/ucb-ist-drupal/ucberkeley_cas-7#users_cannot" target="_new">More info</a>.';
+          $form['account']['pass']['#description'] = t('Since this is a CAS user, their password can\'t be changed.');
         }
       }
       // Prevent editing Display Name because it is updated with new LDAP values on each login.

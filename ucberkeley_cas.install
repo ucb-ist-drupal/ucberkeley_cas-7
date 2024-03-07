@@ -13,8 +13,8 @@ function ucberkeley_cas_requirements($phase) {
   $requirements = [];
   $t = get_t();
 
-  $cas_req_version = '1.7';
-  $ldap_req_version = '2.6';
+  $cas_req_version = '1.8';
+  $ldap_req_version = '2.7';
   $cas_attributes_req_version = '1.0-rc3';
 
   $update_message = <<<EOT
@@ -600,7 +600,6 @@ function ucberkeley_cas_update_7511() {
   variable_set('cas_library_dir', 'composer/vendor/jasig/phpcas/source');
 }
 
-
 /**
  * OPENUCB-2671: Revert ucberkeley_cas to implement the cas_attributes_relations change from
  * '[cas:ldap:givenname] [cas:ldap:sn]' to '[cas:ldap:displayname]'.
@@ -609,4 +608,12 @@ function ucberkeley_cas_update_7520(&$sandbox) {
   $messages = [];
   features_revert(['ucberkeley_cas' => ['variable']]);
   return implode('<br />', $messages);
+}
+
+/**
+ * OPENUCB-2712: Change location of CAS library source directory.
+ */
+function ucberkeley_cas_update_7530() {
+  variable_set('cas_library_dir', 'composer/vendor/apereo/phpcas/source');
+  features_revert(['ucberkeley_cas' => ['field_base', 'field_instance']]);
 }

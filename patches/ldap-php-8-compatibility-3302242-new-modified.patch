@@ -1,0 +1,272 @@
+diff --git a/ldap_query/ldap_query.module b/ldap_query/ldap_query.module
+index 1d0bf620..d0d0b761 100644
+--- a/ldap_query/ldap_query.module
++++ b/ldap_query/ldap_query.module
+@@ -116,7 +116,7 @@ function ldap_query_cache_clear() {
+ /**
+  * Return ldap query objects.
+  *
+- * @param string $qid
++ * @param string|null $qid
+  * @param string $type
+  *   'all', 'enabled',.
+  * @param bool $flatten
+@@ -128,7 +128,7 @@ function ldap_query_cache_clear() {
+  *   of server conf object keyed on sid
+  *   - single server conf object (if flatten == TRUE)
+  */
+-function ldap_query_get_queries($qid = NULL, $type, $flatten = FALSE, $reset = FALSE) {
++function ldap_query_get_queries($qid = NULL, $type = 'all', $flatten = FALSE, $reset = FALSE) {
+   ldap_servers_module_load_include('inc', 'ldap_query', 'ldap_query');
+   return _ldap_query_get_queries($qid, $type, $flatten, $reset);
+ }
+diff --git a/ldap_servers/LdapServer.class.php b/ldap_servers/LdapServer.class.php
+index d3cc4a46..27db378d 100644
+--- a/ldap_servers/LdapServer.class.php
++++ b/ldap_servers/LdapServer.class.php
+@@ -746,7 +746,7 @@ class LdapServer {
+     $timelimit = 0,
+     $deref = NULL,
+     $scope = LDAP_SCOPE_SUBTREE
+-    ) {
++  ) {
+     $all_entries = [];
+     // Need to search on all basedns one at a time.
+     foreach ($this->basedn as $base_dn) {
+@@ -776,7 +776,7 @@ class LdapServer {
+   /**
+    * Perform an LDAP search.
+    *
+-   * @param string $basedn
++   * @param string|null $basedn
+    *   The search base. If NULL, we use $this->basedn. should not be esacaped.
+    * @param string $filter
+    *   The search filter. such as sAMAccountName=jbarclay.  attribute values
+@@ -792,14 +792,16 @@ class LdapServer {
+    *   elements if search returns no results),
+    *   or FALSE on error.
+    */
+-  public function search($base_dn = NULL,
+-  $filter,
+-  $attributes = [],
++  public function search(
++    $base_dn = NULL,
++    $filter = '',
++    $attributes = [],
+     $attrsonly = 0,
+-  $sizelimit = 0,
+-  $timelimit = 0,
+-  $deref = NULL,
+-  $scope = LDAP_SCOPE_SUBTREE) {
++    $sizelimit = 0,
++    $timelimit = 0,
++    $deref = NULL,
++    $scope = LDAP_SCOPE_SUBTREE
++  ) {
+ 
+     /**
+       * pagingation issues:
+@@ -926,7 +928,17 @@ class LdapServer {
+     $has_page_results = FALSE;
+ 
+     do {
+-      ldap_control_paged_result($this->connection, $this->searchPageSize, TRUE, $page_token);
++      $servercontrols = array(
++        array(
++          'oid' => LDAP_CONTROL_PAGEDRESULTS,
++          'value' => array(
++            'size' => $this->searchPageSize,
++            'cookie' => $page_token,
++          ),
++        ),
++      );
++      ldap_search($this->connection, $ldap_query_params['base_dn'], $ldap_query_params['filter'], array("*"), 0, $this->searchPageSize, -1, LDAP_DEREF_NEVER, $servercontrols);
++
+       $result = $this->ldapQuery($ldap_query_params['scope'], $ldap_query_params);
+ 
+       if ($page >= $this->searchPageStart) {
+@@ -957,7 +969,10 @@ class LdapServer {
+       else {
+         $skipped_page = TRUE;
+       }
+-      @ldap_control_paged_result_response($this->connection, $result, $page_token, $estimated_entries);
++      ldap_parse_result($this->connection, $result, $errcode, $matcheddn, $errmsg, $referrals, $controls);
++      if (isset($controls[LDAP_CONTROL_PAGEDRESULTS]['value']['cookie'])) {
++        $page_token = $controls[LDAP_CONTROL_PAGEDRESULTS]['value']['cookie'];
++      }
+       if ($ldap_query_params['sizelimit'] && $this->ldapErrorNumber() == LDAP_SIZELIMIT_EXCEEDED) {
+         // False positive error thrown.  do not set result limit error when $sizelimit specified.
+       }
+@@ -989,9 +1004,9 @@ class LdapServer {
+   /**
+    * Execute ldap query and return ldap records.
+    *
+-   * @param scope
++   * @param $scope
+    *
+-   * @params see pagedLdapQuery $params
++   * @param $params see pagedLdapQuery $params
+    *
+    * @return array of ldap entries
+    */
+diff --git a/ldap_servers/ldap_servers.module b/ldap_servers/ldap_servers.module
+index a020e8b6..d10be7cb 100644
+--- a/ldap_servers/ldap_servers.module
++++ b/ldap_servers/ldap_servers.module
+@@ -522,8 +522,8 @@ function ldap_servers_module_load_include($type, $module, $name = NULL) {
+ /**
+  * Return ldap server conf objects.
+  *
+- * @param string $sid
+- * @param string $type
++ * @param string|null $sid
++ * @param string|null $type
+  *   All', 'enabled'.
+  * @param bool $flatten
+  *   signifies if array or single object returned.  Only works if sid is specified.
+@@ -581,7 +581,7 @@ function _ldap_servers_get_servers($sid, $type, $flatten, $reset) {
+ /**
+  * See ldap_servers_get_servers()
+  */
+-function _ldap_servers_get_simpletest_servers($sid, $type = NULL, $flatten, $reset = TRUE) {
++function _ldap_servers_get_simpletest_servers($sid, $type, $flatten, $reset) {
+ 
+   if (!$type) {
+     $type = 'all';
+diff --git a/ldap_test/LdapServerTest.class.php b/ldap_test/LdapServerTest.class.php
+index 8c0200a2..e9889025 100644
+--- a/ldap_test/LdapServerTest.class.php
++++ b/ldap_test/LdapServerTest.class.php
+@@ -139,18 +139,23 @@ class LdapServerTest extends LdapServer {
+   /**
+    * Perform an LDAP search.
+    *
++   * @param string|null $basedn
++   *   The search base. If NULL, we use $this->basedn.
+    * @param string $filter
+    *   The search filter. such as sAMAccountName=jbarclay.
+-   * @param string $basedn
+-   *   The search base. If NULL, we use $this->basedn.
+    * @param array $attributes
+    *   List of desired attributes. If omitted, we only return "dn".
++   * @param int $attrsonly
++   * @param int $sizelimit
++   * @param int $timelimit
++   * @param int $deref
++   * @param int $scope
+    *
+    * @return
+    *   An array of matching entries->attributes, or FALSE if the search is
+    *   empty.
+    */
+-  public function search($base_dn = NULL, $filter, $attributes = [], $attrsonly = 0, $sizelimit = 0, $timelimit = 0, $deref = LDAP_DEREF_NEVER, $scope = LDAP_SCOPE_SUBTREE) {
++  public function search($base_dn = NULL, $filter = '', $attributes = [], $attrsonly = 0, $sizelimit = 0, $timelimit = 0, $deref = LDAP_DEREF_NEVER, $scope = LDAP_SCOPE_SUBTREE) {
+ 
+     $lcase_attribute = [];
+     foreach ($attributes as $i => $attribute_name) {
+diff --git a/ldap_test/LdapTestCase.class.php b/ldap_test/LdapTestCase.class.php
+index 25bb806e..d9d11c9f 100644
+--- a/ldap_test/LdapTestCase.class.php
++++ b/ldap_test/LdapTestCase.class.php
+@@ -125,6 +125,7 @@ class LdapTestCase extends DrupalWebTestCase {
+    */
+   public function testId($description = NULL, $method = NULL) {
+ 
++    $trace = debug_backtrace();
+     static $test_id;
+     static $i;
+ 
+@@ -138,7 +139,6 @@ class LdapTestCase extends DrupalWebTestCase {
+       return $test_id . '.' . $i;
+     }
+     if (!$method) {
+-      $trace = debug_backtrace();
+ 
+       $caller = array_shift($trace);
+       $caller = array_shift($trace);
+@@ -161,7 +161,7 @@ class LdapTestCase extends DrupalWebTestCase {
+     if (!empty($test_data['search_results'][$filter][$domain]) &&
+             in_array($group_dn, $test_data['search_results'][$filter][$domain])) {
+       $test_data['search_results'][$filter][$domain] = array_diff($test_data['search_results'][$filter][$domain], [$group_dn]);
+-      $test_data['search_results'][$filter][$domain]['count'] = count($test_data['search_results'][$filter][$domain] - 1);
++      $test_data['search_results'][$filter][$domain]['count'] = count($test_data['search_results'][$filter][$domain]) - 1;
+     }
+ 
+     if (!empty($test_data['users'][$user_dn]['attr']['memberof']) && in_array($group_dn, $test_data['users'][$user_dn]['attr']['memberof'])) {
+@@ -177,7 +177,7 @@ class LdapTestCase extends DrupalWebTestCase {
+     if (!empty($test_data['groups'][$group_dn]['attr']['member']) && in_array($group_dn, $test_data['groups'][$group_dn]['attr']['member'])) {
+       $members = array_diff($test_data['groups'][$group_dn]['attr']['member'], [$group_dn]);
+       $test_data['groups'][$group_dn]['attr']['member'] = $members;
+-      $test_data['groups'][$group_dn]['attr']['member'][$i]['count'] = count($members - 1);
++      $test_data['groups'][$group_dn]['attr']['member']['count'] = count($members) - 1;
+     }
+   }
+ 
+diff --git a/ldap_test/LdapTestFunctions.class.php b/ldap_test/LdapTestFunctions.class.php
+index 6219cbc3..9f513a90 100644
+--- a/ldap_test/LdapTestFunctions.class.php
++++ b/ldap_test/LdapTestFunctions.class.php
+@@ -143,9 +143,21 @@ class LdapTestFunctions {
+   }
+ 
+   /**
++   * Update a Drupal user in LDAP.
+    *
++   * @param array $edit
++   * @param bool $ldap_authenticated
++   * @param object|null $user
++   *   A drupal user account.
++   *
++   * @return object|null
++   *   The updated user.
+    */
+-  public function drupalLdapUpdateUser($edit = [], $ldap_authenticated = FALSE, $user) {
++  public function drupalLdapUpdateUser($edit = [], $ldap_authenticated = FALSE, $user = NULL) {
++    if (!$user) {
++      $user = new stdClass();
++      $user->is_new = TRUE;
++    }
+     if (count($edit)) {
+       $user = user_save($user, $edit);
+     }
+diff --git a/ldap_test/ldap_test.info b/ldap_test/ldap_test.info
+index 3882e891..4bb48313 100644
+--- a/ldap_test/ldap_test.info
++++ b/ldap_test/ldap_test.info
+@@ -19,6 +19,8 @@ files[] = LdapServerTest.class.php
+ files[] = LdapTestFunctions.class.php
+ files[] = LdapUserTestCase.class.php
+ 
++test_dependencies[] = og:og
++
+ ; Information added by D7Security packaging script on 2024-02-29
+ version = '7.x-2.7'
+ project = 'ldap'
+diff --git a/ldap_user/LdapUserConf.class.php b/ldap_user/LdapUserConf.class.php
+index 2d9bfae0..1d6e97a4 100644
+--- a/ldap_user/LdapUserConf.class.php
++++ b/ldap_user/LdapUserConf.class.php
+@@ -1028,7 +1028,7 @@ class LdapUserConf {
+    * Given a drupal account, query ldap and get all user fields and save user account
+    * (note: parameters are in odd order to match synchDrupalAccount handle)
+    *
+-   * @param array $account
++   * @param object|null $account
+    *   drupal account object or null.
+    * @param array $user_edit
+    *   drupal edit array in form user_save($account, $user_edit) would take.
+@@ -1038,12 +1038,12 @@ class LdapUserConf {
+    *   indicating if drupal user should be saved.  generally depends on where function is called from and if the.
+    *
+    * @return bool
+-   *   Resultof user_save() function is $save is true, otherwise return TRUE on
++   *   Result of user_save() function if $save is true, otherwise return TRUE on
+    *   success or FALSE on any problem
+    *
+    *   $user_edit data returned by reference
+    */
+-  public function provisionDrupalAccount($account = FALSE, &$user_edit, $ldap_user = NULL, $save = TRUE) {
++  public function provisionDrupalAccount($account = NULL, &$user_edit = [], $ldap_user = NULL, $save = TRUE) {
+ 
+     $watchdog_tokens = [];
+     // @todo Add error catching for conflicts, conflicts should be checked before calling this function.
