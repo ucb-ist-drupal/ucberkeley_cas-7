@@ -1,3 +1,11 @@
+ucberkeley_cas 7.x-5.3.1
+========================
+* [OPENUCB-2712] Use supported version of LDAP module.
+  * Update field labels and help text.
+  * Use D7 Security module version.
+* [OPENUCB-2720] Use supported version of CAS library.
+  * Use apereo package.
+
 ucberkeley_cas 7.x-5.3.0
 ========================
 * [OPENUCB-2671] Periodic updates of Display Name to meet GRLN requirements.
