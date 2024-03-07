@@ -608,7 +608,7 @@ function ucberkeley_cas_cron_queue_info() {
     'worker callback' => 'ucberkeley_cas_update_display_name',
     // This is the max run time per cron run in seconds.
     // Todo: what happens if this is exceeded?
-    'time' => 170,
+    'time' => 60,
   ];
 
   return $queues;
