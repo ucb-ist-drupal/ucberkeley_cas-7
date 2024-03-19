@@ -608,7 +608,7 @@ function ucberkeley_cas_cron_queue_info() {
     'worker callback' => 'ucberkeley_cas_update_display_name',
     // This is the max run time per cron run in seconds.
     // Todo: what happens if this is exceeded?
-    'time' => 170,
+    'time' => 60,
   ];
 
   return $queues;
@@ -711,11 +711,15 @@ function ucberkeley_cas_cron() {
 }
 
 function ucberkeley_cas_add_users_queue() {
-  drupal_set_message('Checking users for updated display names.');
   $queue = DrupalQueue::get('display_name');
 
   $queue_size = $queue->numberOfItems();
-  if ($queue_size == 0) {
+  $now = time();
+  $last_run = (int) variable_get('ucberkeley_cas_queue_last_run', $now);
+  $offset = (int) variable_get('ucberkeley_cas_queue_offset', 604800);
+  $time_since = $now - $last_run;
+  if ($queue_size == 0 && $time_since > $offset) {
+    drupal_set_message('Queueing users for display name updates check.');
     $users = entity_load('user');
     watchdog(
       'ucberkeley_cas',
@@ -724,18 +728,27 @@ function ucberkeley_cas_add_users_queue() {
     );
 
     foreach ($users as $uid => $account) {
-      // Skip non cas users like users 0 and 1
+      // Skip non cas users like users 0 and 1.
       if (!$account->cas_name) {
         continue;
       }
       $queue->createItem($account);
     }
+    variable_set('ucberkeley_cas_queue_last_run', $now);
   }
-  else {
+  elseif ($queue_size > 0) {
     watchdog(
       'ucberkeley_cas',
       'Processing display name updates for the remaining @queue_size users.',
       ['@queue_size' => $queue_size],
+    );
+  }
+  else {
+    $next_run = date('m/d/Y g:i a T', $last_run + $offset);
+    watchdog(
+      'ucberkeley_cas',
+      'Display name updates will run after %next_run.',
+      ['%next_run' => $next_run],
     );
   }
 }
@@ -863,4 +876,3 @@ function ucberkeley_cas_ensure_attributes_sync_login() {
     );
   }
 }
-

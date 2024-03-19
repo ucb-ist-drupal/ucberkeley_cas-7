@@ -5,6 +5,8 @@ ucberkeley_cas 7.x-5.3.1
   * Use D7 Security module version.
 * [OPENUCB-2720] Use supported version of CAS library.
   * Use apereo package.
+* [OPENUCB-2685] Slow down GRLN updates.
+  * Add variables to track last-run.
 
 ucberkeley_cas 7.x-5.3.0
 ========================

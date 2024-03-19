@@ -617,3 +617,11 @@ function ucberkeley_cas_update_7530() {
   variable_set('cas_library_dir', 'composer/vendor/apereo/phpcas/source');
   features_revert(['ucberkeley_cas' => ['field_base', 'field_instance']]);
 }
+
+/**
+ * OPENUCB-2685: Set variable for last run of displayname updates.
+ */
+function ucberkeley_cas_update_7531() {
+  $now = time();
+  variable_set('ucberkeley_cas_queue_last_run', $now);
+}
