@@ -1,0 +1,85 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "70604f366a33300042623dcc3f0c5276",
+    "packages": [
+        {
+            "name": "pantheon-systems/customer-secrets-php-sdk",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pantheon-systems/customer-secrets-php-sdk.git",
+                "reference": "44d2fafc1e371c53bf432ee07f001a67336654f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pantheon-systems/customer-secrets-php-sdk/zipball/44d2fafc1e371c53bf432ee07f001a67336654f5",
+                "reference": "44d2fafc1e371c53bf432ee07f001a67336654f5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "g1a/composer-test-scenarios": "^3.2",
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.6",
+                "symfony/polyfill": "^1.28",
+                "yoast/phpunit-polyfills": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "scenarios": {
+                    "php8.1": {
+                        "config": {
+                            "platform": {
+                                "php": "8.1.13"
+                            }
+                        }
+                    },
+                    "php8.2": {
+                        "config": {
+                            "platform": {
+                                "php": "8.2.0"
+                            }
+                        }
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PantheonSystems\\CustomerSecrets\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Stovall",
+                    "email": "119924+stovak@users.noreply.github.com"
+                }
+            ],
+            "description": "Supporting libraries for customer secrets project",
+            "support": {
+                "issues": "https://github.com/pantheon-systems/customer-secrets-php-sdk/issues",
+                "source": "https://github.com/pantheon-systems/customer-secrets-php-sdk/tree/1.0.1"
+            },
+            "time": "2023-10-10T15:10:18+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

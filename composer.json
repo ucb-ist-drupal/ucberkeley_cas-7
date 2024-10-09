@@ -1,0 +1,14 @@
+{
+    "name": "ucb-ist-drupal/ucberkeley_cas",
+    "description": "Implement CAS with LDAP attributes in Openberkeley-7.",
+    "type": "drupal-module",
+    "authors": [
+        {
+            "name": "Brian",
+            "email": "bwood@berkeley.edu"
+        }
+    ],
+    "require": {
+        "pantheon-systems/customer-secrets-php-sdk": "^1.0"
+    }
+}

@@ -10,9 +10,26 @@ define('GOOD_TEXT', '<span style="color:green">your settings are probably good.<
 
 /**
  * Implementation of hook_init()
- * If overlay.module is enabled, make sure that our hook_install messages are displayed
+ *
+ * Require the autoload file for pantheon-systems/customer-secrets-php-sdk.
+ *
+ * If overlay.module is enabled, make sure that our hook_install messages are displayed.
  */
 function ucberkeley_cas_init() {
+  // Require composer's autoload file.
+  $autoload_file = DRUPAL_ROOT .
+    DIRECTORY_SEPARATOR .
+    drupal_get_path('module', 'ucberkeley_cas') .
+    DIRECTORY_SEPARATOR .
+    'vendor' .
+    DIRECTORY_SEPARATOR .
+    'autoload.php';
+
+  if (file_exists($autoload_file)) {
+    require_once $autoload_file;
+  }
+
+  // Manage the overlay module.
   if (!module_exists('overlay') || (!isset($_SESSION)) || (!is_array($_SESSION))) {
     return;
   }
