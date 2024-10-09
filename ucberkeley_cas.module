@@ -45,6 +45,12 @@ function ucberkeley_cas_init() {
   }
 }
 
+function ucberkeley_cas_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'key') {
+    return "plugins/{$plugin}";
+  }
+}
+
 /**
  * Implementation of hook_form_alter()
  * @param $form
