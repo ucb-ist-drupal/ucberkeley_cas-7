@@ -13,6 +13,7 @@ dependencies[] = entity
 dependencies[] = entity_token
 dependencies[] = features
 dependencies[] = ldap_servers
+dependencies[] = key (>= 7.x-3.4)
 dependencies[] = realname
 dependencies[] = strongarm
 dependencies[] = text
