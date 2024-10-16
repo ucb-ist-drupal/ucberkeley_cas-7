@@ -49,6 +49,10 @@ mv $BUILD_DIR/realname $BUILD_DIR/ucberkeley_cas/
 rm -rf $BUILD_DIR/build_ucberkeley_cas
 rm $BUILD_DIR/ucberkeley_cas/.gitignore
 
+# Install pantheon-systems/customer-secrets-php-sdk
+cd $BUILD_DIR/ucberkeley_cas
+composer install
+
 # Install phpCAS with composer
 cd $BUILD_DIR/ucberkeley_cas/cas
 mkdir composer
