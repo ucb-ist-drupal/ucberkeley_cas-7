@@ -19,16 +19,15 @@ function key_provider_pantheon_default_configuration() {
   return [];
 }
 
+/**
+ * Implement key_provider_get_key_value.
+ * Retrieve key value from Pantheon Secrets.
+ *
+ * @param $config
+ * @return string
+ */
 function key_provider_pantheon_get_key_value($config) {
-  //$client = \PantheonSystems\CustomerSecrets\CustomerSecrets::create()->getClient();
-  $args = [];
-  $customer_secrets = new class($args) extends PantheonSystems\CustomerSecrets\CustomerSecrets {
-    public function __construct(array $args = []) {
-      // Force use of CustomerSecretsFakeClient.
-      $this->client = new \PantheonSystems\CustomerSecrets\CustomerSecretsFakeClient($args);
-    }
-  };
-  $client = $customer_secrets->getClient();
+  $client = \PantheonSystems\CustomerSecrets\CustomerSecrets::create()->getClient();
   $secret = $client->getSecret($config['label']);
   $secret_value = $secret->getValue();
 
