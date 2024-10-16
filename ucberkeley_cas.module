@@ -16,7 +16,8 @@ define('GOOD_TEXT', '<span style="color:green">your settings are probably good.<
  * If overlay.module is enabled, make sure that our hook_install messages are displayed.
  */
 function ucberkeley_cas_init() {
-  // Require composer's autoload file.
+  // Require composer autoload file for pantheon-systems/customer-secrets-php-sdk.
+  // This is required for plugins/key_provider/pantheon.inc: key_provider_pantheon_get_key_value().
   $autoload_file = DRUPAL_ROOT .
     DIRECTORY_SEPARATOR .
     drupal_get_path('module', 'ucberkeley_cas') .
