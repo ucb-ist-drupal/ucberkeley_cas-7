@@ -625,3 +625,19 @@ function ucberkeley_cas_update_7531() {
   $now = time();
   variable_set('ucberkeley_cas_queue_last_run', $now);
 }
+
+/**
+ * OPENUCB-2754: Replace lockr.io with Pantheon Secrets manager.
+ */
+function ucberkeley_cas_update_7600() {
+  $rows = db_update('ldap_servers')
+    ->fields([
+      'bindpw' => 'ldap-bind'
+    ])->condition('name', 'ldap.berkeley.edu', '=')->execute();
+
+  if ($rows == 0) {
+    throw new DrupalUpdateException("bindpw value for LDAP server ldap.berkeley.edu was not updated.");
+  }
+
+  return t("Successfuly set bindpw to value stored in Pantheon Secrets.");
+}
