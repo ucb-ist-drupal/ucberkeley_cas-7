@@ -630,14 +630,92 @@ function ucberkeley_cas_update_7531() {
  * OPENUCB-2754: Replace lockr.io with Pantheon Secrets manager.
  */
 function ucberkeley_cas_update_7600() {
+  // 1. Uninstall lockr.
+  if (module_exists('lockr')) {
+    module_disable(['lockr']);
+    uninstall_but_skip_hook_uninstall(['lockr']);
+    watchdog('ucberkeley_cas', t('Uninstalled Lockr module.', WATCHDOG_NOTICE));
+  }
+  else {
+    watchdog('ucberkeley_cas', t('Lockr module not found on this site.', WATCHDOG_WARNING));
+  }
+
+  // 2. Remove lockr entries in system table.
+  db_delete('system')
+    ->condition('name', 'lockr', '=');
+
+  // 3. Remove lockr entries in key_config table.
+  $rows = db_delete('key_config')
+    ->condition('key_provider', 'lockr', '=');
+
+  if ($rows == 0) {
+    watchdog('ucberkeley_cas', t('Lockr key configuration was not found on this site.', WATCHDOG_WARNING));
+  }
+  else {
+    watchdog('ucberkeley_cas', t('Removed Lockr key configuration.', WATCHDOG_NOTICE));
+  }
+
+  // 4. Add key config for Pantheon Secrets.
+  unset($rows);
+  $rows = db_insert('key_config')
+    ->fields([
+        'id' => 'ldap_bind',
+        'label' => 'ldap_bind',
+        'description' => 'Pantheon Secrets',
+        'key_type' => 'authentication',
+        'key_type_settings' => 'a:0:{}',
+        'key_provider' => 'pantheon',
+        'key_provider_settings' => 'a:0:{}',
+        'key_input' => 'none',
+        'key_input_settings' => 'a:0:{}'
+      ]
+    )
+    ->execute();
+
+  if ($rows == 0) {
+    watchdog('ucberkeley_cas', t('New key config insert affected 0 rows.', WATCHDOG_WARNING));
+  }
+  else {
+    watchdog('ucberkeley_cas', t('Inserted new key config.', WATCHDOG_NOTICE));
+  }
+
+  // 5. Update ldap_server entry to use Pantheon Secrets.
+  unset($rows);
   $rows = db_update('ldap_servers')
     ->fields([
       'bindpw' => 'ldap-bind'
     ])->condition('name', 'ldap.berkeley.edu', '=')->execute();
 
   if ($rows == 0) {
-    throw new DrupalUpdateException("bindpw value for LDAP server ldap.berkeley.edu was not updated.");
+    watchdog('ucberkeley_cas', t('New LDAP config update affected 0 rows.', WATCHDOG_WARNING));
+  }
+  else {
+    watchdog('ucberkeley_cas', t('Updated LDAP config.', WATCHDOG_NOTICE));
   }
 
-  return t("Successfuly set bindpw to value stored in Pantheon Secrets.");
+
+}
+
+/**
+ * Uninstall a module, but do not run its hook_uninstall.
+ *
+ * @param array $module_list
+ * @return void
+ */
+function uninstall_but_skip_hook_uninstall(array $module_list) {
+  foreach ($module_list as $module) {
+    // Uninstall the module.
+    module_load_install($module);
+    // don't run the module's hook_uninstall implementation.
+    // module_invoke($module, 'uninstall');
+    drupal_uninstall_schema($module);
+
+    watchdog('system', '%module module uninstalled.', array('%module' => $module), WATCHDOG_INFO);
+    drupal_set_installed_schema_version($module, SCHEMA_UNINSTALLED);
+  }
+
+  if (!empty($module_list)) {
+    // Let other modules react.
+    module_invoke_all('modules_uninstalled', $module_list);
+  }
 }
