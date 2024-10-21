@@ -634,10 +634,10 @@ function ucberkeley_cas_update_7600() {
   if (module_exists('lockr')) {
     module_disable(['lockr']);
     uninstall_but_skip_hook_uninstall(['lockr']);
-    watchdog('ucberkeley_cas', t('Uninstalled Lockr module.', WATCHDOG_NOTICE));
+    watchdog('ucberkeley_cas', t('Uninstalled Lockr module.'), WATCHDOG_NOTICE);
   }
   else {
-    watchdog('ucberkeley_cas', t('Lockr module not found on this site.', WATCHDOG_WARNING));
+    watchdog('ucberkeley_cas', t('Lockr module not found on this site.'), WATCHDOG_WARNING);
   }
 
   // 2. Remove lockr entries in system table.
@@ -646,21 +646,22 @@ function ucberkeley_cas_update_7600() {
 
   // 3. Remove lockr entries in key_config table.
   $rows = db_delete('key_config')
-    ->condition('key_provider', 'lockr', '=');
+    ->condition('key_provider', 'lockr', '=')
+    ->execute();
 
   if ($rows == 0) {
-    watchdog('ucberkeley_cas', t('Lockr key configuration was not found on this site.', WATCHDOG_WARNING));
+    watchdog('ucberkeley_cas', t('Lockr key configuration was not found on this site.'), WATCHDOG_WARNING);
   }
   else {
-    watchdog('ucberkeley_cas', t('Removed Lockr key configuration.', WATCHDOG_NOTICE));
+    watchdog('ucberkeley_cas', t('Removed Lockr key configuration.'), WATCHDOG_NOTICE);
   }
 
   // 4. Add key config for Pantheon Secrets.
-  unset($rows);
-  $rows = db_insert('key_config')
+  $ps_id = 'ldap_bind';
+  db_insert('key_config')
     ->fields([
-        'id' => 'ldap_bind',
-        'label' => 'ldap_bind',
+        'id' => $ps_id,
+        'label' => $ps_id,
         'description' => 'Pantheon Secrets',
         'key_type' => 'authentication',
         'key_type_settings' => 'a:0:{}',
@@ -672,11 +673,14 @@ function ucberkeley_cas_update_7600() {
     )
     ->execute();
 
-  if ($rows == 0) {
-    watchdog('ucberkeley_cas', t('New key config insert affected 0 rows.', WATCHDOG_WARNING));
+  $result = db_query("SELECT id FROM key_config WHERE id = :id", [':id' => $ps_id]);
+
+
+  if ($result->rowCount() != 1) {
+    watchdog('ucberkeley_cas', t('New key config insert affected 0 rows.'), WATCHDOG_WARNING);
   }
   else {
-    watchdog('ucberkeley_cas', t('Inserted new key config.', WATCHDOG_NOTICE));
+    watchdog('ucberkeley_cas', t('Inserted new key config.'), WATCHDOG_NOTICE);
   }
 
   // 5. Update ldap_server entry to use Pantheon Secrets.
@@ -684,13 +688,15 @@ function ucberkeley_cas_update_7600() {
   $rows = db_update('ldap_servers')
     ->fields([
       'bindpw' => 'ldap-bind'
-    ])->condition('name', 'ldap.berkeley.edu', '=')->execute();
+    ])
+    ->condition('name', 'ldap.berkeley.edu', '=')
+    ->execute();
 
   if ($rows == 0) {
-    watchdog('ucberkeley_cas', t('New LDAP config update affected 0 rows.', WATCHDOG_WARNING));
+    watchdog('ucberkeley_cas', t('New LDAP config update affected 0 rows.'), WATCHDOG_WARNING);
   }
   else {
-    watchdog('ucberkeley_cas', t('Updated LDAP config.', WATCHDOG_NOTICE));
+    watchdog('ucberkeley_cas', t('Updated LDAP config.'), WATCHDOG_NOTICE);
   }
 
 
