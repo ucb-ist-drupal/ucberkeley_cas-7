@@ -634,10 +634,15 @@ function ucberkeley_cas_update_7600() {
   if (module_exists('lockr')) {
     module_disable(['lockr']);
     uninstall_but_skip_hook_uninstall(['lockr']);
-    watchdog('ucberkeley_cas', t('Uninstalled Lockr module.'), WATCHDOG_NOTICE);
+
+    $msg = t('Uninstalled Lockr module.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
   }
   else {
-    watchdog('ucberkeley_cas', t('Lockr module not found on this site.'), WATCHDOG_WARNING);
+    $msg = t('Lockr module not found on this site.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
   }
 
   // 2. Remove lockr entries in system table.
@@ -650,10 +655,14 @@ function ucberkeley_cas_update_7600() {
     ->execute();
 
   if ($rows == 0) {
-    watchdog('ucberkeley_cas', t('Lockr key configuration was not found on this site.'), WATCHDOG_WARNING);
+    $msg = t('Lockr key configuration was not found on this site.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
   }
   else {
-    watchdog('ucberkeley_cas', t('Removed Lockr key configuration.'), WATCHDOG_NOTICE);
+    $msg = t('Removed Lockr key configuration.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
   }
 
   // 4. Add key config for Pantheon Secrets.
@@ -675,31 +684,36 @@ function ucberkeley_cas_update_7600() {
 
   $result = db_query("SELECT id FROM key_config WHERE id = :id", [':id' => $ps_id]);
 
-
   if ($result->rowCount() != 1) {
-    watchdog('ucberkeley_cas', t('New key config insert affected 0 rows.'), WATCHDOG_WARNING);
+    $msg = t('New key config insert affected 0 rows.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
   }
   else {
-    watchdog('ucberkeley_cas', t('Inserted new key config.'), WATCHDOG_NOTICE);
+    $msg = t('Inserted new key config.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
   }
 
   // 5. Update ldap_server entry to use Pantheon Secrets.
   unset($rows);
   $rows = db_update('ldap_servers')
     ->fields([
-      'bindpw' => 'ldap-bind'
+      'bindpw' => $ps_id
     ])
     ->condition('name', 'ldap.berkeley.edu', '=')
     ->execute();
 
   if ($rows == 0) {
-    watchdog('ucberkeley_cas', t('New LDAP config update affected 0 rows.'), WATCHDOG_WARNING);
+    $msg = t('New LDAP config update affected 0 rows.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
   }
   else {
-    watchdog('ucberkeley_cas', t('Updated LDAP config.'), WATCHDOG_NOTICE);
+    $msg = t('Updated LDAP config.');
+    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
   }
-
-
 }
 
 /**
