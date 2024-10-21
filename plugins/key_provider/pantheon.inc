@@ -28,7 +28,7 @@ function key_provider_pantheon_default_configuration() {
  */
 function key_provider_pantheon_get_key_value($config) {
   $client = \PantheonSystems\CustomerSecrets\CustomerSecrets::create()->getClient();
-  $secret = $client->getSecret($config['label']);
+  $secret = $client->getSecret($config['id']);
   $secret_value = $secret->getValue();
 
   return $secret_value;
