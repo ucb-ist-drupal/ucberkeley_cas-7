@@ -636,12 +636,12 @@ function ucberkeley_cas_update_7600() {
     uninstall_but_skip_hook_uninstall(['lockr']);
 
     $msg = t('Uninstalled Lockr module.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_NOTICE);
     drupal_set_message($msg);
   }
   else {
     $msg = t('Lockr module not found on this site.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    watchdog('ucberkeley_cas', $msg,NULL, WATCHDOG_WARNING);
     drupal_set_message($msg, 'warning');
   }
 
@@ -656,12 +656,12 @@ function ucberkeley_cas_update_7600() {
 
   if ($rows == 0) {
     $msg = t('Lockr key configuration was not found on this site.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_WARNING);
     drupal_set_message($msg, 'warning');
   }
   else {
     $msg = t('Removed Lockr key configuration.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_NOTICE);
     drupal_set_message($msg);
   }
 
@@ -686,12 +686,12 @@ function ucberkeley_cas_update_7600() {
 
   if ($result->rowCount() != 1) {
     $msg = t('New key config insert affected 0 rows.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_WARNING);
     drupal_set_message($msg, 'warning');
   }
   else {
     $msg = t('Inserted new key config.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_NOTICE);
     drupal_set_message($msg);
   }
 
@@ -706,12 +706,12 @@ function ucberkeley_cas_update_7600() {
 
   if ($rows == 0) {
     $msg = t('New LDAP config update affected 0 rows.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_WARNING);
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_WARNING);
     drupal_set_message($msg, 'warning');
   }
   else {
     $msg = t('Updated LDAP config.');
-    watchdog('ucberkeley_cas', $msg, WATCHDOG_NOTICE);
+    watchdog('ucberkeley_cas', $msg,NULL, WATCHDOG_NOTICE);
     drupal_set_message($msg);
   }
 }
