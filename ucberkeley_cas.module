@@ -11,8 +11,6 @@ define('GOOD_TEXT', '<span style="color:green">your settings are probably good.<
 /**
  * Implementation of hook_init()
  *
- * Require the autoload file for pantheon-systems/customer-secrets-php-sdk.
- *
  * If overlay.module is enabled, make sure that our hook_install messages are displayed.
  */
 function ucberkeley_cas_init() {
