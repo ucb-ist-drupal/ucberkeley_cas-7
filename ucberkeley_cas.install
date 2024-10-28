@@ -625,3 +625,117 @@ function ucberkeley_cas_update_7531() {
   $now = time();
   variable_set('ucberkeley_cas_queue_last_run', $now);
 }
+
+/**
+ * OPENUCB-2754: Replace lockr.io with Pantheon Secrets manager.
+ */
+function ucberkeley_cas_update_7600() {
+  // 1. Uninstall lockr.
+  if (module_exists('lockr')) {
+    module_disable(['lockr']);
+    uninstall_but_skip_hook_uninstall(['lockr']);
+
+    $msg = t('Uninstalled Lockr module.');
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
+  }
+  else {
+    $msg = t('Lockr module not found on this site.');
+    watchdog('ucberkeley_cas', $msg,NULL, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
+  }
+
+  // 2. Remove lockr entries in system table.
+  db_delete('system')
+    ->condition('name', 'lockr', '=');
+
+  // 3. Remove lockr entries in key_config table.
+  $rows = db_delete('key_config')
+    ->condition('key_provider', 'lockr', '=')
+    ->execute();
+
+  if ($rows == 0) {
+    $msg = t('Lockr key configuration was not found on this site.');
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
+  }
+  else {
+    $msg = t('Removed Lockr key configuration.');
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
+  }
+
+  // 4. Add key config for Pantheon Secrets.
+  $ps_id = 'ldap_bind';
+  db_insert('key_config')
+    ->fields([
+        'id' => $ps_id,
+        'label' => $ps_id,
+        'description' => 'Pantheon Secrets',
+        'key_type' => 'authentication',
+        'key_type_settings' => 'a:0:{}',
+        'key_provider' => 'pantheon',
+        'key_provider_settings' => 'a:0:{}',
+        'key_input' => 'none',
+        'key_input_settings' => 'a:0:{}'
+      ]
+    )
+    ->execute();
+
+  $result = db_query("SELECT id FROM key_config WHERE id = :id", [':id' => $ps_id]);
+
+  if ($result->rowCount() != 1) {
+    $msg = t('New key config insert affected 0 rows.');
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
+  }
+  else {
+    $msg = t('Inserted new key config.');
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
+  }
+
+  // 5. Update ldap_server entry to use Pantheon Secrets.
+  unset($rows);
+  $rows = db_update('ldap_servers')
+    ->fields([
+      'bindpw' => $ps_id
+    ])
+    ->condition('name', 'ldap.berkeley.edu', '=')
+    ->execute();
+
+  if ($rows == 0) {
+    $msg = t('New LDAP config update affected 0 rows.');
+    watchdog('ucberkeley_cas', $msg, NULL, WATCHDOG_WARNING);
+    drupal_set_message($msg, 'warning');
+  }
+  else {
+    $msg = t('Updated LDAP config.');
+    watchdog('ucberkeley_cas', $msg,NULL, WATCHDOG_NOTICE);
+    drupal_set_message($msg);
+  }
+}
+
+/**
+ * Uninstall a module, but do not run its hook_uninstall.
+ *
+ * @param array $module_list
+ * @return void
+ */
+function uninstall_but_skip_hook_uninstall(array $module_list) {
+  foreach ($module_list as $module) {
+    // Uninstall the module.
+    module_load_install($module);
+    // don't run the module's hook_uninstall implementation.
+    // module_invoke($module, 'uninstall');
+    drupal_uninstall_schema($module);
+
+    watchdog('system', '%module module uninstalled.', array('%module' => $module), WATCHDOG_INFO);
+    drupal_set_installed_schema_version($module, SCHEMA_UNINSTALLED);
+  }
+
+  if (!empty($module_list)) {
+    // Let other modules react.
+    module_invoke_all('modules_uninstalled', $module_list);
+  }
+}

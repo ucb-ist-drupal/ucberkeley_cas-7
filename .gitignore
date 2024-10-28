@@ -49,3 +49,5 @@ README.html
 # phpStorm #
 ############
 .idea/*
+
+/vendor/

@@ -10,9 +10,11 @@ define('GOOD_TEXT', '<span style="color:green">your settings are probably good.<
 
 /**
  * Implementation of hook_init()
- * If overlay.module is enabled, make sure that our hook_install messages are displayed
+ *
+ * If overlay.module is enabled, make sure that our hook_install messages are displayed.
  */
 function ucberkeley_cas_init() {
+  // Manage the overlay module.
   if (!module_exists('overlay') || (!isset($_SESSION)) || (!is_array($_SESSION))) {
     return;
   }
@@ -25,6 +27,12 @@ function ucberkeley_cas_init() {
   elseif ((array_key_exists('messages', $_SESSION)) && (is_array($_SESSION['messages'])) && (array_key_exists('ucberkeley_cas_installed', $_SESSION))) {
     $_SESSION['ucberkeley_cas_install_messages'] = $_SESSION['messages'];
     unset($_SESSION['ucberkeley_cas_installed']);
+  }
+}
+
+function ucberkeley_cas_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'key') {
+    return "plugins/{$plugin}";
   }
 }
 

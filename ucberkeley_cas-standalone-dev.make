@@ -35,6 +35,5 @@ projects[realname][patch][3263690] = https://www.drupal.org/files/issues/2022-03
 projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 ; You might need to update this url to reflect your own user:
-projects[ucberkeley_cas][download][url] = "git@github.com:cboyden-ucb/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2712"
-
+projects[ucberkeley_cas][download][url] = "git@github-bwood.com:bwood/ucberkeley_cas-7.git"
+projects[ucberkeley_cas][download][branch] = "openucb-2754"

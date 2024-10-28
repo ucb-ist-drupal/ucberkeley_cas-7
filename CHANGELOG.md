@@ -1,3 +1,10 @@
+ucberkeley_cas 7.x-6.0.0
+========================
+* [OPENUCB-2754] The Lockr service is being retired. Technically this is a backward-incompatible change requiring 
+  manual configuration, thus the major version bump. 
+  * Added Pantheon Secrets key provider (plugins/key_provider/pantheon.inc) for key.module.
+  * If environment is Pantheon: pantheon_get_secret(). Else assume local dev environment and parse secrets.json. 
+
 ucberkeley_cas 7.x-5.3.1
 ========================
 * [OPENUCB-2712] Use supported version of LDAP module.
