@@ -1,0 +1,39 @@
+diff --git a/ldap_servers/LdapServer.class.php b/ldap_servers/LdapServer.class.php
+index f8c9086..29715be 100644
+--- a/ldap_servers/LdapServer.class.php
++++ b/ldap_servers/LdapServer.class.php
+@@ -426,6 +426,10 @@ class LdapServer {
+       $userdn = ($userdn != NULL) ? $userdn : $this->binddn;
+       $pass = ($pass != NULL) ? $pass : $this->bindpw;
+ 
++      if (module_exists('key') && $key_value = key_get_key_value($pass)) {
++        $pass = $key_value;
++      }
++
+       if ($this->followrefs) {
+         $rebHandler = new LdapServersRebindHandler($userdn, $pass);
+         ldap_set_rebind_proc($this->connection, [$rebHandler, 'rebind_callback']);
+diff --git a/ldap_servers/LdapServerAdmin.class.php b/ldap_servers/LdapServerAdmin.class.php
+index f0e1bf9..c198d6d 100644
+--- a/ldap_servers/LdapServerAdmin.class.php
++++ b/ldap_servers/LdapServerAdmin.class.php
+@@ -750,6 +750,7 @@ class LdapServerAdmin extends LdapServer {
+           '#type' => 'checkbox',
+           '#title' => t('Clear existing password from database.  Check this when switching away from Service Account Binding.'),
+           '#default_value' => 0,
++          '#access' => FALSE
+         ],
+       ],
+ 
+@@ -1243,6 +1244,11 @@ class LdapServerAdmin extends LdapServer {
+ 
+     ];
+ 
++    if (array_key_exists('key_select', module_invoke_all('element_info'))) {
++      $fields['bindpw']['form']['#type'] = 'key_select';
++      unset($fields['bindpw']['form']['#size']);
++    }
++
+     return $fields;
+ 
+   }
