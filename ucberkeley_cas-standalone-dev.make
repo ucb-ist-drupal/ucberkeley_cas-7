@@ -21,7 +21,7 @@ projects[ldap][type] = module
 projects[ldap][version] = 2.7
 projects[ldap][download][type] = file
 projects[ldap][download][url] = https://gitlab.com/api/v4/projects/55398792/packages/generic/ldap/7.x-2.7/ldap-7.x-2.7.tar.gz
-projects[ldap][patch][patchforkey] = "https://github.com/CellarDoorMedia/Lockr-Patches/raw/master/drupal7/ldap/ldap-7.x-2.5-key-integration.patch"
+projects[ldap][patch][patchforkey] = "patches/ldap-7.x-2.5-key-integration.patch"
 projects[ldap][patch][3302242] = "patches/ldap-php-8-compatibility-3302242-new-modified.patch"
 
 ; Realname
@@ -36,4 +36,5 @@ projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 ; You might need to update this url to reflect your own user:
 projects[ucberkeley_cas][download][url] = "git@github-bwood.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2754"
+projects[ucberkeley_cas][download][branch] = "openucb-2754-2"
+
