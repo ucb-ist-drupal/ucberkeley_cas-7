@@ -1,6 +1,8 @@
-ucberkeley_cas 7.x-6.0.1
+ucberkeley_cas 7.x-6.1.0
 ========================
 * [OPENUCB-2754] Add ldap-7.x-2.5-key-integration.patch to local patches folder in case Cellar Door Media removes it from their github repo.
+* Remove mentions of lockr from documentation.
+
 ucberkeley_cas 7.x-6.0.0
 ========================
 * [OPENUCB-2754] The Lockr service is being retired. Technically this is a backward-incompatible change requiring 
