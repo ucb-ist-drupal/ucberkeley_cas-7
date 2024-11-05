@@ -166,6 +166,10 @@ function ucberkeley_cas_install() {
     drupal_set_message(t('If you will host this site on Pantheon, please see: ' . l('http://uc-berkeley-cas.readthedocs.io/en/latest/envconf/', 'http://uc-berkeley-cas.readthedocs.io/en/latest/envconf/')));
     drupal_set_message(t('View UCB Berkeley CAS recommendations at ') . l(t("/@admin_ucbcas_path", ["@admin_ucbcas_path" => $admin_ucbcas_path]), $admin_ucbcas_path) . '.');
   }
+
+  // Set the variable that tracks when to check for updated usernames.
+  variable_set('ucberkeley_cas_queue_last_run', time());
+
   // Set a flag so that we know installation has just completed.  Process the flag in ucberkeley_cas_init()
   $_SESSION['ucberkeley_cas_installed'] = TRUE;
 
