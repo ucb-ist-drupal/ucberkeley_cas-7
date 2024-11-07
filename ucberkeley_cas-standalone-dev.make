@@ -36,5 +36,5 @@ projects[ucberkeley_cas][type] = "module"
 projects[ucberkeley_cas][download][type] = "git"
 ; You might need to update this url to reflect your own user:
 projects[ucberkeley_cas][download][url] = "git@github-bwood.com:bwood/ucberkeley_cas-7.git"
-projects[ucberkeley_cas][download][branch] = "openucb-2754-2"
+projects[ucberkeley_cas][download][branch] = "cboyden-ucb-openucb-2759"
 

@@ -1,3 +1,7 @@
+ucberkeley_cas 7.x-6.2.0
+========================
+* [OPENUCB-2759] Fix for: Username update queue not set on new site install.
+
 ucberkeley_cas 7.x-6.1.0
 ========================
 * [OPENUCB-2754] Add ldap-7.x-2.5-key-integration.patch to local patches folder in case Cellar Door Media removes it from their github repo.
